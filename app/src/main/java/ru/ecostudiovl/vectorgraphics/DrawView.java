@@ -25,7 +25,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     private DrawThread drawThread;
 
-    private boolean isPointCatched;
+    private int catchPoint = -1;
 
 
     public DrawView(Context context){
@@ -34,7 +34,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         Log.d("RENDER", "=== POINT 2");
         points = new ArrayList<>();
         mode = MainActivity.Mode.create;
-        isPointCatched = false;
     }
 
 
@@ -74,6 +73,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+
         switch (mode){
             case create:
                 if (points.size() == 0){
@@ -86,15 +86,23 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                 return false;
             case edit:
+
+                //Если мы подняли палец, значит никакая точка не выбрана
+                if (event.getAction() == MotionEvent.ACTION_UP){
+                    catchPoint = -1;
+                }
                 if (points.size() > 0){
-                    int touchedPoint = getTouchedPoint(event.getX(), event.getY());
+                    if (catchPoint == -1){
+                        if (event.getAction() == MotionEvent.ACTION_DOWN){
+                            catchPoint = getTouchedPoint(event.getX(), event.getY());
+                        }
 
-                    isPointCatched = touchedPoint == -1 ? false : true;
-
-                    if (touchedPoint != -1){
-                        points.get(touchedPoint).x = event.getX();
-                        points.get(touchedPoint).y = event.getY();
                     }
+                    else {
+                        points.get(catchPoint).x = event.getX();
+                        points.get(catchPoint).y = event.getY();
+                    }
+
                 }
                 return true;
 
@@ -127,6 +135,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                 return false;
         }
+
+
 
         return false;
 
