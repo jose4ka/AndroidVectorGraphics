@@ -3,8 +3,6 @@ package ru.ecostudiovl.vectorgraphics;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import ru.ecostudiovl.vectorgraphics.figure.Point;
@@ -16,8 +14,6 @@ public class DrawThread extends Thread{
     private SurfaceHolder surfaceHolder;
     private DrawView drawView;
     private Paint p;
-    private Canvas canvas;
-    private Rect clipBounds;
 
 
     public DrawThread(SurfaceHolder surfaceHolder, DrawView drawView){
@@ -33,19 +29,20 @@ public class DrawThread extends Thread{
         while (running) {
 
             double start = System.currentTimeMillis();
-            canvas = null;
+            Canvas canvas = null;
 
             try {
                 //15 - время кадра
                 Thread.sleep((long) (start + 15 - System.currentTimeMillis()));
                 canvas = surfaceHolder.lockCanvas(null);
-                if (canvas == null) {continue;}
-                else {
+                if (canvas != null){
                     render(canvas);
                 }
 
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
             finally {
                 if (canvas != null) {
@@ -56,7 +53,6 @@ public class DrawThread extends Thread{
     }
 
     private void render(Canvas canvas){
-        clipBounds = canvas.getClipBounds();
         canvas.save();
 
         canvas.drawColor(Color.rgb(255, 255, 255));

@@ -2,25 +2,20 @@ package ru.ecostudiovl.vectorgraphics;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
-import ru.ecostudiovl.vectorgraphics.figure.Figure;
 import ru.ecostudiovl.vectorgraphics.figure.Point;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public MainActivity.Mode mode;
 
-    //Массив 1 - x и y, массив 2 - номер фигуры и точки в ней
     public List<Point> points;
 
     private DrawThread drawThread;
@@ -28,10 +23,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private int catchPoint = -1;
 
 
-    public DrawView(Context context){
+    public DrawView(Context context) {
         super(context);
         getHolder().addCallback(this);
-        Log.d("RENDER", "=== POINT 2");
         points = new ArrayList<>();
         mode = MainActivity.Mode.create;
     }
@@ -40,12 +34,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     //При создании самого класса мы создаём сам поток, который будет рисовать
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("RENDER", "=== POINT 3");
         drawThread = new DrawThread(getHolder(), this);
         startDrawThread();
     }
 
-    public void stopDrawThread(){
+    public void stopDrawThread() {
         //Останавливаем поток
 
         boolean retry = true;
@@ -55,13 +48,13 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 drawThread.join();
                 retry = false;
             } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
     }
 
-    public void startDrawThread(){
-        Log.d("RENDER", "=== POINT 4");
+    public void startDrawThread() {
         //Устанавливаем переменуую как true, это нужно для управления потоком
         drawThread.setRunning(true);
         //Стартуем поток
@@ -69,17 +62,15 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
 
-        switch (mode){
+        switch (mode) {
             case create:
-                if (points.size() == 0){
+                if (points.size() == 0) {
                     points.add(new Point(event.getX(), event.getY(), points.size()));
-                }
-                else if (points.size() >= 1){
+                } else if (points.size() >= 1) {
                     points.get(points.size() - 1).nextIndex = points.size();
                     points.add(new Point(event.getX(), event.getY(), 0));
                 }
@@ -88,17 +79,16 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
             case edit:
 
                 //Если мы подняли палец, значит никакая точка не выбрана
-                if (event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     catchPoint = -1;
                 }
-                if (points.size() > 0){
-                    if (catchPoint == -1){
-                        if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (points.size() > 0) {
+                    if (catchPoint == -1) {
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
                             catchPoint = getTouchedPoint(event.getX(), event.getY());
                         }
 
-                    }
-                    else {
+                    } else {
                         points.get(catchPoint).x = event.getX();
                         points.get(catchPoint).y = event.getY();
                     }
@@ -116,8 +106,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                 points.get(i).nextIndex -= 1;
                             }
                             points.get(points.size() - 1).nextIndex = 0;
-                        }
-                        else if (touched == points.size() - 1) { //Последняя точка
+                        } else if (touched == points.size() - 1) { //Последняя точка
                             points.get(touched - 1).nextIndex = 0;
                         } else { //Иначе, если точка не нулевая, а где-то в середине - то обновляем ссылку предыдущей точки на следующую
                             for (int i = touched + 1; i < points.size(); i++) {
@@ -137,17 +126,16 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
 
-
         return false;
 
     }
 
-    private int getTouchedPoint(float x, float y){
+    private int getTouchedPoint(float x, float y) {
         int result = -1;
 
         for (int i = 0; i < points.size(); i++) {
             if (Math.abs(points.get(i).x - x) <= 30 &&
-                    (Math.abs(points.get(i).y - y) <= 30)){
+                    (Math.abs(points.get(i).y - y) <= 30)) {
                 result = i;
             }
         }
@@ -155,11 +143,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
-
-
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -170,8 +156,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
     }
-
-
 
 
 }
