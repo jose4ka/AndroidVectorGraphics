@@ -10,19 +10,23 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
 import ru.ecostudiovl.vectorgraphics.figure.Figure;
+import ru.ecostudiovl.vectorgraphics.figure.Point;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public enum State{
         Overview,
-        FigureCreation,
-        FigureOperation,
-        PointOperation
+        FigureCreating,
+        FigurePointEdit,
+        FigureAddPoints,
+        FigureDeletePoints,
+        FigureSelected
     }
 
     private State currentState;
@@ -30,7 +34,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private List<Figure> figures;
     private int selectedFigure;
 
-    private int touchedFigure, touchedPoint, lastSelFigure, lastSelPoint;
+    private int touchedFigure, touchedPoint;
 
     //Массив 1 - x и y, массив 2 - номер фигуры и точки в ней
     private TreeMap<String, float[]> pointsMap;
@@ -38,6 +42,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint p = new Paint();
 
     private DrawThread drawThread;
+
+    private boolean hasSelectedPoint;
 
     public DrawView(Context context){
         super(context);
@@ -48,11 +54,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private void initialize(){
         figures = new ArrayList<>();
         pointsMap = new TreeMap<>();
+        hasSelectedPoint = false;
         selectedFigure = 0;
         touchedFigure = 0;
         touchedPoint = 0;
-        lastSelFigure = 0;
-        lastSelPoint = 0;
         currentState = State.Overview;
     }
 
@@ -112,7 +117,26 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
         for (TreeMap.Entry<String,float[] > entry: pointsMap.entrySet()) {
             if (Math.abs(x - entry.getValue()[0]) <= minXDelta && Math.abs(y - entry.getValue()[1]) <= minYDelta){
-                if (Integer.parseInt(entry.getKey().split(":")[0]) == selectedFigure && !figures.get(selectedFigure).isHasSelectedPoint()){
+                if (Integer.parseInt(entry.getKey().split(":")[0]) == selectedFigure && !hasSelectedPoint){
+                    touchedFigure = Integer.parseInt(entry.getKey().split(":")[0]);
+                    touchedPoint = Integer.parseInt(entry.getKey().split(":")[1]);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasDeleteInteract(float x, float y){
+
+        //Т.к. мы нажимаем на экран, то мы не можем нажать пиксель в пиксель
+        int minXDelta = 30;
+        int minYDelta = 30;
+
+        for (TreeMap.Entry<String,float[] > entry: pointsMap.entrySet()) {
+            if (Math.abs(x - entry.getValue()[0]) <= minXDelta && Math.abs(y - entry.getValue()[1]) <= minYDelta){
+                if (Integer.parseInt(entry.getKey().split(":")[0]) == selectedFigure){
                     touchedFigure = Integer.parseInt(entry.getKey().split(":")[0]);
                     touchedPoint = Integer.parseInt(entry.getKey().split(":")[1]);
                     return true;
@@ -144,7 +168,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         float column = event.getX();
         float row = event.getY();
 
-        Log.d("TOUCH", "col "+column + " : row "+row);
 
         switch (currentState){
             case Overview:
@@ -153,36 +176,40 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     figures.get(touchedFigure).getPoints().get(touchedPoint).setSelected(true);
                     disableAllFiguresSelects();
                     figures.get(touchedFigure).setSelected(true);
-                    Log.d("OVERVIEW", touchedFigure +" - "+ touchedPoint);
                 }
                 else {
                     disableAllPointsSelects();
                     disableAllFiguresSelects();
-                    Log.d("OVERVIEW", "NOT A POINT");
                 }
                 result = true;
 
                 break;
-            case FigureCreation:
+            case FigureCreating:
 
-                figures.get(selectedFigure).addPoint(column, row);
-                Log.d("ADD", selectedFigure+" - "+(figures.get(selectedFigure).getPoints().size()-1));
+
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(selectedFigure);
                 stringBuilder.append(":");
-                stringBuilder.append(figures.get(selectedFigure).getPoints().size() - 1);
+                stringBuilder.append(figures.get(selectedFigure).getPoints().size());
+                Log.d("CREATING", stringBuilder.toString() + "value "+column+":"+row);
                 pointsMap.put(stringBuilder.toString(), new float[]{column, row});
+                figures.get(selectedFigure).addPoint(column, row);
+
+
                 result = false;
                 break;
-            case PointOperation:
+            case FigurePointEdit:
                 if (event.getAction() == MotionEvent.ACTION_UP){
-                    figures.get(selectedFigure).setHasSelectedPoint(false);
+                    hasSelectedPoint = false;
+                    Log.d("EDIT", "DISABLE");
                     disableAllPointsSelects();
-                    return true;
+                    result = true;
                 }
-                if (hasEditInteract(column, row)){
-                    if (!figures.get(selectedFigure).isHasSelectedPoint()){
-                        figures.get(selectedFigure).setHasSelectedPoint(true);
+                else if (hasEditInteract(column, row)){
+                    if (!hasSelectedPoint){
+
+                        Log.d("EDIT", "ACTIVE POINT = "+selectedFigure+" "+touchedPoint);
+
                         disableAllPointsSelects();
                         figures.get(selectedFigure).getPoints().get(touchedPoint).setSelected(true);
                         disableAllFiguresSelects();
@@ -200,18 +227,36 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     }
 
                 }
-                else {
-                    if (figures.get(selectedFigure).isHasSelectedPoint()){
-                        figures.get(selectedFigure).setHasSelectedPoint(false);
-                        disableAllPointsSelects();
-                    }
-
-
-                }
 
                 result = true;
                 break;
-            case FigureOperation:
+            case FigureAddPoints:
+
+                StringBuilder stringBuilderAdd = new StringBuilder();
+                stringBuilderAdd.append(selectedFigure);
+                stringBuilderAdd.append(":");
+                stringBuilderAdd.append(figures.get(selectedFigure).getPoints().size());
+                pointsMap.put(stringBuilderAdd.toString(), new float[]{column, row});
+                figures.get(selectedFigure).addPoint(column, row);
+
+                result = false;
+                break;
+            case FigureDeletePoints:
+                if (hasDeleteInteract(column, row)){
+                    Log.d("DETECTED REMOVE", touchedFigure + " - "+touchedPoint+" in "+column + " : "+row);
+
+                    StringBuilder stringBuilderRemove = new StringBuilder();
+                    stringBuilderRemove.append(selectedFigure);
+                    stringBuilderRemove.append(":");
+                    stringBuilderRemove.append(touchedPoint);
+
+                    pointsMap.remove(stringBuilderRemove.toString());
+
+                    updatePointMapByFigure();
+                }
+                result = false;
+                break;
+            case FigureSelected:
                 break;
         }
 
@@ -219,6 +264,23 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         return result;
     }
 
+    public void updatePointMapByFigure(){
+
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < figures.get(selectedFigure).getPoints().size(); i++) {
+            if (figures.get(selectedFigure).getPoints().get(i).getIndex() != touchedPoint){
+                points.add(figures.get(selectedFigure).getPoints().get(i));
+            }
+        }
+
+        figures.get(selectedFigure).getPoints().clear();
+
+        for (int i = 0; i < points.size(); i++) {
+            Log.d("CREATING", points.get(i).getX()+" "+ points.get(i).getY());
+            figures.get(selectedFigure).addPoint(points.get(i).getX(), points.get(i).getY());
+        }
+
+    }
 
 
     public void addFigure(String name){

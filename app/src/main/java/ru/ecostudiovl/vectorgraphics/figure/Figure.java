@@ -42,7 +42,7 @@ public class Figure {
     }
 
     public void addPoint(float x, float y){
-        points.add(new Point(x, y, figuresListIndex, points.size()));
+        points.add(new Point(x, y, points.size()));
     }
 
 

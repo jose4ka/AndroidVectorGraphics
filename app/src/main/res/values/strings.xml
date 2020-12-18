@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">VectorGraphics</string>
+
+    <string-array name="operations">
+        <item>Ред. точки</item>
+        <item>Новые точки</item>
+        <item>Удалить точки</item>
+    </string-array>
+
 </resources>

@@ -69,7 +69,6 @@ public class DrawThread extends Thread{
                     if (i == 0){
                         checkSelectedPoint(j, i);
                         canvas.drawCircle(currentPoint.getX(), currentPoint.getY(), r, p);
-                        canvas.drawText(currentPoint.getX()+" : "+currentPoint.getY(),currentPoint.getX(), currentPoint.getY() + 20, p);
                     }
 
                     if(i == drawView.getFigures().get(j).getPoints().size() - 1){
@@ -80,7 +79,6 @@ public class DrawThread extends Thread{
 
                         checkSelectedPoint(j, i);
                         canvas.drawCircle(currentPoint.getX(), currentPoint.getY(), r, p);
-                        canvas.drawText(currentPoint.getX()+" : "+currentPoint.getY(),currentPoint.getX(), currentPoint.getY() + 20, p);
                     }
                     else {
                         Point nextPoint = drawView.getFigures().get(j).getPoints().get(i + 1);
@@ -90,7 +88,6 @@ public class DrawThread extends Thread{
 
                         checkSelectedPoint(j, i);
                         canvas.drawCircle(currentPoint.getX(), currentPoint.getY(), r, p);
-                        canvas.drawText(currentPoint.getX()+" : "+currentPoint.getY(),currentPoint.getX(), currentPoint.getY() + 20, p);
                     }
 
 
@@ -108,10 +105,10 @@ public class DrawThread extends Thread{
             p.setColor(Color.RED);
         }
 
-        else if (drawView.getFigures().get(figure).isSelected() && drawView.getFigures().get(figure).getPoints().get(point).getQueueIndex() == 0){
+        else if (drawView.getFigures().get(figure).isSelected() && point == 0){
             p.setColor(Color.GREEN);
         }
-        else if (drawView.getFigures().get(figure).isSelected() && drawView.getFigures().get(figure).getPoints().get(point).getQueueIndex() == drawView.getFigures().get(figure).getPoints().size() - 1){
+        else if (drawView.getFigures().get(figure).isSelected() && point == drawView.getFigures().get(figure).getPoints().size() - 1){
             p.setColor(Color.GREEN);
         }
 

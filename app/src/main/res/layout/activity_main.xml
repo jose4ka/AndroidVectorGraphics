@@ -30,13 +30,14 @@
                     android:text="Overview"
                     android:textSize="12sp" />
 
-                <Button
-                    android:id="@+id/btnPointOperation"
+
+                <Spinner
+                    android:layout_weight="1"
+                    android:id="@+id/operationsSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Operation"
-                    android:textSize="12sp" />
+                    android:visibility="visible"
+                    android:entries="@array/operations"/>
 
 
                 <Button
@@ -54,7 +55,7 @@
             <LinearLayout
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:orientation="vertical"
                 android:background="@color/grey">
 
