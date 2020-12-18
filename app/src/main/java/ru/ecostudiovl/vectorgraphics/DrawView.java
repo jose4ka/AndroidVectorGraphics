@@ -99,26 +99,34 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
             case delete:
                 if (points.size() > 0) {
                     int touched = getTouchedPoint(event.getX(), event.getY());
-                    if (points.size() > 1) {
+
+                    if (touched == -1){
+                        return false;
+                    }
+                    if (points.size() >= 1) {
 
                         if (touched == 0) { //Если это первая точка, то тогда у передней точки обновляем ссылку на минус 1
                             for (int i = 0; i < points.size(); i++) {
                                 points.get(i).nextIndex -= 1;
                             }
                             points.get(points.size() - 1).nextIndex = 0;
+
+
                         } else if (touched == points.size() - 1) { //Последняя точка
                             points.get(touched - 1).nextIndex = 0;
+
                         } else { //Иначе, если точка не нулевая, а где-то в середине - то обновляем ссылку предыдущей точки на следующую
                             for (int i = touched + 1; i < points.size(); i++) {
                                 points.get(i).nextIndex -= 1;
                             }
                             points.get(points.size() - 1).nextIndex = 0;
+
                         }
 
                     }
+
+
                     points.remove(touched);
-
-
                 }
 
 
