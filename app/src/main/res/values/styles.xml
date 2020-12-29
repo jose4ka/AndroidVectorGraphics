@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PurpleButton" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/purple</item>
+        <item name="colorControlHighlight">@color/purple_light</item>
+        <item name="android:textSize">10dp</item>
+    </style>
+
 </resources>

@@ -7,29 +7,60 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-            <FrameLayout
-                android:id="@+id/frameDraw"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-            </FrameLayout>
 
 
-    <Button
-        android:id="@+id/btnChangeMode"
-        android:text="create"
-        android:textSize="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <Button
-        android:id="@+id/buttonClear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:text="Clear" />
+        <FrameLayout
+            android:id="@+id/frameDraw"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:src="@drawable/ic_baseline_create_new_folder_24"
+                android:theme="@style/PurpleButton"
+                android:id="@+id/btnChangeMode"
+                android:text="create"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:src="@drawable/ic_baseline_clear_all_24"
+                android:theme="@style/PurpleButton"
+                android:id="@+id/buttonClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="Clear" />
+
+            <ImageButton
+                android:src="@drawable/ic_baseline_arrow_downward_24"
+                android:theme="@style/PurpleButton"
+                android:id="@+id/btnShowHide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="Hide" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+
+
 
     <LinearLayout
+        android:id="@+id/lnList"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical">
@@ -46,11 +77,13 @@
                 android:layout_weight="1"
                 android:textSize="10sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnAddFigure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="add"
+                android:src="@drawable/ic_baseline_add_24"
+                android:theme="@style/PurpleButton"
                 android:textSize="10sp" />
 
         </LinearLayout>

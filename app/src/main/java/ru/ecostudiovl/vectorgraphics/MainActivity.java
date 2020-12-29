@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -28,11 +30,13 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     public Mode currentMode;
 
     private EditText etFigureName;
-    private Button btnAddFigure;
-    private Button btnClear;
+    private ImageButton btnAddFigure;
+    private ImageButton btnClear;
+    private ImageButton btnHide;
+    private LinearLayout lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
-    private Button btnChangeMode;
+    private ImageButton btnChangeMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
                 drawView.figures.add(new Figure(etFigureName.getText().toString()+" : "+drawView.figures.size()));
                 drawView.figures.get(drawView.getSelectedFigure()).isSelected = true;
                 etFigureName.setText("");
+
+                currentMode = Mode.create;
+                drawView.mode = Mode.create;
+//                btnChangeMode.setText("Create");
                 updateList();
             }
         });
@@ -68,24 +76,28 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
                     case create:
                         currentMode = Mode.edit;
                         drawView.mode = Mode.edit;
-                        btnChangeMode.setText("Edit");
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+//                        btnChangeMode.setText("Edit");
                         break;
                     case edit:
                         currentMode = Mode.delete;
                         drawView.mode = Mode.delete;
-                        btnChangeMode.setText("Delete");
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
+//                        btnChangeMode.setText("Delete");
                         break;
                     case delete:
                         currentMode = Mode.view;
                         drawView.mode = Mode.view;
-                        btnChangeMode.setText("View");
+//                        btnChangeMode.setText("View");
                         clearSelected();
                         drawView.setSelectedFigure(-1);
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_preview_24);
                         break;
                     case view:
                         currentMode = Mode.create;
                         drawView.mode = Mode.create;
-                        btnChangeMode.setText("Create");
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+//                        btnChangeMode.setText("Create");
                         break;
                 }
             }
@@ -97,6 +109,28 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
             public void onClick(View view) {
                 drawView.figures = new ArrayList<>();
                 updateList();
+            }
+        });
+
+        lnList = findViewById(R.id.lnList);
+
+        btnHide = findViewById(R.id.btnShowHide);
+        btnHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (lnList.getVisibility()){
+                    case View.VISIBLE:
+                        lnList.setVisibility(View.GONE);
+                        btnHide.setImageResource(R.drawable.ic_baseline_arrow_upward_24);
+//                        btnHide.setText("Show");
+                        break;
+
+                        case View.GONE:
+                            lnList.setVisibility(View.VISIBLE);
+                            btnHide.setImageResource(R.drawable.ic_baseline_arrow_downward_24);
+//                            btnHide.setText("Hide");
+                            break;
+                }
             }
         });
         updateList();

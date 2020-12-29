@@ -65,7 +65,7 @@ public class DrawThread extends Thread{
             for (int i = 0; i < drawView.figures.get(j).points.size(); i++) {
                 Point lPoint = drawView.figures.get(j).points.get(i);
 
-                if (i == 0 || i == drawView.figures.get(j).points.size() - 1 && drawView.figures.get(j).isSelected){
+                if ((i == 0 || i == drawView.figures.get(j).points.size() - 1) && drawView.figures.get(j).isSelected){
                     p.setColor(Color.GREEN);
                 }
                 else {
