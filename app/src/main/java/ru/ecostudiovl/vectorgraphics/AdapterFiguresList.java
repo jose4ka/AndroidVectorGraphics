@@ -38,10 +38,10 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                figureSelect.onSelectFigure(mData.get(position));
+                figureSelect.onSelectFigure(position);
             }
         });
-        holder.tvName.setText(mData.get(position).getName() + " : "+mData.get(position).getFiguresListIndex());
+        holder.tvName.setText(mData.get(position).name);
     }
 
     @Override
@@ -62,6 +62,6 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
 
 
     public interface FigureSelect{
-        void onSelectFigure(Figure figure);
+        void onSelectFigure(int index);
     }
 }

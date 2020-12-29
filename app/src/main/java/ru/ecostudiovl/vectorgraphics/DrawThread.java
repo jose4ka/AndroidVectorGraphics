@@ -59,12 +59,35 @@ public class DrawThread extends Thread{
         int r = 5;
 
         p.setColor(Color.BLACK);
-        for (int i = 0; i < drawView.points.size(); i++) {
-            Point lPoint = drawView.points.get(i);
-            canvas.drawCircle(lPoint.x, lPoint.y, r, p);
-            canvas.drawLine(lPoint.x, lPoint.y, drawView.points.get(lPoint.nextIndex).x, drawView.points.get(lPoint.nextIndex).y, p);
-            canvas.drawText(""+i, lPoint.x, lPoint.y + 20, p);
+
+        for (int j = 0; j < drawView.figures.size(); j++) {
+
+            for (int i = 0; i < drawView.figures.get(j).points.size(); i++) {
+                Point lPoint = drawView.figures.get(j).points.get(i);
+
+                if (i == 0 || i == drawView.figures.get(j).points.size() - 1){
+                    p.setColor(Color.GREEN);
+                }
+                else {
+                    p.setColor(Color.BLACK);
+                }
+                canvas.drawCircle(lPoint.x, lPoint.y, r, p);
+
+
+                if (drawView.figures.get(j).isSelected){
+                    p.setColor(Color.BLUE);
+                }
+                else {
+                    p.setColor(Color.BLACK);
+                }
+
+                canvas.drawLine(lPoint.x, lPoint.y, drawView.figures.get(j).points.get(lPoint.nextIndex).x,
+                        drawView.figures.get(j).points.get(lPoint.nextIndex).y, p);
+
+            }
+
         }
+
         canvas.restore();
     }
 
