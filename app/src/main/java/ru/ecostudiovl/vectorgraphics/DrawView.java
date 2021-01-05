@@ -197,4 +197,12 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     public void setSelectedFigure(int selectedFigure) {
         this.selectedFigure = selectedFigure;
     }
+
+    public List<Figure> getFigures() {
+        return figures;
+    }
+
+    public void setFigures(List<Figure> figures) {
+        this.figures = figures;
+    }
 }

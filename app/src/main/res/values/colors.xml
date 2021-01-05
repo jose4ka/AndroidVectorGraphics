@@ -7,4 +7,6 @@
 
     <color name="purple">#935BFF</color>
     <color name="purple_light">#EBE1FF</color>
+    <color name="selected_figure">#B2FF77</color>
+    <color name="simple_figure">#FFFFFF</color>
 </resources>

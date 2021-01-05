@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         etFigureName = findViewById(R.id.etFigureName);
 
         btnAddFigure = findViewById(R.id.btnAddFigure);
-        btnAddFigure.setOnClickListener(new View.OnClickListener() {
+        btnAddFigure.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 clearSelected();
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         frameLayout.addView(drawView);
         currentMode = Mode.create;
         btnChangeMode = findViewById(R.id.btnChangeMode);
-        btnChangeMode.setOnClickListener(new View.OnClickListener() {
+        btnChangeMode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (currentMode) {
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
                         clearSelected();
                         drawView.setSelectedFigure(-1);
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_preview_24);
+                        updateList();
                         break;
                     case view:
                         currentMode = Mode.create;
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         });
 
         btnClear = findViewById(R.id.buttonClear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+        btnClear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawView.figures = new ArrayList<>();
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         lnList = findViewById(R.id.lnList);
 
         btnHide = findViewById(R.id.btnShowHide);
-        btnHide.setOnClickListener(new View.OnClickListener() {
+        btnHide.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (lnList.getVisibility()){
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     }
 
     public void updateList(){
-        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(drawView.figures, this);
+        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(drawView.figures, this, getApplicationContext());
         rvFigures.setAdapter(adapterFiguresList);
         rvFigures.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
@@ -150,7 +152,20 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         clearSelected();
         drawView.figures.get(index).isSelected = true;
 
+        currentMode = Mode.edit;
+        drawView.mode = Mode.edit;
+        btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+
+        updateList();
     }
+
+    @Override
+    public void onDeletedFigure(int index) {
+        drawView.getFigures().remove(index);
+        updateList();
+    }
+
+
 
     private void clearSelected(){
         for (int i = 0; i < drawView.figures.size(); i++){
