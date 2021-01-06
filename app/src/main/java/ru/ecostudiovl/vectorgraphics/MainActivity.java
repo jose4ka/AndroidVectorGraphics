@@ -78,28 +78,27 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
                         currentMode = Mode.edit;
                         drawView.mode = Mode.edit;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
-//                        btnChangeMode.setText("Edit");
                         break;
                     case edit:
                         currentMode = Mode.delete;
                         drawView.mode = Mode.delete;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
-//                        btnChangeMode.setText("Delete");
                         break;
                     case delete:
                         currentMode = Mode.view;
                         drawView.mode = Mode.view;
-//                        btnChangeMode.setText("View");
                         clearSelected();
                         drawView.setSelectedFigure(-1);
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_preview_24);
                         updateList();
                         break;
                     case view:
-                        currentMode = Mode.create;
-                        drawView.mode = Mode.create;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
-//                        btnChangeMode.setText("Create");
+                        if (hasSelected()){
+                            currentMode = Mode.create;
+                            drawView.mode = Mode.create;
+                            btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+                        }
+
                         break;
                 }
             }
@@ -152,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         clearSelected();
         drawView.figures.get(index).isSelected = true;
 
-        currentMode = Mode.edit;
-        drawView.mode = Mode.edit;
-        btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
-
+        currentMode = Mode.create;
+        drawView.mode = Mode.create;
+        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+        
         updateList();
     }
 
@@ -171,5 +170,16 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         for (int i = 0; i < drawView.figures.size(); i++){
             drawView.figures.get(i).isSelected = false;
         }
+    }
+
+    private boolean hasSelected(){
+        for (int i = 0; i < drawView.figures.size(); i++){
+
+            if (drawView.figures.get(i).isSelected){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
