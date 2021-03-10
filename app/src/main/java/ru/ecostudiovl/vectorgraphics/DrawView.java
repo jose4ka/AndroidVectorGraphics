@@ -26,6 +26,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     private int catchPoint = -1;
 
+    private int scaleMultiplier = 1;
+    private float xDelta, yDelta = 0;
+
 
     public DrawView(Context context) {
         super(context);
@@ -69,6 +72,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        float x = (event.getX() - xDelta) * scaleMultiplier;
+        float y = (event.getY() - yDelta) * scaleMultiplier;
 
         if (figures.size() > 0){
             switch (mode) {
@@ -76,10 +81,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     if (selectedFigure != -1){
                         if (figures.get(selectedFigure).points.size() == 0) {
-                            figures.get(selectedFigure).points.add(new Point(event.getX(), event.getY(), selectedFigure, figures.get(selectedFigure).points.size()));
+                            figures.get(selectedFigure).points.add(new Point(x, y, selectedFigure, figures.get(selectedFigure).points.size()));
                         } else if (figures.get(selectedFigure).points.size() >= 1) {
                             figures.get(selectedFigure).points.get(figures.get(selectedFigure).points.size() - 1).nextIndex = figures.get(selectedFigure).points.size();
-                            figures.get(selectedFigure).points.add(new Point(event.getX(), event.getY(), selectedFigure, 0));
+                            figures.get(selectedFigure).points.add(new Point(x, y, selectedFigure, 0));
                         }
                     }
 
@@ -97,12 +102,12 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         if (figures.get(selectedFigure).points.size() > 0) {
                             if (catchPoint == -1) {
                                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    catchPoint = getTouchedPoint(event.getX(), event.getY());
+                                    catchPoint = getTouchedPoint(x, y);
                                 }
 
                             } else {
-                                figures.get(selectedFigure).points.get(catchPoint).x = event.getX();
-                                figures.get(selectedFigure).points.get(catchPoint).y = event.getY();
+                                figures.get(selectedFigure).points.get(catchPoint).x = x;
+                                figures.get(selectedFigure).points.get(catchPoint).y = y;
                             }
                         }
                     }
@@ -115,7 +120,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     if (selectedFigure != -1){
                         if (figures.get(selectedFigure).points.size() > 0) {
-                            int touched = getTouchedPoint(event.getX(), event.getY());
+                            int touched = getTouchedPoint(x, y);
 
                             if (touched == -1){
                                 return false;
@@ -196,5 +201,29 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void setSelectedFigure(int selectedFigure) {
         this.selectedFigure = selectedFigure;
+    }
+
+    public int getScaleMultiplier() {
+        return scaleMultiplier;
+    }
+
+    public void setScaleMultiplier(int scaleMultiplier) {
+        this.scaleMultiplier = scaleMultiplier;
+    }
+
+    public float getxDelta() {
+        return xDelta;
+    }
+
+    public void setxDelta(float xDelta) {
+        this.xDelta = xDelta;
+    }
+
+    public float getyDelta() {
+        return yDelta;
+    }
+
+    public void setyDelta(float yDelta) {
+        this.yDelta = yDelta;
     }
 }

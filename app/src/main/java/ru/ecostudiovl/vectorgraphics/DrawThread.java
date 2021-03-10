@@ -71,7 +71,8 @@ public class DrawThread extends Thread{
                 else {
                     p.setColor(Color.BLACK);
                 }
-                canvas.drawCircle(lPoint.x, lPoint.y, r, p);
+                canvas.drawCircle((lPoint.x + drawView.getxDelta()) * drawView.getScaleMultiplier(),
+                        (lPoint.y + drawView.getyDelta()) * drawView.getScaleMultiplier(), r, p);
 
 
                 if (drawView.figures.get(j).isSelected){
@@ -81,8 +82,10 @@ public class DrawThread extends Thread{
                     p.setColor(Color.BLACK);
                 }
 
-                canvas.drawLine(lPoint.x, lPoint.y, drawView.figures.get(j).points.get(lPoint.nextIndex).x,
-                        drawView.figures.get(j).points.get(lPoint.nextIndex).y, p);
+                canvas.drawLine((lPoint.x + drawView.getxDelta()) * drawView.getScaleMultiplier(),
+                        (lPoint.y + drawView.getyDelta()) * drawView.getScaleMultiplier(),
+                        (drawView.figures.get(j).points.get(lPoint.nextIndex).x +  + drawView.getxDelta()) * drawView.getScaleMultiplier(),
+                        (drawView.figures.get(j).points.get(lPoint.nextIndex).y +  + drawView.getyDelta()) * drawView.getScaleMultiplier(), p);
 
             }
 

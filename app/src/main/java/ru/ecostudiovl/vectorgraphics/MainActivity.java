@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     private RecyclerView rvFigures;
     private DrawView drawView;
     private ImageButton btnChangeMode;
+
+    private ImageButton btnLeft, btnRight, btnUp, btnDown;
+    private SeekBar seekBarScale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +135,57 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
 //                            btnHide.setText("Hide");
                             break;
                 }
+            }
+        });
+
+        drawView.setScaleMultiplier(50);
+        btnLeft = findViewById(R.id.btnLeft);
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setxDelta(drawView.getxDelta() + 100);
+            }
+        });
+
+        btnRight = findViewById(R.id.btnRight);
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setxDelta(drawView.getxDelta() - 100);
+            }
+        });
+
+        btnUp = findViewById(R.id.btnUp);
+        btnUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setyDelta(drawView.getyDelta() + 100);
+            }
+        });
+
+        btnDown = findViewById(R.id.btnDown);
+        btnDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawView.setyDelta(drawView.getyDelta() - 100);
+            }
+        });
+
+        seekBarScale = findViewById(R.id.seekBar);
+        seekBarScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                drawView.setScaleMultiplier(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
         updateList();
