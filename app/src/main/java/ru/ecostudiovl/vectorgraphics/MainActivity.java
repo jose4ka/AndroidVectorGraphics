@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -15,7 +15,8 @@ import android.widget.SeekBar;
 
 import java.util.ArrayList;
 
-import ru.ecostudiovl.vectorgraphics.figure.Figure;
+import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
+import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Multiplex;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterFiguresList.FigureSelect {
@@ -51,19 +52,19 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         etFigureName = findViewById(R.id.etFigureName);
 
         btnAddFigure = findViewById(R.id.btnAddFigure);
-        btnAddFigure.setOnClickListener(new View.OnClickListener() {
+        btnAddFigure.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                clearSelected();
-                drawView.setSelectedFigure(drawView.figures.size());
-                drawView.figures.add(new Figure(etFigureName.getText().toString()+" : "+drawView.figures.size()));
-                drawView.figures.get(drawView.getSelectedFigure()).isSelected = true;
-                etFigureName.setText("");
-
+//                clearSelected();
+//                drawView.setSelectedFigure(0);
+//                drawView.getjPointData().getFigures().add(new Multiplex());
+//                drawView.getjPointData().getFigures().get(drawView.getSelectedFigure()).isSelected = true;
+//                etFigureName.setText("");
+//
                 currentMode = Mode.create;
                 drawView.mode = Mode.create;
-//                btnChangeMode.setText("Create");
-                updateList();
+////                btnChangeMode.setText("Create");
+//                updateList();
             }
         });
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         frameLayout.addView(drawView);
         currentMode = Mode.create;
         btnChangeMode = findViewById(R.id.btnChangeMode);
-        btnChangeMode.setOnClickListener(new View.OnClickListener() {
+        btnChangeMode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (currentMode) {
@@ -81,37 +82,37 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
                         currentMode = Mode.edit;
                         drawView.mode = Mode.edit;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
-//                        btnChangeMode.setText("Edit");
                         break;
                     case edit:
                         currentMode = Mode.delete;
                         drawView.mode = Mode.delete;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
-//                        btnChangeMode.setText("Delete");
                         break;
                     case delete:
                         currentMode = Mode.view;
                         drawView.mode = Mode.view;
-//                        btnChangeMode.setText("View");
                         clearSelected();
                         drawView.setSelectedFigure(-1);
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_preview_24);
+                        updateList();
                         break;
                     case view:
-                        currentMode = Mode.create;
-                        drawView.mode = Mode.create;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
-//                        btnChangeMode.setText("Create");
+                        if (hasSelected()){
+                            currentMode = Mode.create;
+                            drawView.mode = Mode.create;
+                            btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+                        }
+
                         break;
                 }
             }
         });
 
         btnClear = findViewById(R.id.buttonClear);
-        btnClear.setOnClickListener(new View.OnClickListener() {
+        btnClear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawView.figures = new ArrayList<>();
+                drawView.getjPointData().getFigures().clear();
                 updateList();
             }
         });
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         lnList = findViewById(R.id.lnList);
 
         btnHide = findViewById(R.id.btnShowHide);
-        btnHide.setOnClickListener(new View.OnClickListener() {
+        btnHide.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (lnList.getVisibility()){
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawView.setyDelta(drawView.getyDelta() + 100);
+                drawView.setyDelta(drawView.getyDelta() - 100);
             }
         });
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawView.setyDelta(drawView.getyDelta() - 100);
+                drawView.setyDelta(drawView.getyDelta() + 100);
             }
         });
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         seekBarScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                drawView.setScaleMultiplier(i);
+//                drawView.setScaleMultiplier(i);
             }
 
             @Override
@@ -192,24 +193,48 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     }
 
     public void updateList(){
-        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(drawView.figures, this);
-        rvFigures.setAdapter(adapterFiguresList);
-        rvFigures.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(drawView.figures, this, getApplicationContext());
+//        rvFigures.setAdapter(adapterFiguresList);
+//        rvFigures.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
 
     @Override
     public void onSelectFigure(int index) {
-        drawView.setSelectedFigure(index);
+        drawView.setSelectedFigure(0);
 
         clearSelected();
-        drawView.figures.get(index).isSelected = true;
+//        drawView.figures.get(index).isSelected = true;
 
+        currentMode = Mode.create;
+        drawView.mode = Mode.create;
+        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+        
+        updateList();
     }
 
+    @Override
+    public void onDeletedFigure(int index) {
+//        drawView.getFigures().remove(index);
+        updateList();
+    }
+
+
+
     private void clearSelected(){
-        for (int i = 0; i < drawView.figures.size(); i++){
-            drawView.figures.get(i).isSelected = false;
-        }
+//        for (int i = 0; i < drawView.figures.size(); i++){
+//            drawView.figures.get(i).isSelected = false;
+//        }
+    }
+
+    private boolean hasSelected(){
+//        for (int i = 0; i < drawView.figures.size(); i++){
+//
+//            if (drawView.figures.get(i).isSelected){
+//                return true;
+//            }
+//        }
+
+        return false;
     }
 }

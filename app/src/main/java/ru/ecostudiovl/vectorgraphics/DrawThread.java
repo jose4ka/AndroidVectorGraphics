@@ -5,7 +5,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 
-import ru.ecostudiovl.vectorgraphics.figure.Point;
+import java.util.List;
+
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 
 public class DrawThread extends Thread{
 
@@ -60,36 +63,38 @@ public class DrawThread extends Thread{
 
         p.setColor(Color.BLACK);
 
-        for (int j = 0; j < drawView.figures.size(); j++) {
 
-            for (int i = 0; i < drawView.figures.get(j).points.size(); i++) {
-                Point lPoint = drawView.figures.get(j).points.get(i);
+        List<JPoint> points = drawView.getPoints();
+        for (int i = 0; i < points.size(); i++) {
+            p.setColor(Color.BLACK);
+            canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), 5, p);
+            p.setColor(Color.RED);
+            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
 
-                if ((i == 0 || i == drawView.figures.get(j).points.size() - 1) && drawView.figures.get(j).isSelected){
-                    p.setColor(Color.GREEN);
-                }
-                else {
-                    p.setColor(Color.BLACK);
-                }
-                canvas.drawCircle((lPoint.x + drawView.getxDelta()) * drawView.getScaleMultiplier(),
-                        (lPoint.y + drawView.getyDelta()) * drawView.getScaleMultiplier(), r, p);
+            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
+            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
+        }
 
 
-                if (drawView.figures.get(j).isSelected){
-                    p.setColor(Color.BLUE);
-                }
-                else {
-                    p.setColor(Color.BLACK);
-                }
+        p.setColor(Color.BLACK);
 
-                canvas.drawLine((lPoint.x + drawView.getxDelta()) * drawView.getScaleMultiplier(),
-                        (lPoint.y + drawView.getyDelta()) * drawView.getScaleMultiplier(),
-                        (drawView.figures.get(j).points.get(lPoint.nextIndex).x +  + drawView.getxDelta()) * drawView.getScaleMultiplier(),
-                        (drawView.figures.get(j).points.get(lPoint.nextIndex).y +  + drawView.getyDelta()) * drawView.getScaleMultiplier(), p);
+        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++) {
+
+
+            List<JPair> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
+
+            for (int j = 0; j < lPoints.size() -1; j++) {
+                canvas.drawLine(
+                        points.get(lPoints.get(j).getStartIndex()).getX(),
+                        points.get(lPoints.get(j).getStartIndex()).getY(),
+                        points.get(lPoints.get(j).getEndIndex()).getX(),
+                        points.get(lPoints.get(j).getEndIndex()).getY(),
+                        p);
 
             }
-
         }
+
+
 
         canvas.restore();
     }
