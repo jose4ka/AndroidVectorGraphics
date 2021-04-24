@@ -92,7 +92,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                             jPointData.getFigures().get(selectedFigure).addPair(0,0);
                         }
                         else{
-                            jPointData.getFigures().get(selectedFigure).getPoints().set(0, new JPair(0, 1));
                             jPointData.getFigures().get(selectedFigure).addPair(
 
                                     jPointData.getFigures().get(selectedFigure).getPoints().get(
