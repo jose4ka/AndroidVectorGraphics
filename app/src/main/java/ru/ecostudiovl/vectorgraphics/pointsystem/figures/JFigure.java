@@ -1,12 +1,7 @@
 package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
 
 public class JFigure {
 
@@ -26,7 +21,6 @@ public class JFigure {
     }
 
     public void addPoint(int index){
-        Log.i(TAG, "addPoint: "+index);
         if (isClosePointNumber){
             if (points.size() < pointsCount){
                 points.add(index);
@@ -38,10 +32,13 @@ public class JFigure {
     }
 
     public void deletePoint(int index){
-        points.remove(getIndexOfPoint(index));
+        points.remove(getLocalIndexOfPoint(index));
     }
 
-    public int getIndexOfPoint(int index){
+    /*
+    Нужно найти индекс точки в локальном списке
+     */
+    public int getLocalIndexOfPoint(int index){
         for (int i = 0; i < points.size(); i++) {
             if (points.get(i).equals(index)){
                 return i;
@@ -49,18 +46,6 @@ public class JFigure {
         }
         return -1;
     }
-
-
-    public void printEdges(){
-
-//        for (int i = 0; i < edges.size(); i++) {
-//            Log.i(TAG, "printEdges: "+edges.get(i).getStartIndex() + " - "+edges.get(i).getEndIndex());
-//        }
-    }
-
-
-
-
 
 
     public int getPointsCount() {

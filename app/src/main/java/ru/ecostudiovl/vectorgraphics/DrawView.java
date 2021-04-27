@@ -150,7 +150,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         if (touchedPoint != -1){
                             points.remove(touchedPoint); //Удаляем точку из общего списка
                             jPointData.getFigures().get(selectedFigure).deletePoint(touchedPoint); //Удаляем точку из текущей фигуры
-                            minimize(touchedPoint); //Финимизируем все точки в структуре данных
+                            minimize(touchedPoint); //Минимизируем все точки в структуре данных
                         }
                     }
 

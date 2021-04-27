@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Quadrilateral;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Triangle;
-
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 
 public class JPointData {
 

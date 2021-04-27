@@ -7,7 +7,6 @@ import android.view.SurfaceHolder;
 
 import java.util.List;
 
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 
 public class DrawThread extends Thread{
@@ -59,26 +58,22 @@ public class DrawThread extends Thread{
         canvas.save();
 
         canvas.drawColor(Color.rgb(255, 255, 255)); //Рисуем фон
-        int r = 5;
+        int r = 3;
 
         p.setColor(Color.BLACK);
 
 
         List<JPoint> points = drawView.getPoints();
-        for (int i = 0; i < points.size(); i++) {
-            p.setColor(Color.BLACK);
-            canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), 5, p);
-            p.setColor(Color.RED);
-//            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
-//            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
-//            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
-        }
-
 
         p.setColor(Color.BLACK);
 
-        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++) {
+        //Рисуем сами точки
+        for (int i = 0; i < points.size(); i++) {
+            canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), r, p);
+        }
 
+        //Соединяем точки друг с другом
+        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++) {
 
             List<Integer> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
 
@@ -94,7 +89,7 @@ public class DrawThread extends Thread{
                         p);
 
 
-                //Если фигуры закрытая, то ещё рисуем замыкающую линию
+                //Если фигуры замкнутая, то ещё рисуем замыкающую линию
                 if (drawView.getjPointData().getFigures().get(i).isClosedFigure()){
                     canvas.drawLine(
                             points.get(lPoints.get(j)).getX(),
@@ -104,10 +99,9 @@ public class DrawThread extends Thread{
                             p);
                 }
 
-
-                p.setColor(Color.BLUE);
-
             }
+
+            lPoints = null;
         }
 
 
@@ -115,9 +109,6 @@ public class DrawThread extends Thread{
         points = null;
         canvas.restore();
     }
-
-
-
 
     public void setRunning(boolean running) {
         this.running = running;
