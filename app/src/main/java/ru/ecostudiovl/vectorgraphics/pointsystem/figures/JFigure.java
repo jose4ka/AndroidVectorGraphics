@@ -14,13 +14,15 @@ public class JFigure {
     private int pointsCount;
     private boolean isClosePointNumber;
     private boolean isClosedFigure;
+    private String name;
     protected List<Integer> points;
 
-    public JFigure(boolean isClosePointNumber, boolean isClosedFigure, int pointsCount){
+    public JFigure(boolean isClosePointNumber, boolean isClosedFigure, int pointsCount, String name){
         this.pointsCount = pointsCount;
         this.points = new LinkedList<>();
         this.isClosePointNumber = isClosePointNumber;
         this.isClosedFigure = isClosedFigure;
+        this.name = name;
     }
 
     public void addPoint(int index){
@@ -91,5 +93,13 @@ public class JFigure {
 
     public void setClosedFigure(boolean closedFigure) {
         isClosedFigure = closedFigure;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

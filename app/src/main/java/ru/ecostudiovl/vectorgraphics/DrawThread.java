@@ -58,7 +58,7 @@ public class DrawThread extends Thread{
     private void render(Canvas canvas){
         canvas.save();
 
-        canvas.drawColor(Color.rgb(255, 255, 255));
+        canvas.drawColor(Color.rgb(255, 255, 255)); //Рисуем фон
         int r = 5;
 
         p.setColor(Color.BLACK);
@@ -69,9 +69,9 @@ public class DrawThread extends Thread{
             p.setColor(Color.BLACK);
             canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), 5, p);
             p.setColor(Color.RED);
-            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
-            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
-            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
+//            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
+//            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
+//            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
         }
 
 

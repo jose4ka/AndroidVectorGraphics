@@ -2,7 +2,6 @@ package ru.ecostudiovl.vectorgraphics;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,31 +15,45 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Multiplex;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
-    public static String TAG = "=== DRAW_VIEW";
-    public MainActivity.Mode mode = MainActivity.Mode.create;
+    public static String TAG = "=== DRAW_VIEW"; //Тег для логов.
+    public MainActivity.Mode mode;//Текущий режим работы с экраном.
 
-    public JPointData jPointData;
-    private List<JPoint> points;
+    public JPointData jPointData; /*Структура данных, которая хранит в себе данные о фигурах, основываясь
+                                    на индексы из общего списка точек.*/
 
-    private DrawThread drawThread;
+    private List<JPoint> points;/*Список абсолютно всех точек, которые есть на экране и которые задействуются
+                                    в структуре данных, описывающих фигуры.*/
 
-    private int selectedFigure = 0;
+    private int selectedFigure; //Выбранная фигура на данный момент.
+    private int touchedPoint; //Индекс точки, на которую мы тыкнули пальцем.
+    private boolean isPointTouched; //Переменная нужна при перемещении точки, чтобы не цеплять точки которые очень рядом.
 
-    private int catchPoint = -1;
-    private boolean isPointCatched = false;
-
+    /*
+    TODO: реализовать нормальное перемещение по холсту, и масштабирование
+    Вспомогательные перменные которые на данный момент не используются.
+    Нужны для перемещения по холсту, и для масштабирования изображения.
+     */
     private int scaleMultiplier = 1;
     private float xDelta, yDelta = 0;
+
+    private DrawThread drawThread;//Главный поток, отвечающий за постоянную отрисовку фигур и точек (рендеринг).
+
+
 
 
     public DrawView(Context context) {
         super(context);
         getHolder().addCallback(this);
-        jPointData = new JPointData();
-        jPointData.getFigures().add(new Multiplex());
-        points = new LinkedList<>();
+        initializeVariables();
+    }
+
+    private void initializeVariables(){
         mode = MainActivity.Mode.create;
-        isPointCatched = false;
+        jPointData = new JPointData();
+        points = new LinkedList<>();
+        selectedFigure = -1; //Изначально -1, т.к. фигур никаких нет
+        touchedPoint = -1; //Изначально -1, т.к. точек никаких нет
+        isPointTouched = false;
     }
 
 
@@ -51,9 +64,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         startDrawThread();
     }
 
+    //Останавливаем поток
     public void stopDrawThread() {
-        //Останавливаем поток
-
         boolean retry = true;
         drawThread.setRunning(false);
         while (retry) {
@@ -75,45 +87,55 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    /*
+    Эвент реагирующий на нажатия по экрану
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         float x = (event.getX());
         float y = (event.getY());
 
+        //Если у нас есть хоть какие-то фигуры, значит уже можем что-то делать с точками
         if (jPointData.getFigures().size() > 0){
             switch (mode) {
                 case create:
 
                     if (selectedFigure != -1){
-                        points.add(new JPoint(x, y));
-                        jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1);
+                        points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                        jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1); /*Добавляем
+                        индекс точки в структуру данных*/
+
                     }
 
                     return false;
                 case edit:
 
-                    if (!isPointCatched){
-                        catchPoint = getTouchedPoint(x, y);
-                    }
-                    if (catchPoint != -1){
-                        isPointCatched = true;
-                    }
                     if (selectedFigure != -1){
+
+                        if (!isPointTouched){
+                        touchedPoint = getTouchedPoint(x, y);
+                        }
+
+                        if (touchedPoint != -1){
+                        isPointTouched = true;
+                        }
+
                         //Если мы подняли палец, значит никакая точка не выбрана
                         if (event.getAction() == MotionEvent.ACTION_UP) {
-                            isPointCatched = false;
-                            catchPoint = -1;
+                            isPointTouched = false;
+                            touchedPoint = -1;
                         }
+
                         if (points.size() > 0) {
-                            if (catchPoint == -1) {
+                            if (touchedPoint == -1) {
                                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    catchPoint = getTouchedPoint(x, y);
+                                    touchedPoint = getTouchedPoint(x, y);
                                 }
 
                             } else {
-                                points.get(catchPoint).setX(x);
-                                points.get(catchPoint).setY(y);
+                                points.get(touchedPoint).setX(x);
+                                points.get(touchedPoint).setY(y);
                             }
                         }
                     }
@@ -124,15 +146,13 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                 case delete:
                     if (selectedFigure != -1){
-                        catchPoint = getTouchedPoint(x, y);
-                        if (catchPoint != -1){
-                            Log.i(TAG, "onTouchEvent: delete catched point "+catchPoint);
-                            points.remove(catchPoint);
-                            jPointData.getFigures().get(selectedFigure).deletePoint(catchPoint);
-                            minimize(catchPoint);
+                        touchedPoint = getTouchedPoint(x, y);
+                        if (touchedPoint != -1){
+                            points.remove(touchedPoint); //Удаляем точку из общего списка
+                            jPointData.getFigures().get(selectedFigure).deletePoint(touchedPoint); //Удаляем точку из текущей фигуры
+                            minimize(touchedPoint); //Финимизируем все точки в структуре данных
                         }
                     }
-
 
                     return false;
 
@@ -148,12 +168,21 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-    private int getTouchedPoint(float x, float y) {
+    /*
+    Проверяем нахождение точки в радиусе
+     */
+    private int getTouchedPoint(float centerX, float centerY) {
         int result = -1;
+        float radius = 30;
 
         for (int i = 0; i < points.size(); i++) {
-            if (Math.abs(points.get(i).getX() - x) <= 30 &&
-                    (Math.abs(points.get(i).getY() - y) <= 30)) {
+
+            boolean pointInRadius = (
+                    Math.pow((points.get(i).getX() - centerX), 2)+
+                            Math.pow(((points.get(i).getY() - centerY)),2)) <
+                    (Math.pow(radius, 2));
+
+            if (pointInRadius) {
                 result = i;
             }
         }
@@ -161,6 +190,13 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    /*
+    Данная процедура минимизирует индексы точек которые ссылаются
+    Для чего это нужно?
+    Когда мы удаляем точку из общего списка, все точки после неё автоматически скатываются по индексу вниз
+    Поэтому, чтобы не было несостыковок в структуре данных, мы в каждой фигуре,
+    где есть индексы точек большие чем удалённая точка - понижаем эти индексы
+     */
     private void minimize(int index){
         for (int i = 0; i < jPointData.getFigures().size(); i++) {
             for (int j = 0; j < jPointData.getFigures().get(i).getPoints().size(); j++) {
