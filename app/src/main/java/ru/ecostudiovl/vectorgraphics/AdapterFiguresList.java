@@ -44,20 +44,20 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
             }
         });
 
-//        if (mData.get(position).isSelected){
-//            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
-//        }
-//        else {
-//            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
-//        }
+        if (mData.get(position).isSelected()){
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
+        }
+        else {
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
+        }
 
-//        holder.tvName.setText(mData.get(position).name);
-//        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                figureSelect.onDeletedFigure(position);
-//            }
-//        });
+        holder.tvName.setText(mData.get(position).getName());
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                figureSelect.onDeletedFigure(position);
+            }
+        });
     }
 
     @Override

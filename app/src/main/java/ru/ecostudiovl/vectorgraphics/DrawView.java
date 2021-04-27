@@ -48,7 +48,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void initializeVariables(){
-        mode = MainActivity.Mode.create;
+        mode = MainActivity.Mode.view;
         jPointData = new JPointData();
         points = new LinkedList<>();
         selectedFigure = -1; //Изначально -1, т.к. фигур никаких нет
@@ -128,15 +128,18 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         }
 
                         if (points.size() > 0) {
-                            if (touchedPoint == -1) {
-                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    touchedPoint = getTouchedPoint(x, y);
-                                }
+                            if (jPointData.getFigures().get(selectedFigure).isContainsPoint(touchedPoint)){
+                                if (touchedPoint == -1) {
+                                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                        touchedPoint = getTouchedPoint(x, y);
+                                    }
 
-                            } else {
-                                points.get(touchedPoint).setX(x);
-                                points.get(touchedPoint).setY(y);
+                                } else {
+                                    points.get(touchedPoint).setX(x);
+                                    points.get(touchedPoint).setY(y);
+                                }
                             }
+
                         }
                     }
 

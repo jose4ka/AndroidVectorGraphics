@@ -77,9 +77,14 @@ public class DrawThread extends Thread{
 
             List<Integer> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
 
-            for (int j = 0; j < lPoints.size() - 1; j++) {
+            if (drawView.getjPointData().getFigures().get(i).isSelected()){
+                p.setColor(Color.BLUE);
+            }
+            else {
                 p.setColor(Color.BLACK);
+            }
 
+            for (int j = 0; j < lPoints.size() - 1; j++) {
 
                 canvas.drawLine(
                         points.get(lPoints.get(j)).getX(),

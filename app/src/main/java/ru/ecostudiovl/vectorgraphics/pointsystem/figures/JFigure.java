@@ -9,6 +9,7 @@ public class JFigure {
     private int pointsCount;
     private boolean isClosePointNumber;
     private boolean isClosedFigure;
+    private boolean isSelected;
     private String name;
     protected List<Integer> points;
 
@@ -17,6 +18,7 @@ public class JFigure {
         this.points = new LinkedList<>();
         this.isClosePointNumber = isClosePointNumber;
         this.isClosedFigure = isClosedFigure;
+        this.isSelected = false;
         this.name = name;
     }
 
@@ -47,6 +49,15 @@ public class JFigure {
         return -1;
     }
 
+
+    public boolean isContainsPoint(int index){
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).equals(index)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public int getPointsCount() {
         return pointsCount;
@@ -86,5 +97,13 @@ public class JFigure {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

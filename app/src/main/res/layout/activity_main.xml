@@ -27,7 +27,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:src="@drawable/ic_baseline_create_new_folder_24"
+                android:src="@drawable/ic_baseline_preview_24"
                 android:theme="@style/PurpleButton"
                 android:id="@+id/btnChangeMode"
                 android:text="create"
@@ -76,6 +76,7 @@
                 android:layout_height="wrap_content" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
