@@ -2,6 +2,7 @@ package ru.ecostudiovl.vectorgraphics;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -103,6 +104,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     if (selectedFigure != -1){
                         points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                        Log.i(TAG, "onTouchEvent: add "+(points.size() - 1));
                         jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1); /*Добавляем
                         индекс точки в структуру данных*/
 
@@ -207,6 +209,14 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     jPointData.getFigures().get(i).getPoints().set(j, jPointData.getFigures().get(i).getPoints().get(j) - 1);
                 }
             }
+        }
+    }
+
+    public void deletePointsWithFigure(int figureIndex){
+        for (int i = 0; i < jPointData.getFigures().get(figureIndex).getPoints().size() ; i++) {
+            Log.i(TAG, "deletePointsWithFigure: "+jPointData.getFigures().get(figureIndex).getPoints().get(i).intValue());
+            points.remove(jPointData.getFigures().get(figureIndex).getPoints().get(i).intValue());
+            minimize(jPointData.getFigures().get(figureIndex).getPoints().get(i).intValue());
         }
     }
 

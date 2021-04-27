@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         btnClear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                drawView.getPoints().clear();
                 drawView.getjPointData().getFigures().clear();
                 updateList();
             }
@@ -224,7 +226,10 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
 
     @Override
     public void onDeletedFigure(int index) {
+
+        drawView.deletePointsWithFigure(index);
         drawView.getjPointData().getFigures().remove(index);
+
         updateList();
     }
 
