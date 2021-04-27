@@ -2,14 +2,14 @@ package ru.ecostudiovl.vectorgraphics;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Multiplex;
@@ -38,7 +38,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         jPointData = new JPointData();
         jPointData.getFigures().add(new Multiplex());
-        points = new ArrayList<>();
+        points = new LinkedList<>();
         mode = MainActivity.Mode.create;
         isPointCatched = false;
     }
@@ -86,19 +86,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 case create:
 
                     if (selectedFigure != -1){
-                        points.add(new JPoint(x, y, points.size()));
-
-                        if(points.size() == 1){
-                            jPointData.getFigures().get(selectedFigure).addPair(0,0);
-                        }
-                        else{
-                            jPointData.getFigures().get(selectedFigure).addPair(
-
-                                    jPointData.getFigures().get(selectedFigure).getPoints().get(
-                                            jPointData.getFigures().get(selectedFigure).getPoints().size() - 1
-                                    ).getEndIndex(),
-                                    points.size() - 1);
-                        }
+                        points.add(new JPoint(x, y));
+                        jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1);
                     }
 
                     return false;
@@ -134,12 +123,13 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return true;
 
                 case delete:
-
                     if (selectedFigure != -1){
                         catchPoint = getTouchedPoint(x, y);
                         if (catchPoint != -1){
+                            Log.i(TAG, "onTouchEvent: delete catched point "+catchPoint);
                             points.remove(catchPoint);
                             jPointData.getFigures().get(selectedFigure).deletePoint(catchPoint);
+                            minimize(catchPoint);
                         }
                     }
 
@@ -169,6 +159,19 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         }
         return result;
     }
+
+
+    private void minimize(int index){
+        for (int i = 0; i < jPointData.getFigures().size(); i++) {
+            for (int j = 0; j < jPointData.getFigures().get(i).getPoints().size(); j++) {
+                if ( jPointData.getFigures().get(i).getPoints().get(j) > index){
+                    jPointData.getFigures().get(i).getPoints().set(j, jPointData.getFigures().get(i).getPoints().get(j) - 1);
+                }
+            }
+        }
+    }
+
+
 
 
     @Override

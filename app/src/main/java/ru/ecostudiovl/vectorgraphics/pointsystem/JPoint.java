@@ -4,13 +4,12 @@ public class JPoint {
 
     private float x;
     private float y;
-    private int index;
 
 
-    public JPoint(float x, float y, int index){
+
+    public JPoint(float x, float y){
         this.x = x;
         this.y = y;
-        this.index = index;
     }
 
 
@@ -40,5 +39,6 @@ public class JPoint {
     public void setY(float y) {
         this.y = y;
     }
+
 
 }

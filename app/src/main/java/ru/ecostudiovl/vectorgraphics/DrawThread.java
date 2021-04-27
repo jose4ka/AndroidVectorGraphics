@@ -68,10 +68,10 @@ public class DrawThread extends Thread{
         for (int i = 0; i < points.size(); i++) {
             p.setColor(Color.BLACK);
             canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), 5, p);
-//            p.setColor(Color.RED);
-//            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
-//            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
-//            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
+            p.setColor(Color.RED);
+            canvas.drawText(i+"", points.get(i).getX(), points.get(i).getY() + 20, p);
+            canvas.drawText("X: "+points.get(i).getX(), points.get(i).getX(), points.get(i).getY() + 40, p);
+            canvas.drawText("Y: "+points.get(i).getY(), points.get(i).getX(), points.get(i).getY() + 60, p);
         }
 
 
@@ -80,21 +80,39 @@ public class DrawThread extends Thread{
         for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++) {
 
 
-            List<JPair> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
+            List<Integer> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
 
-            for (int j = 0; j < lPoints.size(); j++) {
+            for (int j = 0; j < lPoints.size() - 1; j++) {
+                p.setColor(Color.BLACK);
+
+
                 canvas.drawLine(
-                        points.get(lPoints.get(j).getStartIndex()).getX(),
-                        points.get(lPoints.get(j).getStartIndex()).getY(),
-                        points.get(lPoints.get(j).getEndIndex()).getX(),
-                        points.get(lPoints.get(j).getEndIndex()).getY(),
+                        points.get(lPoints.get(j)).getX(),
+                        points.get(lPoints.get(j)).getY(),
+                        points.get(lPoints.get(j) + 1).getX(),
+                        points.get(lPoints.get(j) + 1).getY(),
                         p);
+
+
+                //Если фигуры закрытая, то ещё рисуем замыкающую линию
+                if (drawView.getjPointData().getFigures().get(i).isClosedFigure()){
+                    canvas.drawLine(
+                            points.get(lPoints.get(j)).getX(),
+                            points.get(lPoints.get(j)).getY(),
+                            points.get(0).getX(),
+                            points.get(0).getY(),
+                            p);
+                }
+
+
+                p.setColor(Color.BLUE);
 
             }
         }
 
 
 
+        points = null;
         canvas.restore();
     }
 

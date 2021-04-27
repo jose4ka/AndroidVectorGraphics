@@ -1,69 +1,47 @@
 package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPair;
 
 public class JFigure {
 
+    private static final String TAG = "=== FIGURE";
     private int pointsCount;
     private boolean isClosePointNumber;
-    protected List<JPair> points;
+    private boolean isClosedFigure;
+    protected List<Integer> points;
 
-    public JFigure(boolean isClosePointNumber, int pointsCount){
+    public JFigure(boolean isClosePointNumber, boolean isClosedFigure, int pointsCount){
         this.pointsCount = pointsCount;
-        this.points = new ArrayList<>();
+        this.points = new LinkedList<>();
         this.isClosePointNumber = isClosePointNumber;
+        this.isClosedFigure = isClosedFigure;
     }
 
-    public void addPair(int startIndex, int endIndex){
+    public void addPoint(int index){
+        Log.i(TAG, "addPoint: "+index);
         if (isClosePointNumber){
             if (points.size() < pointsCount){
-                points.add(new JPair(startIndex, endIndex));
+                points.add(index);
             }
         }
         else {
-            points.add(new JPair(startIndex, endIndex));
+            points.add(index);
         }
     }
 
     public void deletePoint(int index){
-        if (isContainsPoint(index)){
-            int position = getIndexOfPoint(index);
-            if (position != -1){
-                if (position == points.size() -1){
-                    points.get(position - 1).setEndIndex(points.get(position - 1).getStartIndex());
-                }
-                else if(position == 0){
-                    points.get(position + 1).setStartIndex(points.get(position + 1).getEndIndex());
-                }
-                else {
-                    points.get(position - 1).setEndIndex(points.get(position + 1).getStartIndex());
-                    points.get(position + 1).setStartIndex(points.get(position - 1).getEndIndex());
-                }
-
-                points.remove(position);
-            }
-
-
-        }
+        points.remove(getIndexOfPoint(index));
     }
 
-    public boolean isContainsPoint(int index){
+    public int getIndexOfPoint(int index){
         for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getStartIndex() == index ||
-                    points.get(i).getEndIndex() == index){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getIndexOfPoint(int point){
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).getStartIndex() == point ||
-                    points.get(i).getEndIndex() == point){
+            if (points.get(i).equals(index)){
                 return i;
             }
         }
@@ -71,17 +49,17 @@ public class JFigure {
     }
 
 
+    public void printEdges(){
 
-    public void printData(){
-        for (int i = 0; i < pointsCount; i++) {
-            System.out.print(points.get(i).getStartIndex());
-            if (i < pointsCount - 1){
-                System.out.print("-");
-            }
-
-        }
-        System.out.println();
+//        for (int i = 0; i < edges.size(); i++) {
+//            Log.i(TAG, "printEdges: "+edges.get(i).getStartIndex() + " - "+edges.get(i).getEndIndex());
+//        }
     }
+
+
+
+
+
 
     public int getPointsCount() {
         return pointsCount;
@@ -91,11 +69,27 @@ public class JFigure {
         this.pointsCount = pointsCount;
     }
 
-    public List<JPair> getPoints() {
+    public List<Integer> getPoints() {
         return points;
     }
 
-    public void setPoints(List<JPair> points) {
+    public void setPoints(List<Integer> points) {
         this.points = points;
+    }
+
+    public boolean isClosePointNumber() {
+        return isClosePointNumber;
+    }
+
+    public void setClosePointNumber(boolean closePointNumber) {
+        isClosePointNumber = closePointNumber;
+    }
+
+    public boolean isClosedFigure() {
+        return isClosedFigure;
+    }
+
+    public void setClosedFigure(boolean closedFigure) {
+        isClosedFigure = closedFigure;
     }
 }

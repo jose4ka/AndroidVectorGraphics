@@ -4,7 +4,7 @@ public class Triangle extends JFigure {
 
 
     public Triangle(){
-        super(true, 3);
+        super(true,false, 3);
 
     }
 
