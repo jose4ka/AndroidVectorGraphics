@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
+import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class JPointData {
 
 
     private List<JFigure> figures;
+    private List<JFigureTemplates> templates;
 
     public JPointData(){
         figures = new ArrayList<>();
-    }
-
-    public float findLength(JPoint start, JPoint end){
-        return (float) Math.sqrt(Math.pow((end.getX() - start.getX()), 2)+Math.pow((end.getY() - start.getY()), 2));
-    }
-
-    public boolean comeInRadius(JPoint start, JPoint end, float r){
-        return Math.pow((start.getX() - end.getX()),2) + Math.pow((start.getY() - end.getY()),2) < Math.pow(r, 2);
+        templates = new ArrayList<>();
+        templates.add(new JFigureTemplates(0, false, false));
     }
 
     public List<JFigure> getFigures() {
@@ -28,5 +24,13 @@ public class JPointData {
 
     public void setFigures(List<JFigure> figures) {
         this.figures = figures;
+    }
+
+    public List<JFigureTemplates> getTemplates() {
+        return templates;
+    }
+
+    public void setTemplates(List<JFigureTemplates> templates) {
+        this.templates = templates;
     }
 }

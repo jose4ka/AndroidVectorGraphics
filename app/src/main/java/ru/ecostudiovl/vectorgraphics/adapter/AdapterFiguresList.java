@@ -1,4 +1,4 @@
-package ru.ecostudiovl.vectorgraphics;
+package ru.ecostudiovl.vectorgraphics.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 
 public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.ViewHolder> {

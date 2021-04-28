@@ -1,4 +1,4 @@
-package ru.ecostudiovl.vectorgraphics;
+package ru.ecostudiovl.vectorgraphics.view;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -94,8 +94,9 @@ public class DrawThread extends Thread{
                         p);
 
 
+
                 //Если фигуры замкнутая, то ещё рисуем замыкающую линию
-                if (drawView.getjPointData().getFigures().get(i).isClosedFigure()){
+                if (drawView.getjPointData().getTemplates().get(drawView.getjPointData().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
                     canvas.drawLine(
                             points.get(lPoints.get(j)).getX(),
                             points.get(lPoints.get(j)).getY(),

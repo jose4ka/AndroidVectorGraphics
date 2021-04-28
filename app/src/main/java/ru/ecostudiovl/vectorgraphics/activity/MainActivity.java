@@ -1,11 +1,10 @@
-package ru.ecostudiovl.vectorgraphics;
+package ru.ecostudiovl.vectorgraphics.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -14,16 +13,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-import java.util.ArrayList;
-
+import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Multiplex;
+import ru.ecostudiovl.vectorgraphics.view.DrawView;
+import ru.ecostudiovl.vectorgraphics.R;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterFiguresList.FigureSelect {
 
 
-    enum Mode {
+    public enum Mode {
         create,
         edit,
         delete,
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
             public void onClick(View view) {
                 clearSelected();
 
-                drawView.getjPointData().getFigures().add(new Multiplex(etFigureName.getText().toString() + " : "+drawView.getjPointData().getFigures().size()));
+                drawView.getjPointData().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+drawView.getjPointData().getFigures().size()), 0));
                 drawView.setSelectedFigure( drawView.getjPointData().getFigures().size() - 1);
                 drawView.getjPointData().getFigures().get(drawView.getSelectedFigure()).setSelected(true);
                 etFigureName.setText("");

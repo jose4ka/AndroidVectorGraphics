@@ -3,28 +3,30 @@ package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
+
 public class JFigure {
 
     private static final String TAG = "=== FIGURE";
-    private int pointsCount;
-    private boolean isClosePointNumber;
-    private boolean isClosedFigure;
+
     private boolean isSelected;
     private String name;
+    private int templateIndex;
+    private float centerX, centerY;
     protected List<Integer> points;
 
-    public JFigure(boolean isClosePointNumber, boolean isClosedFigure, int pointsCount, String name){
-        this.pointsCount = pointsCount;
+    public JFigure(String name, int templateIndex){
         this.points = new LinkedList<>();
-        this.isClosePointNumber = isClosePointNumber;
-        this.isClosedFigure = isClosedFigure;
         this.isSelected = false;
         this.name = name;
+        this.centerX = 0;
+        this.centerY = 0;
+        this.templateIndex = templateIndex;
     }
 
-    public void addPoint(int index){
-        if (isClosePointNumber){
-            if (points.size() < pointsCount){
+    public void addPoint(int index, JFigureTemplates template){
+        if (template.isClosePointNumber()){
+            if (points.size() < template.getPointsCount()){
                 points.add(index);
             }
         }
@@ -59,13 +61,7 @@ public class JFigure {
         return false;
     }
 
-    public int getPointsCount() {
-        return pointsCount;
-    }
 
-    public void setPointsCount(int pointsCount) {
-        this.pointsCount = pointsCount;
-    }
 
     public List<Integer> getPoints() {
         return points;
@@ -73,22 +69,6 @@ public class JFigure {
 
     public void setPoints(List<Integer> points) {
         this.points = points;
-    }
-
-    public boolean isClosePointNumber() {
-        return isClosePointNumber;
-    }
-
-    public void setClosePointNumber(boolean closePointNumber) {
-        isClosePointNumber = closePointNumber;
-    }
-
-    public boolean isClosedFigure() {
-        return isClosedFigure;
-    }
-
-    public void setClosedFigure(boolean closedFigure) {
-        isClosedFigure = closedFigure;
     }
 
     public String getName() {
@@ -105,5 +85,29 @@ public class JFigure {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public float getCenterX() {
+        return centerX;
+    }
+
+    public void setCenterX(float centerX) {
+        this.centerX = centerX;
+    }
+
+    public float getCenterY() {
+        return centerY;
+    }
+
+    public void setCenterY(float centerY) {
+        this.centerY = centerY;
+    }
+
+    public int getTemplateIndex() {
+        return templateIndex;
+    }
+
+    public void setTemplateIndex(int templateIndex) {
+        this.templateIndex = templateIndex;
     }
 }

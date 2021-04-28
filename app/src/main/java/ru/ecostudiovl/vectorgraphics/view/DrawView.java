@@ -1,8 +1,7 @@
-package ru.ecostudiovl.vectorgraphics;
+package ru.ecostudiovl.vectorgraphics.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -10,9 +9,10 @@ import android.view.SurfaceView;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.ecostudiovl.vectorgraphics.activity.MainActivity;
+import ru.ecostudiovl.vectorgraphics.activity.MainActivity.Mode;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.Multiplex;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -104,7 +104,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     if (selectedFigure != -1){
                         points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                        jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1); /*Добавляем
+                        jPointData.getFigures().get(selectedFigure).addPoint(points.size() - 1, jPointData.getTemplates().get(jPointData.getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
                         индекс точки в структуру данных*/
 
                     }
