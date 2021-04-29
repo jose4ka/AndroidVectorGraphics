@@ -63,6 +63,9 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
                 figureSelect.onDeletedTemlate(position);
             }
         });
+
+        holder.tvPointCount.setText(""+mData.get(position).getPointsCount());
+        holder.lnCLosedIndicator.setBackground(mData.get(position).isClosedFigure() ? context.getDrawable(R.drawable.ic_baseline_all_inclusive_24) : context.getDrawable(R.drawable.ic_baseline_multiline_chart_24));
     }
 
     @Override
@@ -72,6 +75,8 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+        TextView tvPointCount;
+        LinearLayout lnCLosedIndicator;
         TextView tvName;
         LinearLayout linearLayout;
         ImageButton btnDelete;
@@ -80,6 +85,8 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
             tvName = itemView.findViewById(R.id.etElementFigureName);
             linearLayout = itemView.findViewById(R.id.lnElFigureMain);
             btnDelete = itemView.findViewById(R.id.btnDeleteFigure);
+            tvPointCount = itemView.findViewById(R.id.tvTemplatePointsCount);
+            lnCLosedIndicator = itemView.findViewById(R.id.lnFigureTypeIsClosed);
         }
     }
 
