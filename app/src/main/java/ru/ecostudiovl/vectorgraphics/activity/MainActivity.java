@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
 import ru.ecostudiovl.vectorgraphics.R;
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
             public void onClick(View view) {
                 clearSelected();
 
-                drawView.getjPointData().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+drawView.getjPointData().getFigures().size()), 0));
-                drawView.setSelectedFigure( drawView.getjPointData().getFigures().size() - 1);
-                drawView.getjPointData().getFigures().get(drawView.getSelectedFigure()).setSelected(true);
+                JPointData.getInstance().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+JPointData.getInstance().getFigures().size()), 0));
+                drawView.setSelectedFigure(JPointData.getInstance().getFigures().size() - 1);
+                JPointData.getInstance().getFigures().get(drawView.getSelectedFigure()).setSelected(true);
                 etFigureName.setText("");
 
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
             @Override
             public void onClick(View view) {
                 drawView.getPoints().clear();
-                drawView.getjPointData().getFigures().clear();
+                JPointData.getInstance().getFigures().clear();
                 updateList();
             }
         });
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     }
 
     public void updateList(){
-        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(drawView.getjPointData().getFigures(), this, getApplicationContext());
+        AdapterFiguresList adapterFiguresList = new AdapterFiguresList(JPointData.getInstance().getFigures(), this, getApplicationContext());
         rvFigures.setAdapter(adapterFiguresList);
         rvFigures.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
@@ -206,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         drawView.setSelectedFigure(index);
 
         clearSelected();
-        drawView.jPointData.getFigures().get(index).setSelected(true);
+        JPointData.getInstance().getFigures().get(index).setSelected(true);
 
-        if (drawView.jPointData.getFigures().get(index).getPoints().size() == 0){
+        if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
             currentMode = Mode.create;
             drawView.mode = Mode.create;
             btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     public void onDeletedFigure(int index) {
 
         drawView.deletePointsWithFigure(index);
-        drawView.getjPointData().getFigures().remove(index);
+        JPointData.getInstance().getFigures().remove(index);
 
         updateList();
     }
@@ -235,15 +236,15 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
 
 
     private void clearSelected(){
-        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++){
-            drawView.getjPointData().getFigures().get(i).setSelected(false);
+        for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++){
+            JPointData.getInstance().getFigures().get(i).setSelected(false);
         }
     }
 
     private boolean hasSelected(){
-        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++){
+        for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++){
 
-            if (drawView.getjPointData().getFigures().get(i).isSelected()){
+            if (JPointData.getInstance().getFigures().get(i).isSelected()){
                 return true;
             }
         }

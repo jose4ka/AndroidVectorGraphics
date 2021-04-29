@@ -12,10 +12,20 @@ public class JPointData {
     private List<JFigure> figures;
     private List<JFigureTemplates> templates;
 
-    public JPointData(){
+    private static JPointData instance;
+
+    private JPointData(){
         figures = new ArrayList<>();
         templates = new ArrayList<>();
-        templates.add(new JFigureTemplates(0, false, false));
+        templates.add(new JFigureTemplates(0, false, false, "start template"));
+    }
+
+    public static JPointData getInstance(){
+        if (instance == null) {
+            instance = new JPointData();
+        }
+
+        return instance;
     }
 
     public List<JFigure> getFigures() {

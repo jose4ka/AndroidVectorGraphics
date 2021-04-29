@@ -8,6 +8,7 @@ import android.view.SurfaceHolder;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
 public class DrawThread extends Thread{
 
@@ -73,11 +74,11 @@ public class DrawThread extends Thread{
         }
 
         //Соединяем точки друг с другом
-        for (int i = 0; i < drawView.getjPointData().getFigures().size(); i++) {
+        for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++) {
 
-            List<Integer> lPoints = drawView.getjPointData().getFigures().get(i).getPoints();
+            List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
 
-            if (drawView.getjPointData().getFigures().get(i).isSelected()){
+            if (JPointData.getInstance().getFigures().get(i).isSelected()){
                 p.setColor(Color.BLUE);
             }
             else {
@@ -96,7 +97,7 @@ public class DrawThread extends Thread{
 
 
                 //Если фигуры замкнутая, то ещё рисуем замыкающую линию
-                if (drawView.getjPointData().getTemplates().get(drawView.getjPointData().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
+                if (JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
                     canvas.drawLine(
                             points.get(lPoints.get(j)).getX(),
                             points.get(lPoints.get(j)).getY(),

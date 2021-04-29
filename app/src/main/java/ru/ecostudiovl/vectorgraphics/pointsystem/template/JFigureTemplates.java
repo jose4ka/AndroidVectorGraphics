@@ -11,15 +11,20 @@ public class JFigureTemplates {
     private int pointsCount;
     private boolean isClosePointNumber;
     private boolean isClosedFigure;
+    private String name;
 
     private List<JFigure> figures;
 
-    public JFigureTemplates(int pointsCount, boolean isClosePointNumber, boolean isClosedFigure){
+    public JFigureTemplates(int pointsCount, boolean isClosePointNumber, boolean isClosedFigure, String name){
         figures = new ArrayList<>();
         this.pointsCount = pointsCount;
         this.isClosePointNumber = isClosePointNumber;
         this.isClosedFigure = isClosedFigure;
+        this.name = name;
+
+
     }
+
 
     public List<JFigure> getFigures() {
         return figures;
@@ -51,5 +56,13 @@ public class JFigureTemplates {
 
     public void setClosedFigure(boolean closedFigure) {
         isClosedFigure = closedFigure;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
