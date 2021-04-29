@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,15 +59,11 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
             public void onClick(View view) {
                 clearSelected();
 
-                JPointData.getInstance().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+JPointData.getInstance().getFigures().size()), 0));
-                drawView.setSelectedFigure(JPointData.getInstance().getFigures().size() - 1);
-                JPointData.getInstance().getFigures().get(drawView.getSelectedFigure()).setSelected(true);
-                etFigureName.setText("");
+                Intent i = new Intent(MainActivity.this, ActivityCreateFigure.class);
+                startActivity(i);
 
 
-                currentMode = Mode.create;
-                drawView.mode = Mode.create;
-                btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+
                 updateList();
             }
         });

@@ -36,7 +36,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.element_figure, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.element_template, parent, false);
         return new ViewHolder(v);
     }
 

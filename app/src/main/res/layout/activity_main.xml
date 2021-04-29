@@ -138,6 +138,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:visibility="gone"
                 android:id="@+id/etFigureName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
