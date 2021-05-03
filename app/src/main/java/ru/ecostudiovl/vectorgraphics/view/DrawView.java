@@ -99,9 +99,21 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 case create:
 
                     if (selectedFigure != -1){
-                        points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                        JPointData.getInstance().getFigures().get(selectedFigure).addPoint(points.size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
+                        int template = JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex();
+                        int pointsCount = JPointData.getInstance().getFigures().get(selectedFigure).getPoints().size();
+                        if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()){
+                            if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()){
+                                points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                                JPointData.getInstance().getFigures().get(selectedFigure).addPoint(points.size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
+
+                            }
+                        }
+                        else {
+                            points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                            JPointData.getInstance().getFigures().get(selectedFigure).addPoint(points.size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
                         индекс точки в структуру данных*/
+                        }
+
 
                     }
 

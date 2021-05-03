@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
     private SeekBar seekBarScale;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
