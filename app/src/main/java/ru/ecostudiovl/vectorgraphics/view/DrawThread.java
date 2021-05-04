@@ -85,26 +85,28 @@ public class DrawThread extends Thread{
                 p.setColor(Color.BLACK);
             }
 
-            for (int j = 0; j < lPoints.size() - 1; j++) {
+            for (int j = 0; j < lPoints.size(); j++) {
 
-                canvas.drawLine(
-                        points.get(lPoints.get(j)).getX(),
-                        points.get(lPoints.get(j)).getY(),
-                        points.get(lPoints.get(j) + 1).getX(),
-                        points.get(lPoints.get(j) + 1).getY(),
-                        p);
-
-
-
-                //Если фигуры замкнутая, то ещё рисуем замыкающую линию
-                if (JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
+                if ((j + 1) < lPoints.size()){
                     canvas.drawLine(
                             points.get(lPoints.get(j)).getX(),
                             points.get(lPoints.get(j)).getY(),
-                            points.get(0).getX(),
-                            points.get(0).getY(),
+                            points.get(lPoints.get(j + 1)).getX(),
+                            points.get(lPoints.get(j + 1)).getY(),
                             p);
                 }
+                else {
+                    if (JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
+                        canvas.drawLine(
+                                points.get(lPoints.get(j)).getX(),
+                                points.get(lPoints.get(j)).getY(),
+                                points.get(lPoints.get(0)).getX(),
+                                points.get(lPoints.get(0)).getY(),
+                                p);
+                    }
+
+                }
+
 
             }
 

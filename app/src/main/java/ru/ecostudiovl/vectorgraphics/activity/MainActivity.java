@@ -63,14 +63,8 @@ public class MainActivity extends AppCompatActivity implements AdapterFiguresLis
         btnAddFigure.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                clearSelected();
-
                 Intent i = new Intent(MainActivity.this, ActivityCreateFigure.class);
                 startActivity(i);
-
-
-
-                updateList();
             }
         });
 
