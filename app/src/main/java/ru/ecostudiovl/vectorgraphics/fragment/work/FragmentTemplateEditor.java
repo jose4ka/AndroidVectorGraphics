@@ -149,7 +149,6 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            //Remove swiped item from list and notify the RecyclerView
             selectedIndex = -1;
             int position = viewHolder.getAdapterPosition();
             JPointData.getInstance().getTemplates().remove(position);
