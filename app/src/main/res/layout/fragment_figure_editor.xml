@@ -7,20 +7,26 @@
     tools:context=".fragment.constructor.FragmentFigureEditor">
 
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/BetterCardView">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:layout_weight="0.4"
             >
 
 
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                style="@style/BetterCardView">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_margin="3dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -34,6 +40,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="3dp"/>
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                style="@style/BetterCardView">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_margin="3dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -48,6 +70,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
                         android:layout_marginRight="2dp"/>
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
 
 
             <ImageButton
@@ -59,20 +87,21 @@
                         android:textSize="12sp"
                         android:text="Создать фигуру" />
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp" />
-
-                    <ImageButton
-                        android:src="@drawable/ic_baseline_close_24"
-                        android:id="@+id/btnActFigureBack"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:theme="@style/PurpleButton"
-                        android:textSize="12sp"
-                        android:text="Создать фигуру" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6" />
+
+    <ImageButton
+        android:src="@drawable/ic_baseline_close_24"
+        android:id="@+id/btnActFigureBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/PurpleButton"
+        android:textSize="12sp"
+        android:text="Создать фигуру" />
 </LinearLayout>
