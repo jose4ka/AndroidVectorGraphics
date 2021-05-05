@@ -46,10 +46,10 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
         });
 
         if (mData.get(position).isSelected()){
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
+            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
         }
         else {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
+            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
         }
 
         holder.tvName.setText(mData.get(position).getName());
@@ -65,10 +65,12 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
 
         TextView tvName;
         LinearLayout linearLayout;
+        LinearLayout lnIndicator;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.etElementFigureName);
             linearLayout = itemView.findViewById(R.id.lnElFigureMain);
+            lnIndicator = itemView.findViewById(R.id.lnElFigureIndicator);
         }
     }
 
