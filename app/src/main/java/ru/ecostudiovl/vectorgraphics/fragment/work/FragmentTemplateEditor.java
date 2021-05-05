@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import org.jetbrains.annotations.NotNull;
-
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
@@ -52,7 +50,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     }
 
     @Override
-    public void onAttach(@NonNull @NotNull Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         fragmentTemplateEditorCallback = (FragmentTemplateEditorCallback) context;
     }

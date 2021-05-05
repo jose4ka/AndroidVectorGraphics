@@ -64,7 +64,7 @@ public class DrawThread extends Thread{
         p.setColor(Color.BLACK);
 
 
-        List<JPoint> points = drawView.getPoints();
+        List<JPoint> points = JPointData.getInstance().getPoints();
 
         p.setColor(Color.BLACK);
 

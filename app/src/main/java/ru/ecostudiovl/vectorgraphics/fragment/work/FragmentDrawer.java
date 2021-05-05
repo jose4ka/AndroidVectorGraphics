@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper.Callback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
-import org.jetbrains.annotations.NotNull;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
@@ -69,12 +69,6 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateList();
-    }
-
     public static FragmentDrawer newInstance(String param1, String param2) {
         FragmentDrawer fragment = new FragmentDrawer();
         return fragment;
@@ -82,7 +76,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
 
     @Override
-    public void onAttach(@NonNull @NotNull Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         fragmentDrawerCallback = (FragmentDrawerCallback) context;
     }
@@ -93,6 +87,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_drawer, container, false);
         initializeViewElements();
+        updateList();
         return view;
     }
 
@@ -108,7 +103,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         });
 
         FrameLayout frameLayout = view.findViewById(R.id.frameDraw);
-        drawView = new DrawView(requireContext());
+        drawView = new DrawView(getContext());
 
         frameLayout.addView(drawView);
         currentMode = Mode.view;
@@ -156,7 +151,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                drawView.getPoints().clear();
+                JPointData.getInstance().getPoints().clear();
                 JPointData.getInstance().getFigures().clear();
                 updateList();
             }
@@ -232,7 +227,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
             }
         });
-        updateList();
+
     }
 
 

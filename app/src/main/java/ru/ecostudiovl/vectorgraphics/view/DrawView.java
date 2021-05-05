@@ -18,9 +18,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     public static String TAG = "=== DRAW_VIEW"; //Тег для логов.
     public FragmentDrawer.Mode mode;//Текущий режим работы с экраном.
 
-    private List<JPoint> points;/*Список абсолютно всех точек, которые есть на экране и которые задействуются
-                                    в структуре данных, описывающих фигуры.*/
-
     private int selectedFigure; //Выбранная фигура на данный момент.
     private int touchedPoint; //Индекс точки, на которую мы тыкнули пальцем.
     private boolean isPointTouched; //Переменная нужна при перемещении точки, чтобы не цеплять точки которые очень рядом.
@@ -46,7 +43,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     private void initializeVariables(){
         mode = FragmentDrawer.Mode.view;
-        points = new LinkedList<>();
         selectedFigure = -1; //Изначально -1, т.к. фигур никаких нет
         touchedPoint = -1; //Изначально -1, т.к. точек никаких нет
         isPointTouched = false;
@@ -97,23 +93,19 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
             switch (mode) {
                 case create:
 
-                    if (selectedFigure != -1){
+                    if (selectedFigure != -1) {
                         int template = JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex();
                         int pointsCount = JPointData.getInstance().getFigures().get(selectedFigure).getPoints().size();
-                        if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()){
-                            if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()){
-                                points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                JPointData.getInstance().getFigures().get(selectedFigure).addPoint(points.size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
-
+                        if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
+                            if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
+                                JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                                JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
                             }
-                        }
-                        else {
-                            points.add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                            JPointData.getInstance().getFigures().get(selectedFigure).addPoint(points.size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
+                        } else {
+                            JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                            JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
                         индекс точки в структуру данных*/
                         }
-
-
                     }
 
                     return false;
@@ -135,7 +127,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                             touchedPoint = -1;
                         }
 
-                        if (points.size() > 0) {
+                        if (JPointData.getInstance().getPoints().size() > 0) {
                             if (JPointData.getInstance().getFigures().get(selectedFigure).isContainsPoint(touchedPoint)){
                                 if (touchedPoint == -1) {
                                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -143,8 +135,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                     }
 
                                 } else {
-                                    points.get(touchedPoint).setX(x);
-                                    points.get(touchedPoint).setY(y);
+                                    JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
+                                    JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
                                 }
                             }
 
@@ -159,7 +151,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     if (selectedFigure != -1){
                         touchedPoint = getTouchedPoint(x, y);
                         if (touchedPoint != -1){
-                            points.remove(touchedPoint); //Удаляем точку из общего списка
+                            JPointData.getInstance().getPoints().remove(touchedPoint); //Удаляем точку из общего списка
                             JPointData.getInstance().getFigures().get(selectedFigure).deletePoint(touchedPoint); //Удаляем точку из текущей фигуры
                             minimize(touchedPoint); //Минимизируем все точки в структуре данных
                         }
@@ -186,11 +178,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         int result = -1;
         float radius = 30;
 
-        for (int i = 0; i < points.size(); i++) {
+        for (int i = 0; i < JPointData.getInstance().getPoints().size(); i++) {
 
             boolean pointInRadius = (
-                    Math.pow((points.get(i).getX() - centerX), 2)+
-                            Math.pow(((points.get(i).getY() - centerY)),2)) <
+                    Math.pow((JPointData.getInstance().getPoints().get(i).getX() - centerX), 2)+
+                            Math.pow(((JPointData.getInstance().getPoints().get(i).getY() - centerY)),2)) <
                     (Math.pow(radius, 2));
 
             if (pointInRadius) {
@@ -220,7 +212,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void deletePointsWithFigure(int figureIndex){
         for (int i = 0; i < JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() ; i++) {
-            points.remove(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i).intValue());
+            JPointData.getInstance().getPoints().remove(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i).intValue());
             minimize(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i).intValue());
         }
     }
@@ -274,12 +266,4 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     public void setyDelta(float yDelta) {
         this.yDelta = yDelta;}
 
-
-    public List<JPoint> getPoints() {
-        return points;
-    }
-
-    public void setPoints(List<JPoint> points) {
-        this.points = points;
-    }
 }
