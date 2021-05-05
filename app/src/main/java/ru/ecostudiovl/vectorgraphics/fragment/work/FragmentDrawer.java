@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.ItemTouchHelper.Callback;
@@ -49,7 +50,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnClear;
     private ImageButton btnHide;
     private ImageButton btnOverview;
-    private LinearLayout lnList;
+    private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
     private ImageButton btnChangeMode;
