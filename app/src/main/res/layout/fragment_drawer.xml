@@ -29,6 +29,15 @@
             <ImageButton
                 android:src="@drawable/ic_baseline_preview_24"
                 android:theme="@style/PurpleButton"
+                android:id="@+id/btnOverview"
+                android:text="create"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:src="@drawable/ic_baseline_create_new_folder_24"
+                android:theme="@style/PurpleButton"
                 android:id="@+id/btnChangeMode"
                 android:text="create"
                 android:textSize="10sp"

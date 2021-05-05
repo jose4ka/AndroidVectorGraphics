@@ -48,6 +48,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnAddFigure;
     private ImageButton btnClear;
     private ImageButton btnHide;
+    private ImageButton btnOverview;
     private LinearLayout lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
@@ -115,6 +116,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         btnChangeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (hasSelected()){
                 switch (currentMode) {
                     case create:
                         currentMode = Mode.edit;
@@ -127,22 +129,25 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
                         break;
                     case delete:
-                        currentMode = Mode.view;
-                        drawView.mode = Mode.view;
-                        clearSelected();
-                        drawView.setSelectedFigure(-1);
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_preview_24);
-                        updateList();
-                        break;
-                    case view:
-                        if (hasSelected()){
-                            currentMode = Mode.create;
-                            drawView.mode = Mode.create;
-                            btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
-                        }
+                        currentMode = Mode.create;
+                        drawView.mode = Mode.create;
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
 
                         break;
                 }
+                }
+            }
+        });
+
+        btnOverview = view.findViewById(R.id.btnOverview);
+        btnOverview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentMode = Mode.view;
+                drawView.mode = Mode.view;
+                clearSelected();
+                drawView.setSelectedFigure(-1);
+                updateList();
             }
         });
 
@@ -283,7 +288,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
         updateList();
     }
-    
+
 
 
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
