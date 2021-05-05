@@ -50,10 +50,10 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         });
 
         if (position == selectedTemplate){
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
+            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
         }
         else {
-            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
+            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
         }
 
         holder.tvName.setText(mData.get(position).getName());
@@ -79,6 +79,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         LinearLayout lnCLosedIndicator;
         TextView tvName;
         LinearLayout linearLayout;
+        LinearLayout lnIndicator;
         ImageButton btnDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +88,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
             btnDelete = itemView.findViewById(R.id.btnDeleteFigure);
             tvPointCount = itemView.findViewById(R.id.tvTemplatePointsCount);
             lnCLosedIndicator = itemView.findViewById(R.id.lnFigureTypeIsClosed);
+            lnIndicator = itemView.findViewById(R.id.lnElTemplateIndicator);
         }
     }
 
