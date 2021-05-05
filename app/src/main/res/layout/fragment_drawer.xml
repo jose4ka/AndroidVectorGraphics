@@ -26,41 +26,77 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:src="@drawable/ic_baseline_preview_24"
-                android:theme="@style/PurpleButton"
-                android:id="@+id/btnOverview"
-                android:text="create"
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
-            <ImageButton
-                android:src="@drawable/ic_baseline_create_new_folder_24"
-                android:theme="@style/PurpleButton"
-                android:id="@+id/btnChangeMode"
-                android:text="create"
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
 
-            <ImageButton
-                android:src="@drawable/ic_baseline_clear_all_24"
-                android:theme="@style/PurpleButton"
-                android:id="@+id/buttonClear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="Clear" />
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <ImageButton
-                android:src="@drawable/ic_baseline_arrow_downward_24"
-                android:theme="@style/PurpleButton"
-                android:id="@+id/btnShowHide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="Hide" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    <ImageButton
+                        android:src="@drawable/ic_baseline_preview_24"
+                        android:theme="@style/PurpleButton"
+                        android:id="@+id/btnOverview"
+                        android:text="create"
+                        android:textSize="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <ImageButton
+                        android:src="@drawable/ic_baseline_create_new_folder_24"
+                        android:theme="@style/PurpleButton"
+                        android:id="@+id/btnChangeMode"
+                        android:text="create"
+                        android:textSize="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_arrow_downward_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnShowHide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="Hide" />
+
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_category_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnWorkOpenTemplateEditor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="Clear" />
+
+                    <ImageButton
+                        android:src="@drawable/ic_baseline_clear_all_24"
+                        android:theme="@style/PurpleButton"
+                        android:id="@+id/buttonClear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="Clear" />
+
+
+
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_menu_open_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnWorkGoToMenu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="10sp"
+                            android:text="GoToMenu" />
+
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
         </LinearLayout>
 
         <LinearLayout

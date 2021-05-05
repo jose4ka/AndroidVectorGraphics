@@ -52,7 +52,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     //При создании самого класса мы создаём сам поток, который будет рисовать
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        drawThread = new DrawThread(getHolder(), this);
+        drawThread = new DrawThread(getHolder());
         startDrawThread();
     }
 

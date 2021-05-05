@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.constructor.FragmentFigureEditor">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BetterCardView">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:text="Выберите шаблон фигуры:" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTemplates"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="3dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:text="Название новой фигуры:" />
+
+                    <EditText
+                        android:id="@+id/tvFigureName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"/>
+
+
+            <ImageButton
+                        android:src="@drawable/ic_baseline_done_24"
+                        android:id="@+id/btnActFigureCreateFigure"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/PurpleButton"
+                        android:textSize="12sp"
+                        android:text="Создать фигуру" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp" />
+
+                    <ImageButton
+                        android:src="@drawable/ic_baseline_close_24"
+                        android:id="@+id/btnActFigureBack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/PurpleButton"
+                        android:textSize="12sp"
+                        android:text="Создать фигуру" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

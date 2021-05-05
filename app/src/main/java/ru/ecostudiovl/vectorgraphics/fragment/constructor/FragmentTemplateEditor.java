@@ -1,4 +1,4 @@
-package ru.ecostudiovl.vectorgraphics.fragment.work;
+package ru.ecostudiovl.vectorgraphics.fragment.constructor;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
@@ -29,7 +30,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     private View view;
 
     private RecyclerView rvTemplates;
-    private Button btnCreateTemplate, btnCreateFigure, btnBack;
+    private ImageButton btnCreateTemplate, btnBack;
     private EditText etTemplateName, etTemplateNumber, etFigureName;
     private CheckBox cbIsClosedFigure, cbIsClosedFigureNumber;
 
@@ -38,8 +39,8 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     private ItemTouchHelper itemTouchHelper;
 
     public interface FragmentTemplateEditorCallback{
-        void onCreatedFigure();
-        void onBackPressedF();
+        void onCreatedTemplate();
+        void onBackPressedTemplate();
     }
 
     private FragmentTemplateEditorCallback fragmentTemplateEditorCallback;
@@ -103,20 +104,12 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
             }
         });
 
-        btnCreateFigure = view.findViewById(R.id.btnActTempCreateFigure);
-        btnCreateFigure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createFigure();
-                fragmentTemplateEditorCallback.onCreatedFigure();
-            }
-        });
 
         btnBack = view.findViewById(R.id.btnActTempBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentTemplateEditorCallback.onBackPressedF();
+                fragmentTemplateEditorCallback.onBackPressedTemplate();
             }
         });
     }

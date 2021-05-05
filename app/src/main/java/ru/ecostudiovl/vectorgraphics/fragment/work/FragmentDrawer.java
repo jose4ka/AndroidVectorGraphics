@@ -50,6 +50,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnClear;
     private ImageButton btnHide;
     private ImageButton btnOverview;
+    private ImageButton btnOpenTemplater;
     private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
@@ -61,6 +62,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     public interface FragmentDrawerCallback{
         void onCreateFigureClicked();
+        void onCreateTemplateClicked();
     }
     private FragmentDrawerCallback fragmentDrawerCallback;
 
@@ -154,6 +156,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 JPointData.getInstance().getPoints().clear();
                 JPointData.getInstance().getFigures().clear();
                 updateList();
+            }
+        });
+
+        btnOpenTemplater = view.findViewById(R.id.btnWorkOpenTemplateEditor);
+        btnOpenTemplater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentDrawerCallback.onCreateTemplateClicked();
             }
         });
 

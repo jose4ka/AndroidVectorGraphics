@@ -15,13 +15,11 @@ public class DrawThread extends Thread{
     private boolean running = false;
 
     private SurfaceHolder surfaceHolder;
-    private DrawView drawView;
     private Paint p;
 
 
-    public DrawThread(SurfaceHolder surfaceHolder, DrawView drawView){
+    public DrawThread(SurfaceHolder surfaceHolder){
         this.surfaceHolder = surfaceHolder;
-        this.drawView = drawView;
         this.p = new Paint();
     }
 

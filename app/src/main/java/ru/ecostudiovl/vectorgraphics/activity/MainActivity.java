@@ -3,29 +3,16 @@ package ru.ecostudiovl.vectorgraphics.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 
-import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
+import ru.ecostudiovl.vectorgraphics.fragment.constructor.FragmentFigureEditor;
 import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
-import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentTemplateEditor;
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
-import ru.ecostudiovl.vectorgraphics.view.DrawView;
+import ru.ecostudiovl.vectorgraphics.fragment.constructor.FragmentTemplateEditor;
 import ru.ecostudiovl.vectorgraphics.R;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentTemplateEditor.FragmentTemplateEditorCallback, FragmentDrawer.FragmentDrawerCallback {
+public class MainActivity extends AppCompatActivity implements FragmentTemplateEditor.FragmentTemplateEditorCallback, FragmentDrawer.FragmentDrawerCallback, FragmentFigureEditor.FragmentFigureEditorCallback {
 
 
     private NavController navController;
@@ -41,16 +28,32 @@ public class MainActivity extends AppCompatActivity implements FragmentTemplateE
 
     @Override
     public void onCreateFigureClicked() {
+        navController.navigate(R.id.fragmentFigureEditor);
+    }
+
+    @Override
+    public void onCreateTemplateClicked() {
         navController.navigate(R.id.fragmentTemplateEditor);
     }
 
     @Override
+    public void onCreatedTemplate() {
+        navController.navigate(R.id.fragmentDrawer);
+    }
+
+    @Override
+    public void onBackPressedTemplate() {
+        navController.navigate(R.id.fragmentDrawer);
+    }
+
+    @Override
+
     public void onCreatedFigure() {
         navController.navigate(R.id.fragmentDrawer);
     }
 
     @Override
-    public void onBackPressedF() {
+    public void onBackPressedFigure() {
         navController.navigate(R.id.fragmentDrawer);
     }
 }
