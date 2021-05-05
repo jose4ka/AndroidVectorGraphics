@@ -131,7 +131,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                     case delete:
                         currentMode = Mode.create;
                         drawView.mode = Mode.create;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+                        btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
 
                         break;
                 }
@@ -293,7 +293,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
             currentMode = Mode.create;
             drawView.mode = Mode.create;
-            btnChangeMode.setImageResource(R.drawable.ic_baseline_create_new_folder_24);
+            btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
         }
         else {
             currentMode = Mode.edit;

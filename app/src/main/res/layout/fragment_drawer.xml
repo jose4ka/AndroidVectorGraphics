@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"/>
 
                     <ImageButton
-                        android:src="@drawable/ic_baseline_create_new_folder_24"
+                        android:src="@drawable/ic_baseline_add_circle_24"
                         android:theme="@style/PurpleButton"
                         android:id="@+id/btnChangeMode"
                         android:text="create"
