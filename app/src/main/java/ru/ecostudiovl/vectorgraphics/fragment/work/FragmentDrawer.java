@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper.Callback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +52,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private RecyclerView rvFigures;
     private DrawView drawView;
     private ImageButton btnChangeMode;
+    private ItemTouchHelper itemTouchHelper;
 
     private ImageButton btnLeft, btnRight, btnUp, btnDown;
     private SeekBar seekBarScale;
@@ -228,9 +231,16 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
 
     public void updateList(){
+
+        simpleItemTouchCallback.setDefaultSwipeDirs(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+
         AdapterFiguresList adapterFiguresList = new AdapterFiguresList(JPointData.getInstance().getFigures(), this, requireContext());
         rvFigures.setAdapter(adapterFiguresList);
         rvFigures.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        ItemTouchHelper.Callback itemTouchHelperCallback;
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvFigures);
     }
 
 
@@ -273,15 +283,25 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
         updateList();
     }
+    
 
-    @Override
-    public void onDeletedFigure(int index) {
 
-        drawView.deletePointsWithFigure(index);
-        JPointData.getInstance().getFigures().remove(index);
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-        updateList();
-    }
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+            int position = viewHolder.getAdapterPosition();
+            drawView.deletePointsWithFigure(position);
+            JPointData.getInstance().getFigures().remove(position);
+            updateList();
+        }
+    };
 
 
 }

@@ -53,12 +53,7 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
         }
 
         holder.tvName.setText(mData.get(position).getName());
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                figureSelect.onDeletedFigure(position);
-            }
-        });
+
     }
 
     @Override
@@ -70,18 +65,15 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
 
         TextView tvName;
         LinearLayout linearLayout;
-        ImageButton btnDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.etElementFigureName);
             linearLayout = itemView.findViewById(R.id.lnElFigureMain);
-            btnDelete = itemView.findViewById(R.id.btnDeleteFigure);
         }
     }
 
 
     public interface FigureSelect{
         void onSelectFigure(int index);
-        void onDeletedFigure(int index);
     }
 }
