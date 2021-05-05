@@ -51,6 +51,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnHide;
     private ImageButton btnOverview;
     private ImageButton btnOpenTemplater;
+    private ImageButton btnOpenMenu;
     private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
@@ -63,6 +64,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     public interface FragmentDrawerCallback{
         void onCreateFigureClicked();
         void onCreateTemplateClicked();
+        void onMainMenuClicked();
     }
     private FragmentDrawerCallback fragmentDrawerCallback;
 
@@ -184,6 +186,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                         btnHide.setImageResource(R.drawable.ic_baseline_arrow_downward_24);
                         break;
                 }
+            }
+        });
+
+        btnOpenMenu = view.findViewById(R.id.btnWorkGoToMenu);
+        btnOpenMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentDrawerCallback.onMainMenuClicked();
             }
         });
 

@@ -13,11 +13,6 @@ import android.view.ViewGroup;
 
 import ru.ecostudiovl.vectorgraphics.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentMainMenu#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentMainMenu extends Fragment {
 
     private View view;
@@ -49,7 +44,6 @@ public class FragmentMainMenu extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_menu, container, false);
         initializeViewElements();
         return view;

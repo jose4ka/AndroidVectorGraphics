@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import ru.ecostudiovl.vectorgraphics.fragment.constructor.FragmentFigureEditor;
@@ -55,5 +56,12 @@ public class MainActivity extends AppCompatActivity implements FragmentTemplateE
     @Override
     public void onBackPressedFigure() {
         navController.navigate(R.id.fragmentDrawer);
+    }
+
+    @Override
+    public void onMainMenuClicked() {
+        Intent i = new Intent(MainActivity.this, ActivityMainMenu.class);
+        startActivity(i);
+        finish();
     }
 }
