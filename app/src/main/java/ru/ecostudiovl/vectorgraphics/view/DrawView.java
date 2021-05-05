@@ -9,15 +9,14 @@ import android.view.SurfaceView;
 import java.util.LinkedList;
 import java.util.List;
 
-import ru.ecostudiovl.vectorgraphics.activity.MainActivity;
-import ru.ecostudiovl.vectorgraphics.activity.MainActivity.Mode;
+import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static String TAG = "=== DRAW_VIEW"; //Тег для логов.
-    public MainActivity.Mode mode;//Текущий режим работы с экраном.
+    public FragmentDrawer.Mode mode;//Текущий режим работы с экраном.
 
     private List<JPoint> points;/*Список абсолютно всех точек, которые есть на экране и которые задействуются
                                     в структуре данных, описывающих фигуры.*/
@@ -46,7 +45,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void initializeVariables(){
-        mode = MainActivity.Mode.view;
+        mode = FragmentDrawer.Mode.view;
         points = new LinkedList<>();
         selectedFigure = -1; //Изначально -1, т.к. фигур никаких нет
         touchedPoint = -1; //Изначально -1, т.к. точек никаких нет

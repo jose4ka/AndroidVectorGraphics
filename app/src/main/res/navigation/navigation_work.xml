@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_work"
+    app:startDestination="@id/fragmentDrawer">
+
+    <fragment
+        android:id="@+id/fragmentDrawer"
+        android:name="ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer"
+        android:label="fragment_drawer"
+        tools:layout="@layout/fragment_drawer" />
+</navigation>
