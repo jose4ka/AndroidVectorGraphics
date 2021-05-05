@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/graph_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.ActivityCreateFigure"></activity>
+        <activity android:name=".activity.ActivityMainMenu"></activity>
+        <activity android:name=".activity.ActivityCreateFigure" />
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
