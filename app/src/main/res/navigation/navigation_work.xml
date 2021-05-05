@@ -9,5 +9,18 @@
         android:id="@+id/fragmentDrawer"
         android:name="ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer"
         android:label="fragment_drawer"
-        tools:layout="@layout/fragment_drawer" />
+        tools:layout="@layout/fragment_drawer" >
+        <action
+            android:id="@+id/action_fragmentDrawer_to_fragmentTemplateEditor"
+            app:destination="@id/fragmentTemplateEditor" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentTemplateEditor"
+        android:name="ru.ecostudiovl.vectorgraphics.fragment.work.FragmentTemplateEditor"
+        android:label="fragment_template_editor"
+        tools:layout="@layout/fragment_template_editor" >
+        <action
+            android:id="@+id/action_fragmentTemplateEditor_to_fragmentDrawer"
+            app:destination="@id/fragmentDrawer" />
+    </fragment>
 </navigation>

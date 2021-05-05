@@ -1,23 +1,33 @@
-package ru.ecostudiovl.vectorgraphics.activity;
+package ru.ecostudiovl.vectorgraphics.fragment.work;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.ecostudiovl.vectorgraphics.R;
-import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
-public class ActivityCreateFigure extends AppCompatActivity implements AdapterTemplatesList.TemplateSelect {
+
+public class FragmentTemplateEditor extends Fragment  implements AdapterTemplatesList.TemplateSelect {
+
+
+    private View view;
 
     private RecyclerView rvTemplates;
     private Button btnCreateTemplate, btnCreateFigure, btnBack;
@@ -26,26 +36,44 @@ public class ActivityCreateFigure extends AppCompatActivity implements AdapterTe
 
     private int selectedIndex = 0;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_figure);
-
-        initializeView();
-        initializeRecyclerView();
-
+    public interface FragmentTemplateEditorCallback{
+        void onCreatedFigure();
+        void onBackPressedF();
     }
 
-    private void initializeView(){
-        rvTemplates = findViewById(R.id.rvTemplates);
-        etTemplateName = findViewById(R.id.tvTemplateName);
-        etTemplateNumber = findViewById(R.id.tvTemplatePointsCount);
-        etFigureName = findViewById(R.id.tvFigureName);
+    private FragmentTemplateEditorCallback fragmentTemplateEditorCallback;
 
-        cbIsClosedFigure = findViewById(R.id.cbIsClosedNumber);
-        cbIsClosedFigureNumber = findViewById(R.id.cbIsClosedPontsNumber);
+    public static FragmentTemplateEditor newInstance(String param1, String param2) {
+        FragmentTemplateEditor fragment = new FragmentTemplateEditor();
+        return fragment;
+    }
 
-        btnCreateTemplate = findViewById(R.id.btnActTempCreateTemplate);
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        fragmentTemplateEditorCallback = (FragmentTemplateEditorCallback) context;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.fragment_template_editor, container, false);
+        initializeViewElements();
+        initializeRecyclerView();
+        return view;
+    }
+
+    private void initializeViewElements(){
+        rvTemplates = view.findViewById(R.id.rvTemplates);
+        etTemplateName = view.findViewById(R.id.tvTemplateName);
+        etTemplateNumber = view.findViewById(R.id.tvTemplatePointsCount);
+        etFigureName = view.findViewById(R.id.tvFigureName);
+
+        cbIsClosedFigure = view.findViewById(R.id.cbIsClosedNumber);
+        cbIsClosedFigureNumber = view.findViewById(R.id.cbIsClosedPontsNumber);
+
+        btnCreateTemplate = view.findViewById(R.id.btnActTempCreateTemplate);
         btnCreateTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,44 +102,42 @@ public class ActivityCreateFigure extends AppCompatActivity implements AdapterTe
             }
         });
 
-        btnCreateFigure = findViewById(R.id.btnActTempCreateFigure);
+        btnCreateFigure = view.findViewById(R.id.btnActTempCreateFigure);
         btnCreateFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createFigure();
-                finish();
+                fragmentTemplateEditorCallback.onCreatedFigure();
             }
         });
 
-        btnBack = findViewById(R.id.btnActTempBack);
+        btnBack = view.findViewById(R.id.btnActTempBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                fragmentTemplateEditorCallback.onBackPressedF();
             }
         });
     }
 
     private void initializeRecyclerView(){
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, getApplicationContext(), 0);
+        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), 0);
         rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(this));
+        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
-
-
-
 
     private void createFigure(){
         JPointData.getInstance().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+JPointData.getInstance().getFigures().size()), selectedIndex));
 
     }
 
+
     @Override
     public void onSelectTemplate(int index) {
         selectedIndex = index;
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, getApplicationContext(), index);
+        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), index);
         rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(this));
+        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 
 
@@ -119,8 +145,8 @@ public class ActivityCreateFigure extends AppCompatActivity implements AdapterTe
     @Override
     public void onDeletedTemlate(int index) {
         JPointData.getInstance().getTemplates().remove(index);
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, getApplicationContext(), -1);
+        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), -1);
         rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(this));
+        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 }

@@ -1,8 +1,9 @@
 package ru.ecostudiovl.vectorgraphics.fragment.work;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,15 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.ecostudiovl.vectorgraphics.R;
-import ru.ecostudiovl.vectorgraphics.activity.ActivityCreateFigure;
-import ru.ecostudiovl.vectorgraphics.activity.MainActivity;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
@@ -54,6 +54,11 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnLeft, btnRight, btnUp, btnDown;
     private SeekBar seekBarScale;
 
+    public interface FragmentDrawerCallback{
+        void onCreateFigureClicked();
+    }
+    private FragmentDrawerCallback fragmentDrawerCallback;
+
     public FragmentDrawer() {
         // Required empty public constructor
     }
@@ -72,6 +77,12 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
 
     @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+        fragmentDrawerCallback = (FragmentDrawerCallback) context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -87,8 +98,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         btnAddFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(requireContext(), ActivityCreateFigure.class);
-                startActivity(i);
+                fragmentDrawerCallback.onCreateFigureClicked();
             }
         });
 

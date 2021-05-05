@@ -17,16 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
+import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
+import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentTemplateEditor;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
 import ru.ecostudiovl.vectorgraphics.R;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements FragmentTemplateEditor.FragmentTemplateEditorCallback, FragmentDrawer.FragmentDrawerCallback {
 
 
     private NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,5 +39,18 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public void onCreateFigureClicked() {
+        navController.navigate(R.id.fragmentTemplateEditor);
+    }
 
+    @Override
+    public void onCreatedFigure() {
+        navController.navigate(R.id.fragmentDrawer);
+    }
+
+    @Override
+    public void onBackPressedF() {
+        navController.navigate(R.id.fragmentDrawer);
+    }
 }
