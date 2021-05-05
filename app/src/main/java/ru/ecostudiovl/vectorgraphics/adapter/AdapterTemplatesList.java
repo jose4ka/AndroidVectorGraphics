@@ -57,12 +57,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         }
 
         holder.tvName.setText(mData.get(position).getName());
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                figureSelect.onDeletedTemlate(position);
-            }
-        });
+
 
         holder.tvPointCount.setText(""+mData.get(position).getPointsCount());
         holder.lnCLosedIndicator.setBackground(mData.get(position).isClosedFigure() ? context.getDrawable(R.drawable.ic_baseline_all_inclusive_24) : context.getDrawable(R.drawable.ic_baseline_multiline_chart_24));
@@ -80,12 +75,10 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         TextView tvName;
         LinearLayout linearLayout;
         LinearLayout lnIndicator;
-        ImageButton btnDelete;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.etElementFigureName);
             linearLayout = itemView.findViewById(R.id.lnElFigureMain);
-            btnDelete = itemView.findViewById(R.id.btnDeleteFigure);
             tvPointCount = itemView.findViewById(R.id.tvTemplatePointsCount);
             lnCLosedIndicator = itemView.findViewById(R.id.lnFigureTypeIsClosed);
             lnIndicator = itemView.findViewById(R.id.lnElTemplateIndicator);
@@ -95,6 +88,5 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
 
     public interface TemplateSelect{
         void onSelectTemplate(int index);
-        void onDeletedTemlate(int index);
     }
 }

@@ -10,13 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btnDeleteFigure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:theme="@style/PurpleButton"/>
-
         <TextView
             android:id="@+id/etElementFigureName"
             android:layout_width="match_parent"

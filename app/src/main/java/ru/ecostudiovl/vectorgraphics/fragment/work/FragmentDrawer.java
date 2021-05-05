@@ -242,10 +242,6 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         AdapterFiguresList adapterFiguresList = new AdapterFiguresList(JPointData.getInstance().getFigures(), this, requireContext());
         rvFigures.setAdapter(adapterFiguresList);
         rvFigures.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        ItemTouchHelper.Callback itemTouchHelperCallback;
-        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(rvFigures);
     }
 
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,8 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
     private int selectedIndex = 0;
 
+    private ItemTouchHelper itemTouchHelper;
+
     public interface FragmentTemplateEditorCallback{
         void onCreatedFigure();
         void onBackPressedF();
@@ -60,7 +63,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
         view = inflater.inflate(R.layout.fragment_template_editor, container, false);
         initializeViewElements();
-        initializeRecyclerView();
+        updateList();
         return view;
     }
 
@@ -97,7 +100,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
                     ));
                 }
 
-                initializeRecyclerView();
+                updateList();
 
             }
         });
@@ -120,11 +123,6 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
         });
     }
 
-    private void initializeRecyclerView(){
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), 0);
-        rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
-    }
 
     private void createFigure(){
         JPointData.getInstance().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+JPointData.getInstance().getFigures().size()), selectedIndex));
@@ -135,18 +133,40 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     @Override
     public void onSelectTemplate(int index) {
         selectedIndex = index;
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), index);
+        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), selectedIndex);
         rvTemplates.setAdapter(adapterTemplatesList);
         rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 
 
 
-    @Override
-    public void onDeletedTemlate(int index) {
-        JPointData.getInstance().getTemplates().remove(index);
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), -1);
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+            selectedIndex = -1;
+            int position = viewHolder.getAdapterPosition();
+            JPointData.getInstance().getTemplates().remove(position);
+            updateList();
+        }
+    };
+
+
+    private void updateList(){
+        simpleItemTouchCallback.setDefaultSwipeDirs(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+
+        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), selectedIndex);
         rvTemplates.setAdapter(adapterTemplatesList);
         rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        ItemTouchHelper.Callback itemTouchHelperCallback;
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvTemplates);
     }
 }
