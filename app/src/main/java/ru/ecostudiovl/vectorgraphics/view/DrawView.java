@@ -9,6 +9,7 @@ import android.view.SurfaceView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
@@ -161,7 +162,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return false;
 
                 case view:
-                    findNearPoint(x, y);
+                    findFigureByLine(x, y);
                     return false;
 
             }
@@ -223,18 +224,18 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         return (float) Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2));
     }
 
-    private float getDegrees(float startX, float startY, float endX, float endY){
-        double cos = Math.round((startX * endX + startY * endY)
-                / (Math.sqrt(startX* startX + startY * startY) *
-                Math.sqrt(endX * endX + endY * endY)));
+    private float getDegrees(float aX, float aY, float bX, float bY){
 
-        double angle = Math.acos(cos);
-        double degrees = (angle * 180) / Math.PI;
-        return (float) degrees;
+
+        double angle = Math.toDegrees(Math.atan2(bX - aX, bY - aY));
+        // Keep angle between 0 and 360
+        angle = angle + Math.ceil( -angle / 360 ) * 360;
+
+        return (float) angle;
     }
 
 
-    private void findNearPoint(float startX, float startY){
+    private int findNearPoint(float startX, float startY){
         float minLength = 1000000;
         int index = 0;
         boolean isFinded = false;
@@ -254,17 +255,85 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
         if (isFinded){
             Log.i(TAG, "findNearPoint length : "+index + " l = "+minLength);
-            Log.i(TAG, "findNearPoint degrees: "+getDegrees(startX, startY,
-                    JPointData.getInstance().getPoints().get(index).getX(),
-                    JPointData.getInstance().getPoints().get(index).getY()));
+//            Log.i(TAG, "findNearPoint degrees : "+getDegrees(
+//                    startX,
+//                    startY,
+//                    JPointData.getInstance().getPoints().get(index).getX(),
+//                    JPointData.getInstance().getPoints().get(index).getY()));
+            return index;
         }
         else {
             Log.i(TAG, "findNearPoint: POINTS NOT FOUND");
+            return  -1;
         }
 
-
-
     }
+
+    private void findFigureByLine(float x, float y){
+        int pointIndex = findNearPoint(x, y);
+        float acceptZone = 20;
+        if (pointIndex != -1){
+            int figureIndex = JPointData.getInstance().getPoints().get(pointIndex).getFigureIndex();
+            int localPointIndex = JPointData.getInstance().getFigures().get(figureIndex).getLocalIndexOfPoint(pointIndex);
+
+            JPoint sourcePoint = JPointData.getInstance().getPoints().get(
+                    JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex)
+            );
+
+            float currPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), x, y);
+
+            JPoint nextPoint, prevPoint;
+            if (localPointIndex == 0){
+
+                Log.i(TAG, "findFigureByLine: loc point index = 0");
+                nextPoint = JPointData.getInstance().getPoints().get(
+                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
+                );
+                float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
+
+
+
+                if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
+                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                }
+
+            }
+            else if(localPointIndex == JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1){
+
+                Log.i(TAG, "findFigureByLine: loc point index = "+(JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1));
+
+                prevPoint = JPointData.getInstance().getPoints().get(
+                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
+                );
+                float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
+
+                if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
+                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                }
+            }
+            else {
+                Log.i(TAG, "findFigureByLine: loc point btw");
+                nextPoint = JPointData.getInstance().getPoints().get(
+                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
+                );
+                float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
+
+                prevPoint = JPointData.getInstance().getPoints().get(
+                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
+                );
+                float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
+
+                if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
+                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                }
+                else if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
+                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                }
+            }
+
+        }
+    }
+
 
 
     @Override
