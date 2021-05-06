@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,8 +95,8 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
     private void updateList(){
         AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), selectedTemplate);
         rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
-
+        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        rvTemplates.setLayoutManager(layoutManager);
     }
 
 

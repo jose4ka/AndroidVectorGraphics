@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,14 +130,13 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     @Override
     public void onSelectTemplate(int index) {
         selectedIndex = index;
-        AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), selectedIndex);
-        rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
+        updateList();
+
     }
 
 
 
-    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.UP) {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -154,14 +154,17 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
 
     private void updateList(){
-        simpleItemTouchCallback.setDefaultSwipeDirs(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        simpleItemTouchCallback.setDefaultSwipeDirs(ItemTouchHelper.UP | ItemTouchHelper.DOWN);
 
         AdapterTemplatesList adapterTemplatesList = new AdapterTemplatesList(this, requireContext(), selectedIndex);
         rvTemplates.setAdapter(adapterTemplatesList);
-        rvTemplates.setLayoutManager(new LinearLayoutManager(requireContext()));
+        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
+        rvTemplates.setLayoutManager(layoutManager);
 
         ItemTouchHelper.Callback itemTouchHelperCallback;
         itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(rvTemplates);
+
+
     }
 }

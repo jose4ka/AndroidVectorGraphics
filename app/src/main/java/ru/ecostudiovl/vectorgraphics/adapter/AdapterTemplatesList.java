@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         TextView tvPointCount;
         LinearLayout lnCLosedIndicator;
         TextView tvName;
-        LinearLayout linearLayout;
+        CardView linearLayout;
         LinearLayout lnIndicator;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
