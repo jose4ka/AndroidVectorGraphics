@@ -2,6 +2,7 @@ package ru.ecostudiovl.vectorgraphics.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,7 +16,7 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
-    public static String TAG = "=== DRAW_VIEW"; //Тег для логов.
+    public static String TAG = "=ABOBA= DRAW_VIEW"; //Тег для логов.
     public FragmentDrawer.Mode mode;//Текущий режим работы с экраном.
 
     private int selectedFigure; //Выбранная фигура на данный момент.
@@ -160,7 +161,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return false;
 
                 case view:
-                    return true;
+                    findNearPoint(x, y);
+                    return false;
 
             }
 
@@ -168,8 +170,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
 
         return false;
-
     }
+
 
     /*
     Проверяем нахождение точки в радиусе
@@ -217,7 +219,52 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    private float getLength(float startX, float startY, float endX, float endY){
+        return (float) Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2));
+    }
 
+    private float getDegrees(float startX, float startY, float endX, float endY){
+        double cos = Math.round((startX * endX + startY * endY)
+                / (Math.sqrt(startX* startX + startY * startY) *
+                Math.sqrt(endX * endX + endY * endY)));
+
+        double angle = Math.acos(cos);
+        double degrees = (angle * 180) / Math.PI;
+        return (float) degrees;
+    }
+
+
+    private void findNearPoint(float startX, float startY){
+        float minLength = 1000000;
+        int index = 0;
+        boolean isFinded = false;
+        for (int i = 0; i < JPointData.getInstance().getPoints().size(); i++) {
+            float length = getLength(startX, startY,
+                    JPointData.getInstance().getPoints().get(i).getX(),
+                    JPointData.getInstance().getPoints().get(i).getY());
+
+            if (length <= minLength){
+                minLength = length;
+                index = i;
+                isFinded = true;
+            }
+        }
+
+
+
+        if (isFinded){
+            Log.i(TAG, "findNearPoint length : "+index + " l = "+minLength);
+            Log.i(TAG, "findNearPoint degrees: "+getDegrees(startX, startY,
+                    JPointData.getInstance().getPoints().get(index).getX(),
+                    JPointData.getInstance().getPoints().get(index).getY()));
+        }
+        else {
+            Log.i(TAG, "findNearPoint: POINTS NOT FOUND");
+        }
+
+
+
+    }
 
 
     @Override
