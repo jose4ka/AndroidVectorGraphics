@@ -106,11 +106,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         int pointsCount = JPointData.getInstance().getFigures().get(selectedFigure).getPoints().size();
                         if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
                             if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
-                                JPointData.getInstance().getPoints().add(new JPoint(x, y, selectedFigure)); //Добавляем точку в общий список с точками
+                                JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
                                 JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1,x, y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
                             }
                         } else {
-                            JPointData.getInstance().getPoints().add(new JPoint(x, y, selectedFigure)); //Добавляем точку в общий список с точками
+                            JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
                             JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1,x , y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
                         индекс точки в структуру данных*/
                         }
@@ -168,7 +168,16 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return false;
 
                 case view:
-                    findFigureByLine(x, y);
+                    touchedPoint = getTouchedPoint(x, y);
+                    Log.i(TAG, "onTouchEvent: "+touchedPoint);
+                    if (touchedPoint == -1){
+                        findFigureByLine(x, y);
+                    }
+                    else {
+                        selectFigureByPoint(findFigureByPoint(touchedPoint));
+                        
+                    }
+
                     return false;
 
             }
@@ -275,71 +284,92 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+
     private void findFigureByLine(float x, float y){
         int pointIndex = findNearPoint(x, y);
         float acceptZone = 20;
         if (pointIndex != -1){
-            int figureIndex = JPointData.getInstance().getPoints().get(pointIndex).getFigureIndex();
-            int localPointIndex = JPointData.getInstance().getFigures().get(figureIndex).getLocalIndexOfPoint(pointIndex);
 
-            JPoint sourcePoint = JPointData.getInstance().getPoints().get(
-                    JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex)
-            );
+            int figureIndex = findFigureByPoint(pointIndex);
 
-            float currPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), x, y);
+            if (figureIndex != -1){
+                int localPointIndex = JPointData.getInstance().getFigures().get(figureIndex).getLocalIndexOfPoint(pointIndex);
 
-            JPoint nextPoint, prevPoint;
-            if (localPointIndex == 0){
-
-                nextPoint = JPointData.getInstance().getPoints().get(
-                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
+                JPoint sourcePoint = JPointData.getInstance().getPoints().get(
+                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex)
                 );
-                float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
+
+                float currPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), x, y);
+
+                JPoint nextPoint, prevPoint;
+                if (localPointIndex == 0){
+
+                    nextPoint = JPointData.getInstance().getPoints().get(
+                            JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
+                    );
+                    float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
 
 
 
-                if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
-                    selectedFigure = figureIndex;
-                    drawViewCallback.onSelectFigure(selectedFigure);
+                    if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
+                        selectedFigure = figureIndex;
+                        drawViewCallback.onSelectFigure(selectedFigure);
+                    }
+
                 }
+                else if(localPointIndex == JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1){
 
+                    prevPoint = JPointData.getInstance().getPoints().get(
+                            JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
+                    );
+                    float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
+
+                    if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
+                        selectedFigure = figureIndex;
+                        drawViewCallback.onSelectFigure(selectedFigure);
+                    }
+                }
+                else {
+                    nextPoint = JPointData.getInstance().getPoints().get(
+                            JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
+                    );
+                    float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
+
+                    prevPoint = JPointData.getInstance().getPoints().get(
+                            JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
+                    );
+                    float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
+
+                    if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
+                        selectedFigure = figureIndex;
+                        drawViewCallback.onSelectFigure(selectedFigure);
+                    }
+                    else if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
+                        selectedFigure = figureIndex;
+                        drawViewCallback.onSelectFigure(selectedFigure);
+                    }
+                }
             }
-            else if(localPointIndex == JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1){
 
-                prevPoint = JPointData.getInstance().getPoints().get(
-                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
-                );
-                float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
-
-                if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
-                    selectedFigure = figureIndex;
-                    drawViewCallback.onSelectFigure(selectedFigure);
-                }
-            }
-            else {
-                nextPoint = JPointData.getInstance().getPoints().get(
-                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
-                );
-                float nextPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), nextPoint.getX(), nextPoint.getY());
-
-                prevPoint = JPointData.getInstance().getPoints().get(
-                        JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
-                );
-                float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
-
-                if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
-                    selectedFigure = figureIndex;
-                    drawViewCallback.onSelectFigure(selectedFigure);
-                }
-                else if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
-                    selectedFigure = figureIndex;
-                    drawViewCallback.onSelectFigure(selectedFigure);
-                }
-            }
 
         }
     }
 
+    private int findFigureByPoint(int point){
+
+        for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++) {
+            if (JPointData.getInstance().getFigures().get(i).isContainsPoint(point)){
+                return i;
+            }
+
+        }
+        return -1;
+    }
+
+    private void selectFigureByPoint(int figureIndex){
+        selectedFigure = figureIndex;
+        drawViewCallback.onSelectFigure(figureIndex);
+    }
 
 
     @Override

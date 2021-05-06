@@ -4,14 +4,12 @@ public class JPoint {
 
     private float x;
     private float y;
-    private int figureIndex;
 
 
 
-    public JPoint(float x, float y, int figureIndex){
+    public JPoint(float x, float y){
         this.x = x;
         this.y = y;
-        this.figureIndex = figureIndex;
     }
 
 
@@ -42,11 +40,4 @@ public class JPoint {
         this.y = y;
     }
 
-    public int getFigureIndex() {
-        return figureIndex;
-    }
-
-    public void setFigureIndex(int figureIndex) {
-        this.figureIndex = figureIndex;
-    }
 }

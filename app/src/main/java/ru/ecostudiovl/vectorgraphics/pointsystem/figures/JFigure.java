@@ -35,43 +35,11 @@ public class JFigure {
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
                 points.add(index);
-                recalcCenter(x, y);
             }
         }
         else {
             points.add(index);
-            recalcCenter(x, y);
         }
-    }
-
-    private void recalcCenter(float x, float y){
-        if (points.size() == 1){
-            centerX = x;
-            centerY = y;
-            leftX = x;
-            rightX = x;
-            leftY = y;
-            rightY = y;
-        }
-        else {
-            if (x <= leftX){
-                leftX = x;
-            }
-            else if(x >= rightX){
-                rightX = x;
-            }
-
-            if (y <= leftY){
-                leftY = y;
-            }
-            else if(y >= rightY){
-                rightY = y;
-            }
-
-            centerX = (leftX + rightX) / 2;
-            centerY = (leftY + rightY) / 2;
-        }
-
     }
 
     public void deletePoint(int index){
