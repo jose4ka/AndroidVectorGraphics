@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
+import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
@@ -325,8 +326,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             tvInfoLabel.setText("Редактирование фигуры");
         }
 
-
-        updateList();
+        rvFigures.getAdapter().notifyDataSetChanged();
+//        updateList();
     }
 
 

@@ -128,7 +128,9 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
 
     @Override
-    public void onSelectTemplate(int index) {}
+    public void onSelectTemplate(int index) {
+        rvTemplates.getAdapter().notifyDataSetChanged();
+    }
 
 
 

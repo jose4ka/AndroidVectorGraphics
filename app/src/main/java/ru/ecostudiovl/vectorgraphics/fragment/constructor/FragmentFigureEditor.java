@@ -110,6 +110,8 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
     @Override
     public void onSelectTemplate(int index) {
         selectedTemplate = index;
-        updateList();
+        ((AdapterTemplatesList)rvTemplates.getAdapter()).setSelectedTemplate(index);
+        rvTemplates.getAdapter().notifyDataSetChanged();
+//        updateList();
     }
 }

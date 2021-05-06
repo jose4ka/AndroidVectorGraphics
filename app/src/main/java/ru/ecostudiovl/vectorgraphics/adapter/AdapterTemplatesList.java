@@ -90,4 +90,12 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
     public interface TemplateSelect{
         void onSelectTemplate(int index);
     }
+
+    public int getSelectedTemplate() {
+        return selectedTemplate;
+    }
+
+    public void setSelectedTemplate(int selectedTemplate) {
+        this.selectedTemplate = selectedTemplate;
+    }
 }
