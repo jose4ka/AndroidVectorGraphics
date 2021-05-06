@@ -15,24 +15,63 @@ public class JFigure {
     private float centerX, centerY;
     protected List<Integer> points;
 
+    private float leftX, leftY;
+    private float rightX, rightY;
+
     public JFigure(String name, int templateIndex){
         this.points = new LinkedList<>();
         this.isSelected = false;
         this.name = name;
         this.centerX = 0;
         this.centerY = 0;
+        this.leftX = 0;
+        this.leftY = 0;
+        this.rightX = 0;
+        this.rightY = 0;
         this.templateIndex = templateIndex;
     }
 
-    public void addPoint(int index, JFigureTemplates template){
+    public void addPoint(int index, float x, float y, JFigureTemplates template){
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
                 points.add(index);
+                recalcCenter(x, y);
             }
         }
         else {
             points.add(index);
+            recalcCenter(x, y);
         }
+    }
+
+    private void recalcCenter(float x, float y){
+        if (points.size() == 1){
+            centerX = x;
+            centerY = y;
+            leftX = x;
+            rightX = x;
+            leftY = y;
+            rightY = y;
+        }
+        else {
+            if (x <= leftX){
+                leftX = x;
+            }
+            else if(x >= rightX){
+                rightX = x;
+            }
+
+            if (y <= leftY){
+                leftY = y;
+            }
+            else if(y >= rightY){
+                rightY = y;
+            }
+
+            centerX = (leftX + rightX) / 2;
+            centerY = (leftY + rightY) / 2;
+        }
+
     }
 
     public void deletePoint(int index){
@@ -109,5 +148,37 @@ public class JFigure {
 
     public void setTemplateIndex(int templateIndex) {
         this.templateIndex = templateIndex;
+    }
+
+    public float getLeftX() {
+        return leftX;
+    }
+
+    public void setLeftX(float leftX) {
+        this.leftX = leftX;
+    }
+
+    public float getLeftY() {
+        return leftY;
+    }
+
+    public void setLeftY(float leftY) {
+        this.leftY = leftY;
+    }
+
+    public float getRightX() {
+        return rightX;
+    }
+
+    public void setRightX(float rightX) {
+        this.rightX = rightX;
+    }
+
+    public float getRightY() {
+        return rightY;
+    }
+
+    public void setRightY(float rightY) {
+        this.rightY = rightY;
     }
 }

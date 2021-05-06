@@ -98,12 +98,12 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         int pointsCount = JPointData.getInstance().getFigures().get(selectedFigure).getPoints().size();
                         if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
                             if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
-                                JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
+                                JPointData.getInstance().getPoints().add(new JPoint(x, y, selectedFigure)); //Добавляем точку в общий список с точками
+                                JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1,x, y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex()));
                             }
                         } else {
-                            JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                            JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
+                            JPointData.getInstance().getPoints().add(new JPoint(x, y, selectedFigure)); //Добавляем точку в общий список с точками
+                            JPointData.getInstance().getFigures().get(selectedFigure).addPoint(JPointData.getInstance().getPoints().size() - 1,x , y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(selectedFigure).getTemplateIndex())); /*Добавляем
                         индекс точки в структуру данных*/
                         }
                     }
