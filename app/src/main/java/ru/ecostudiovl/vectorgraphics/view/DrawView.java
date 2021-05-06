@@ -2,6 +2,7 @@ package ru.ecostudiovl.vectorgraphics.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,6 +17,7 @@ import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
+import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -337,9 +339,23 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         pairsMap.clear();
         for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++) {
             JFigure figure = JPointData.getInstance().getFigures().get(i);
-            for (int j = 0; j < figure.getPoints().size() - 1; j++) {
-                JPoint startPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j));
-                JPoint endPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j+1));
+            JFigureTemplates template = JPointData.getInstance().getTemplates().get(figure.getTemplateIndex());
+            for (int j = 0; j < figure.getPoints().size(); j++) {
+                JPoint startPoint = new JPoint(0, 0);
+                JPoint endPoint = new JPoint(0, 0);
+
+                if ((j + 1) < figure.getPoints().size()){
+                    startPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j));
+                    endPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j+1));
+                }
+
+
+                if (template.isClosedFigure()){
+                    if (j == figure.getPoints().size() - 1){
+                        startPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j));
+                        endPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(0));
+                    }
+                }
 
                 if (isPointInZone(x, y, startPoint, endPoint)){
                     List<JPoint> lList = new ArrayList<>();
