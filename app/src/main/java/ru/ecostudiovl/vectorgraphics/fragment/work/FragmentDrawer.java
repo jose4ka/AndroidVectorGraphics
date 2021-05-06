@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 
 import ru.ecostudiovl.vectorgraphics.R;
@@ -57,6 +58,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private DrawView drawView;
     private ImageButton btnChangeMode;
     private ItemTouchHelper itemTouchHelper;
+    private TextView tvInfoLabel;
 
     private ImageButton btnLeft, btnRight, btnUp, btnDown;
     private SeekBar seekBarScale;
@@ -97,7 +99,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     private void initializeViewElements(){
         rvFigures = view.findViewById(R.id.rvFiguresList);
-
+        tvInfoLabel = view.findViewById(R.id.tvSelectedMode);
         btnAddFigure = view.findViewById(R.id.btnAddFigure);
         btnAddFigure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,17 +124,19 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                         currentMode = Mode.edit;
                         drawView.mode = Mode.edit;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+                        tvInfoLabel.setText("Редактирование фигуры");
                         break;
                     case edit:
                         currentMode = Mode.delete;
                         drawView.mode = Mode.delete;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
+                        tvInfoLabel.setText("Удаление точек");
                         break;
                     case delete:
                         currentMode = Mode.create;
                         drawView.mode = Mode.create;
                         btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
-
+                        tvInfoLabel.setText("Создание точек");
                         break;
                 }
                 }
@@ -148,6 +152,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 clearSelected();
                 drawView.setSelectedFigure(-1);
                 updateList();
+                tvInfoLabel.setText("Обзор");
             }
         });
 
@@ -158,6 +163,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 JPointData.getInstance().getPoints().clear();
                 JPointData.getInstance().getFigures().clear();
                 updateList();
+                tvInfoLabel.setText("Холст очищен!");
             }
         });
 
@@ -294,11 +300,13 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             currentMode = Mode.create;
             drawView.mode = Mode.create;
             btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
+            tvInfoLabel.setText("Создание точек");
         }
         else {
             currentMode = Mode.edit;
             drawView.mode = Mode.edit;
             btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+            tvInfoLabel.setText("Редактирование фигуры");
         }
 
 

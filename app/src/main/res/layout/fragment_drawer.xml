@@ -7,7 +7,13 @@
     tools:context=".fragment.work.FragmentDrawer">
 
 
-
+    <TextView
+        android:id="@+id/tvSelectedMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_margin="1dp"
+        android:textColor="@color/black"/>
 
     <FrameLayout
         android:layout_width="match_parent"
