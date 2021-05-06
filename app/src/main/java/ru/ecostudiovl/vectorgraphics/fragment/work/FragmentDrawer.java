@@ -32,7 +32,7 @@ import ru.ecostudiovl.vectorgraphics.view.DrawView;
  * Use the {@link FragmentDrawer#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentDrawer extends Fragment  implements AdapterFiguresList.FigureSelect {
+public class FragmentDrawer extends Fragment  implements AdapterFiguresList.FigureSelect, DrawView.DrawViewCallback {
 
 
     private View view;
@@ -109,7 +109,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         });
 
         FrameLayout frameLayout = view.findViewById(R.id.frameDraw);
-        drawView = new DrawView(getContext());
+        drawView = new DrawView(getContext(), this);
 
         frameLayout.addView(drawView);
         currentMode = Mode.view;
@@ -331,6 +331,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             updateList();
         }
     };
+
 
 
 }

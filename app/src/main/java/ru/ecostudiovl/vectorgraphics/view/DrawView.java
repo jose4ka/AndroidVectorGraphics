@@ -34,11 +34,17 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     private DrawThread drawThread;//Главный поток, отвечающий за постоянную отрисовку фигур и точек (рендеринг).
 
+    public interface DrawViewCallback{
+        void onSelectFigure(int index);
+    }
+
+    private DrawViewCallback drawViewCallback;
 
 
 
-    public DrawView(Context context) {
+    public DrawView(Context context, DrawViewCallback drawViewCallback) {
         super(context);
+        this.drawViewCallback = drawViewCallback;
         getHolder().addCallback(this);
         initializeVariables();
     }
@@ -285,7 +291,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
             JPoint nextPoint, prevPoint;
             if (localPointIndex == 0){
 
-                Log.i(TAG, "findFigureByLine: loc point index = 0");
                 nextPoint = JPointData.getInstance().getPoints().get(
                         JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
                 );
@@ -294,13 +299,12 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
 
                 if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
-                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                    selectedFigure = figureIndex;
+                    drawViewCallback.onSelectFigure(selectedFigure);
                 }
 
             }
             else if(localPointIndex == JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1){
-
-                Log.i(TAG, "findFigureByLine: loc point index = "+(JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() - 1));
 
                 prevPoint = JPointData.getInstance().getPoints().get(
                         JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex - 1)
@@ -308,11 +312,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
 
                 if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
-                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                    selectedFigure = figureIndex;
+                    drawViewCallback.onSelectFigure(selectedFigure);
                 }
             }
             else {
-                Log.i(TAG, "findFigureByLine: loc point btw");
                 nextPoint = JPointData.getInstance().getPoints().get(
                         JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(localPointIndex + 1)
                 );
@@ -324,10 +328,12 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 float prevPDegrees = getDegrees(sourcePoint.getX(), sourcePoint.getY(), prevPoint.getX(), prevPoint.getY());
 
                 if ((currPDegrees <= nextPDegrees + acceptZone) && (currPDegrees >= nextPDegrees - acceptZone)){
-                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                    selectedFigure = figureIndex;
+                    drawViewCallback.onSelectFigure(selectedFigure);
                 }
                 else if ((currPDegrees <= prevPDegrees + acceptZone) && (currPDegrees >= prevPDegrees - acceptZone)){
-                    Log.i(TAG, "findFigureByLine: FIGURE FINDED "+figureIndex);
+                    selectedFigure = figureIndex;
+                    drawViewCallback.onSelectFigure(selectedFigure);
                 }
             }
 
