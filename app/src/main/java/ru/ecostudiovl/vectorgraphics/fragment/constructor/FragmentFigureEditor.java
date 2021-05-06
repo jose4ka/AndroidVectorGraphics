@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
@@ -29,7 +30,7 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
     private RecyclerView rvTemplates;
     private EditText etFigureName;
 
-    private int selectedTemplate = 0;
+    private int selectedTemplate = -1;
 
     public interface FragmentFigureEditorCallback{
         void onCreatedFigure();
@@ -72,8 +73,14 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
         btnCreateFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createFigure();
-                fragmentFigureEditorCallback.onCreatedFigure();
+                if (selectedTemplate == -1){
+                    Toast.makeText(getContext(), "Вы не выбрали шаблон", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    createFigure();
+                    fragmentFigureEditorCallback.onCreatedFigure();
+                }
+
             }
         });
 

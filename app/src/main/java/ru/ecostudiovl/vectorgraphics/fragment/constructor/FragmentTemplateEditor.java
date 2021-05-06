@@ -128,11 +128,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
 
     @Override
-    public void onSelectTemplate(int index) {
-        selectedIndex = index;
-        updateList();
-
-    }
+    public void onSelectTemplate(int index) {}
 
 
 
