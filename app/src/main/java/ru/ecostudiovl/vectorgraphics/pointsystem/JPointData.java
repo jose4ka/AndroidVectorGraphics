@@ -21,7 +21,13 @@ public class JPointData {
     private JPointData(){
         figures = new ArrayList<>();
         templates = new ArrayList<>();
-        templates.add(new JFigureTemplates(0, false, false, "start template"));
+        templates.add(new JFigureTemplates(0, false, false, "Кривая"));
+        templates.add(new JFigureTemplates(0, false, true, "Замкнутая фигура"));
+        templates.add(new JFigureTemplates(3, true, true, "Треугольник"));
+        templates.add(new JFigureTemplates(4, true, true, "Четырёхугольник"));
+        templates.add(new JFigureTemplates(5, true, true, "Пятиугольник"));
+        templates.add(new JFigureTemplates(6, true, true, "Шестиугольник"));
+        templates.add(new JFigureTemplates(3, true, false, "Угол"));
         points = new LinkedList<>();
     }
 

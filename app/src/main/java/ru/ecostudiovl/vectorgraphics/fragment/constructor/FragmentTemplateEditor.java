@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -31,7 +31,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
     private RecyclerView rvTemplates;
     private ImageButton btnCreateTemplate, btnBack;
-    private EditText etTemplateName, etTemplateNumber, etFigureName;
+    private EditText etTemplateName, etPointsNumber;
     private CheckBox cbIsClosedFigure, cbIsClosedFigureNumber;
 
     private int selectedIndex = 0;
@@ -69,18 +69,29 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     private void initializeViewElements(){
         rvTemplates = view.findViewById(R.id.rvTemplates);
         etTemplateName = view.findViewById(R.id.tvTemplateName);
-        etTemplateNumber = view.findViewById(R.id.tvTemplatePointsCount);
-        etFigureName = view.findViewById(R.id.tvFigureName);
+        etPointsNumber = view.findViewById(R.id.tvTemplatePointsCount);
+        etPointsNumber.setEnabled(false);
 
         cbIsClosedFigure = view.findViewById(R.id.cbIsClosedNumber);
         cbIsClosedFigureNumber = view.findViewById(R.id.cbIsClosedPontsNumber);
+        cbIsClosedFigureNumber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    etPointsNumber.setEnabled(true);
+                }
+                else {
+                    etPointsNumber.setEnabled(false);
+                }
+            }
+        });
 
         btnCreateTemplate = view.findViewById(R.id.btnActTempCreateTemplate);
         btnCreateTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cbIsClosedFigureNumber.isChecked() && !etTemplateNumber.getText().toString().isEmpty()){
-                    int pointsNumber = Integer.parseInt(etTemplateNumber.getText().toString());
+                if (cbIsClosedFigureNumber.isChecked() && !etPointsNumber.getText().toString().isEmpty()){
+                    int pointsNumber = Integer.parseInt(etPointsNumber.getText().toString());
                     JPointData.getInstance().getTemplates().add(new JFigureTemplates(
                             pointsNumber,
                             cbIsClosedFigureNumber.isChecked(),
@@ -112,12 +123,6 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
                 fragmentTemplateEditorCallback.onBackPressedTemplate();
             }
         });
-    }
-
-
-    private void createFigure(){
-        JPointData.getInstance().getFigures().add(new JFigure((etFigureName.getText().toString() + " : "+JPointData.getInstance().getFigures().size()), selectedIndex));
-
     }
 
 

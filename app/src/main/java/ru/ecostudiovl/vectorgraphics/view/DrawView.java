@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
 import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
@@ -19,7 +20,6 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static String TAG = "=ABOBA= DRAW_VIEW"; //Тег для логов.
-    public FragmentDrawer.Mode mode;//Текущий режим работы с экраном.
 
     private int selectedFigure; //Выбранная фигура на данный момент.
     private int touchedPoint; //Индекс точки, на которую мы тыкнули пальцем.
@@ -51,17 +51,15 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     public DrawView(Context context, DrawViewCallback drawViewCallback) {
         super(context);
-
+        this.drawViewCallback = drawViewCallback;
         getHolder().addCallback(this);
         initializeVariables();
     }
 
     private void initializeVariables(){
-        mode = FragmentDrawer.Mode.view;
         selectedFigure = -1; //Изначально -1, т.к. фигур никаких нет
         touchedPoint = -1; //Изначально -1, т.к. точек никаких нет
         isPointTouched = false;
-        this.drawViewCallback = drawViewCallback;
         this.pairsMap = new TreeMap<>();
     }
 
@@ -107,7 +105,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
         //Если у нас есть хоть какие-то фигуры, значит уже можем что-то делать с точками
         if (JPointData.getInstance().getFigures().size() > 0){
-            switch (mode) {
+            switch (ModeComponent.getInstance().getCurrentMode()) {
                 case create:/*
                     Режим создания точек
                     Срабатывает если у нас выбрана хоть какая-то фигура

@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
+import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
 
@@ -36,16 +37,6 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
 
     private View view;
-
-    public enum Mode {
-        create,
-        edit,
-        delete,
-        view
-    }
-
-    public Mode currentMode;
-
 
     private ImageButton btnAddFigure;
     private ImageButton btnClear;
@@ -94,6 +85,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         view = inflater.inflate(R.layout.fragment_drawer, container, false);
         initializeViewElements();
         updateList();
+        switchMode(ModeComponent.Mode.view);
         return view;
     }
 
@@ -105,41 +97,19 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             @Override
             public void onClick(View view) {
                 fragmentDrawerCallback.onCreateFigureClicked();
+                drawView.stopDrawThread();
             }
         });
 
         FrameLayout frameLayout = view.findViewById(R.id.frameDraw);
         drawView = new DrawView(getContext(), this);
-
         frameLayout.addView(drawView);
-        currentMode = Mode.view;
 
         btnChangeMode = view.findViewById(R.id.btnChangeMode);
         btnChangeMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasSelected()){
-                switch (currentMode) {
-                    case create:
-                        currentMode = Mode.edit;
-                        drawView.mode = Mode.edit;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
-                        tvInfoLabel.setText("Редактирование фигуры");
-                        break;
-                    case edit:
-                        currentMode = Mode.delete;
-                        drawView.mode = Mode.delete;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
-                        tvInfoLabel.setText("Удаление точек");
-                        break;
-                    case delete:
-                        currentMode = Mode.create;
-                        drawView.mode = Mode.create;
-                        btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
-                        tvInfoLabel.setText("Создание точек");
-                        break;
-                }
-                }
+                onChangedMode();
             }
         });
 
@@ -147,12 +117,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         btnOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentMode = Mode.view;
-                drawView.mode = Mode.view;
-                clearSelected();
-                drawView.setSelectedFigure(-1);
-                updateList();
-                tvInfoLabel.setText("Обзор");
+                switchMode(ModeComponent.Mode.view);
+
             }
         });
 
@@ -172,6 +138,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             @Override
             public void onClick(View v) {
                 fragmentDrawerCallback.onCreateTemplateClicked();
+                drawView.stopDrawThread();
             }
         });
 
@@ -200,6 +167,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             @Override
             public void onClick(View v) {
                 fragmentDrawerCallback.onMainMenuClicked();
+                drawView.stopDrawThread();
             }
         });
 
@@ -256,6 +224,56 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
+    private void onChangedMode(){
+        if (hasSelected()){
+            switch (ModeComponent.getInstance().getCurrentMode()) {
+                case create:
+                    switchMode(ModeComponent.Mode.edit);
+                    break;
+                case edit:
+                    switchMode(ModeComponent.Mode.delete);
+                    break;
+                case delete:
+                    switchMode(ModeComponent.Mode.create);
+                    break;
+            }
+        }
+    }
+
+
+    private void switchMode(ModeComponent.Mode mode){
+        ModeComponent.getInstance().setCurrentMode(mode);
+        switch (ModeComponent.getInstance().getCurrentMode()) {
+            case create:
+                tvInfoLabel.setText("Создание точек");
+                btnChangeMode.setEnabled(true);
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
+                break;
+            case edit:
+                tvInfoLabel.setText("Редактирование фигуры");
+                btnChangeMode.setEnabled(true);
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+                break;
+            case delete:
+                tvInfoLabel.setText("Удаление точек");
+                btnChangeMode.setEnabled(true);
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
+                break;
+            case view:
+                tvInfoLabel.setText("Обзор");
+                btnChangeMode.setEnabled(false);
+                btnChangeMode.setVisibility(View.GONE);
+                drawView.setSelectedFigure(-1);
+                clearSelected();
+                updateList();
+                break;
+
+        }
+
+    }
 
     public void updateList(){
 
@@ -297,14 +315,12 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         JPointData.getInstance().getFigures().get(index).setSelected(true);
 
         if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
-            currentMode = Mode.create;
-            drawView.mode = Mode.create;
+            switchMode(ModeComponent.Mode.create);
             btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
             tvInfoLabel.setText("Создание точек");
         }
         else {
-            currentMode = Mode.edit;
-            drawView.mode = Mode.edit;
+            switchMode(ModeComponent.Mode.edit);
             btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
             tvInfoLabel.setText("Редактирование фигуры");
         }
