@@ -1,10 +1,15 @@
 package ru.ecostudiovl.vectorgraphics.component;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class BufferComponent {
 
 
+    private final String TAG = "=== BUFFER COMPONENT";
 
     private TreeMap<Integer, Integer> selectedMap;
     private static BufferComponent instance;
@@ -33,21 +38,51 @@ public class BufferComponent {
         selectedMap.remove(index);
     }
 
+
     public void clearSelected(){
         selectedMap.clear();
     }
 
     public int getCurrentSelectedObject(){
         if (selectedMap.size()  == 1){
-            for (TreeMap.Entry<Integer, Integer> entry: selectedMap.entrySet()) {
+            for (TreeMap.Entry<Integer, Integer> entry:selectedMap.entrySet()) {
                 return entry.getKey();
             }
+
+
         }
         return  -1;
     }
 
     public boolean isContainsFigure(int index){
         return selectedMap.containsKey(index);
+    }
+
+    public void minimize(int index){
+
+        List<Integer> lList = new ArrayList<>();
+        for (TreeMap.Entry<Integer, Integer> entry:selectedMap.entrySet()) {
+            if (entry.getKey() > index){
+                lList.add(entry.getKey() - 1);
+            }
+        }
+
+        selectedMap.clear();
+
+        for (int i = 0; i < lList.size(); i++) {
+            selectedMap.put(lList.get(i), 0);
+        }
+        lList.clear();
+
+
+    }
+
+    public TreeMap<Integer, Integer> getSelectedMap() {
+        return selectedMap;
+    }
+
+    public void setSelectedMap(TreeMap<Integer, Integer> selectedMap) {
+        this.selectedMap = selectedMap;
     }
 
 }

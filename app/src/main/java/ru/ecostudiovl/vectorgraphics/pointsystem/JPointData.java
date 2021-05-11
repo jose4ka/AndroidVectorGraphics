@@ -16,6 +16,8 @@ public class JPointData {
     private List<JPoint> points;/*Список абсолютно всех точек, которые есть на экране и которые задействуются
                                     в структуре данных, описывающих фигуры.*/
 
+    private boolean isWait;
+
     private static JPointData instance;
 
     private JPointData(){
@@ -29,6 +31,7 @@ public class JPointData {
         templates.add(new JFigureTemplates(6, true, true, "Шестиугольник"));
         templates.add(new JFigureTemplates(3, true, false, "Угол"));
         points = new LinkedList<>();
+        isWait = false;
     }
 
     public static JPointData getInstance(){
@@ -61,5 +64,13 @@ public class JPointData {
 
     public void setPoints(List<JPoint> points) {
         this.points = points;
+    }
+
+    public boolean isWait() {
+        return isWait;
+    }
+
+    public void setWait(boolean wait) {
+        isWait = wait;
     }
 }

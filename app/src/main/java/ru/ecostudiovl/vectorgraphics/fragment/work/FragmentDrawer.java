@@ -22,11 +22,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
+import java.util.TreeMap;
+
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
 
@@ -42,6 +45,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnOpenTemplater;
     private ImageButton btnOpenMenu;
     private ImageButton btnSelectionMode;
+    private ImageButton btnDeleteSelection;
+
     private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
@@ -188,6 +193,40 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             }
         });
 
+
+        btnDeleteSelection = view.findViewById(R.id.btnDeleteSelected);
+        btnDeleteSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int size = BufferComponent.getInstance().getSelectedMap().size();
+                for (int i = 0; i < size; i++) {
+                    boolean flag = false;
+                    int lastInd = -1;
+                    for (TreeMap.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                        if (!flag){
+                            lastInd = entry.getKey();
+
+                            drawView.deletePointsWithFigure(lastInd);
+                            JPointData.getInstance().getFigures().remove(lastInd);
+
+                            flag = true;
+                        }
+                    }
+
+                    if (lastInd != -1){
+                        BufferComponent.getInstance().deleteFigure(lastInd);
+                        BufferComponent.getInstance().minimize(lastInd);
+                    }
+                }
+
+
+                BufferComponent.getInstance().clearSelected();
+                switchMode(ModeComponent.Mode.view);
+                updateList();
+            }
+        });
+
         drawView.setScaleMultiplier(50);
         btnLeft = view.findViewById(R.id.btnLeft);
         btnLeft.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +259,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 drawView.setyDelta(drawView.getyDelta() + 100);
             }
         });
+
+
 
         seekBarScale = view.findViewById(R.id.seekBar);
         seekBarScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -267,6 +308,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
                 btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
                 break;
             case edit:
                 tvInfoLabel.setText("Редактирование фигуры");
@@ -274,6 +316,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
                 btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
                 break;
             case delete:
                 tvInfoLabel.setText("Удаление точек");
@@ -281,6 +324,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
                 btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
                 break;
             case view:
                 BufferComponent.getInstance().clearSelected();
@@ -288,6 +332,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setEnabled(false);
                 btnChangeMode.setVisibility(View.GONE);
                 btnSelectionMode.setVisibility(View.VISIBLE);
+                btnDeleteSelection.setVisibility(View.GONE);
                 clearSelected();
                 updateList();
                 break;
@@ -300,6 +345,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         ModeComponent.getInstance().setSelectionMode(mode);
         switch (ModeComponent.getInstance().getSelectionMode()) {
             case ONE:
+                tvInfoLabel.setText("Выделение одной фигуры");
                 btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_white_24);
                 if (BufferComponent.getInstance().hasSelectedFigures()){
                     btnChangeMode.setVisibility(View.VISIBLE);
@@ -307,6 +353,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
                 break;
             case MORE:
+                tvInfoLabel.setText("Множественное выделение");
                 btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_24);
                 if (BufferComponent.getInstance().hasSelectedFigures()){
                     btnChangeMode.setVisibility(View.GONE);
@@ -351,10 +398,12 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     @Override
     public void onSelectFigure(int index) {
+        btnDeleteSelection.setVisibility(View.VISIBLE);
         switch (ModeComponent.getInstance().getSelectionMode()){
             case ONE:
                 BufferComponent.getInstance().clearSelected();
                 BufferComponent.getInstance().addFigure(index);
+
 
                 if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
                     switchMode(ModeComponent.Mode.create);
@@ -370,6 +419,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 rvFigures.getAdapter().notifyDataSetChanged();
                 break;
             case MORE:
+
                 if (BufferComponent.getInstance().isContainsFigure(index)){
                     BufferComponent.getInstance().deleteFigure(index);
                 }
@@ -396,9 +446,17 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             //Remove swiped item from list and notify the RecyclerView
+
             int position = viewHolder.getAdapterPosition();
+
+            if (BufferComponent.getInstance().isContainsFigure(position)){
+                BufferComponent.getInstance().deleteFigure(position);
+                BufferComponent.getInstance().minimize(position);
+            }
+
             drawView.deletePointsWithFigure(position);
             JPointData.getInstance().getFigures().remove(position);
+
             updateList();
         }
     };

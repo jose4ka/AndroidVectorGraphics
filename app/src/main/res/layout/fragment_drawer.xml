@@ -72,6 +72,15 @@
                         android:layout_height="wrap_content"/>
 
                         <ImageButton
+                            android:src="@drawable/ic_baseline_delete_sweep_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnDeleteSelected"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <ImageButton
                             android:src="@drawable/ic_baseline_arrow_downward_24"
                             android:theme="@style/PurpleButton"
                             android:id="@+id/btnShowHide"
