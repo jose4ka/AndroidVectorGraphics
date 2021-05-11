@@ -25,15 +25,11 @@ import android.widget.TextView;
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterFiguresList;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
+import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.view.DrawView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentDrawer#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentDrawer extends Fragment  implements AdapterFiguresList.FigureSelect, DrawView.DrawViewCallback {
 
 
@@ -45,6 +41,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnOverview;
     private ImageButton btnOpenTemplater;
     private ImageButton btnOpenMenu;
+    private ImageButton btnSelectionMode;
     private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
@@ -87,6 +84,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         initializeViewElements();
         updateList();
         switchMode(ModeComponent.Mode.view);
+        switchSelectionMode(ModeComponent.SelectionMode.ONE);
         return view;
     }
 
@@ -131,6 +129,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 JPointData.getInstance().getFigures().clear();
                 updateList();
                 tvInfoLabel.setText("Холст очищен!");
+                switchMode(ModeComponent.Mode.view);
             }
         });
 
@@ -169,6 +168,23 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             public void onClick(View v) {
                 fragmentDrawerCallback.onMainMenuClicked();
                 drawView.stopDrawThread();
+            }
+        });
+
+        btnSelectionMode = view.findViewById(R.id.btnSelectionMode);
+        btnSelectionMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (ModeComponent.getInstance().getSelectionMode()) {
+                    case ONE:
+                        switchSelectionMode(ModeComponent.SelectionMode.MORE);
+                        break;
+                    case MORE:
+                        switchSelectionMode(ModeComponent.SelectionMode.ONE);
+                        break;
+
+                }
             }
         });
 
@@ -226,7 +242,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     }
 
     private void onChangedMode(){
-        if (hasSelected()){
+        if (BufferComponent.getInstance().getSelectedMap().size() > 0){
             switch (ModeComponent.getInstance().getCurrentMode()) {
                 case create:
                     switchMode(ModeComponent.Mode.edit);
@@ -250,26 +266,51 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setEnabled(true);
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
+                btnSelectionMode.setVisibility(View.GONE);
                 break;
             case edit:
                 tvInfoLabel.setText("Редактирование фигуры");
                 btnChangeMode.setEnabled(true);
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+                btnSelectionMode.setVisibility(View.GONE);
                 break;
             case delete:
                 tvInfoLabel.setText("Удаление точек");
                 btnChangeMode.setEnabled(true);
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
+                btnSelectionMode.setVisibility(View.GONE);
                 break;
             case view:
+                BufferComponent.getInstance().getSelectedMap().clear();
                 tvInfoLabel.setText("Обзор");
                 btnChangeMode.setEnabled(false);
                 btnChangeMode.setVisibility(View.GONE);
-                drawView.setSelectedFigure(-1);
+                btnSelectionMode.setVisibility(View.VISIBLE);
                 clearSelected();
                 updateList();
+                break;
+
+        }
+
+    }
+
+    private void switchSelectionMode(ModeComponent.SelectionMode mode){
+        ModeComponent.getInstance().setSelectionMode(mode);
+        switch (ModeComponent.getInstance().getSelectionMode()) {
+            case ONE:
+                btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_white_24);
+                if (BufferComponent.getInstance().getSelectedMap().size() > 0){
+                    btnChangeMode.setVisibility(View.VISIBLE);
+                }
+
+                break;
+            case MORE:
+                btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_24);
+                if (BufferComponent.getInstance().getSelectedMap().size() > 0){
+                    btnChangeMode.setVisibility(View.GONE);
+                }
                 break;
 
         }
@@ -310,24 +351,37 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     @Override
     public void onSelectFigure(int index) {
-        drawView.setSelectedFigure(index);
+        switch (ModeComponent.getInstance().getSelectionMode()){
+            case ONE:
+                BufferComponent.getInstance().getSelectedMap().clear();
+                BufferComponent.getInstance().getSelectedMap().put(index, 0);
 
-        clearSelected();
-        JPointData.getInstance().getFigures().get(index).setSelected(true);
+                if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
+                    switchMode(ModeComponent.Mode.create);
+                    btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
+                    tvInfoLabel.setText("Создание точек");
+                }
+                else {
+                    switchMode(ModeComponent.Mode.edit);
+                    btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
+                    tvInfoLabel.setText("Редактирование фигуры");
+                }
 
-        if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
-            switchMode(ModeComponent.Mode.create);
-            btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
-            tvInfoLabel.setText("Создание точек");
+                rvFigures.getAdapter().notifyDataSetChanged();
+                break;
+            case MORE:
+                if (BufferComponent.getInstance().getSelectedMap().containsKey(index)){
+                    BufferComponent.getInstance().getSelectedMap().remove(index);
+                }
+                else {
+                    BufferComponent.getInstance().getSelectedMap().put(index, 0);
+                }
+
+                rvFigures.getAdapter().notifyDataSetChanged();
+                break;
         }
-        else {
-            switchMode(ModeComponent.Mode.edit);
-            btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
-            tvInfoLabel.setText("Редактирование фигуры");
-        }
 
-        rvFigures.getAdapter().notifyDataSetChanged();
-//        updateList();
+
     }
 
 

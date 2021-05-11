@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.R;
+import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 
 public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.ViewHolder> {
@@ -45,7 +46,7 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
             }
         });
 
-        if (mData.get(position).isSelected()){
+        if (BufferComponent.getInstance().getSelectedMap().containsKey(position)){
             holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
         }
         else {

@@ -53,6 +53,16 @@
                         android:layout_height="wrap_content"/>
 
                     <ImageButton
+                        android:src="@drawable/ic_baseline_touch_app_white_24"
+                        android:theme="@style/PurpleButton"
+                        android:id="@+id/btnSelectionMode"
+                        android:visibility="gone"
+                        android:text="create"
+                        android:textSize="10sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <ImageButton
                         android:src="@drawable/ic_baseline_add_circle_24"
                         android:theme="@style/PurpleButton"
                         android:id="@+id/btnChangeMode"

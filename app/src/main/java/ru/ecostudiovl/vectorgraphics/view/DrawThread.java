@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 
 import java.util.List;
 
+import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
@@ -76,7 +77,7 @@ public class DrawThread extends Thread{
 
             List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
 
-            if (JPointData.getInstance().getFigures().get(i).isSelected()){
+            if (BufferComponent.getInstance().getSelectedMap().containsKey(i)){
                 p.setColor(Color.BLUE);
             }
             else {

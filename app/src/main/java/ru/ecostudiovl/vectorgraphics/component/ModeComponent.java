@@ -9,7 +9,19 @@ public class ModeComponent {
         view
     }
 
+    public enum SelectionMode{
+        ONE,
+        MORE
+    }
+
+    public enum CreationMode{
+        ADDITIVE,
+        CREATIVE
+    }
+
     public Mode currentMode;
+    public SelectionMode selectionMode;
+    public CreationMode creationMode;
 
     private static ModeComponent instance;
 
@@ -31,5 +43,13 @@ public class ModeComponent {
 
     public void setCurrentMode(Mode currentMode) {
         this.currentMode = currentMode;
+    }
+
+    public SelectionMode getSelectionMode() {
+        return selectionMode;
+    }
+
+    public void setSelectionMode(SelectionMode selectionMode) {
+        this.selectionMode = selectionMode;
     }
 }
