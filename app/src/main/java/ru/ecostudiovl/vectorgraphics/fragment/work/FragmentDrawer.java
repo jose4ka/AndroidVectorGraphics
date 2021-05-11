@@ -242,7 +242,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     }
 
     private void onChangedMode(){
-        if (BufferComponent.getInstance().getSelectedMap().size() > 0){
+        if (BufferComponent.getInstance().hasSelectedFigures()){
             switch (ModeComponent.getInstance().getCurrentMode()) {
                 case create:
                     switchMode(ModeComponent.Mode.edit);
@@ -283,7 +283,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnSelectionMode.setVisibility(View.GONE);
                 break;
             case view:
-                BufferComponent.getInstance().getSelectedMap().clear();
+                BufferComponent.getInstance().clearSelected();
                 tvInfoLabel.setText("Обзор");
                 btnChangeMode.setEnabled(false);
                 btnChangeMode.setVisibility(View.GONE);
@@ -301,14 +301,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         switch (ModeComponent.getInstance().getSelectionMode()) {
             case ONE:
                 btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_white_24);
-                if (BufferComponent.getInstance().getSelectedMap().size() > 0){
+                if (BufferComponent.getInstance().hasSelectedFigures()){
                     btnChangeMode.setVisibility(View.VISIBLE);
                 }
 
                 break;
             case MORE:
                 btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_24);
-                if (BufferComponent.getInstance().getSelectedMap().size() > 0){
+                if (BufferComponent.getInstance().hasSelectedFigures()){
                     btnChangeMode.setVisibility(View.GONE);
                 }
                 break;
@@ -353,8 +353,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     public void onSelectFigure(int index) {
         switch (ModeComponent.getInstance().getSelectionMode()){
             case ONE:
-                BufferComponent.getInstance().getSelectedMap().clear();
-                BufferComponent.getInstance().getSelectedMap().put(index, 0);
+                BufferComponent.getInstance().clearSelected();
+                BufferComponent.getInstance().addFigure(index);
 
                 if (JPointData.getInstance().getFigures().get(index).getPoints().size() == 0){
                     switchMode(ModeComponent.Mode.create);
@@ -370,11 +370,11 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 rvFigures.getAdapter().notifyDataSetChanged();
                 break;
             case MORE:
-                if (BufferComponent.getInstance().getSelectedMap().containsKey(index)){
-                    BufferComponent.getInstance().getSelectedMap().remove(index);
+                if (BufferComponent.getInstance().isContainsFigure(index)){
+                    BufferComponent.getInstance().deleteFigure(index);
                 }
                 else {
-                    BufferComponent.getInstance().getSelectedMap().put(index, 0);
+                    BufferComponent.getInstance().addFigure(index);
                 }
 
                 rvFigures.getAdapter().notifyDataSetChanged();

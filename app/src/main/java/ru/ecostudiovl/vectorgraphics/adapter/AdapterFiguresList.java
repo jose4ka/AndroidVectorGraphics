@@ -46,7 +46,7 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
             }
         });
 
-        if (BufferComponent.getInstance().getSelectedMap().containsKey(position)){
+        if (BufferComponent.getInstance().isContainsFigure(position)){
             holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
         }
         else {

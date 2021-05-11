@@ -21,11 +21,33 @@ public class BufferComponent {
         return instance;
     }
 
-    public TreeMap<Integer, Integer> getSelectedMap() {
-        return selectedMap;
+    public boolean hasSelectedFigures(){
+        return selectedMap.size() > 0;
     }
 
-    public void setSelectedMap(TreeMap<Integer, Integer> selectedMap) {
-        this.selectedMap = selectedMap;
+    public void addFigure(int index){
+        selectedMap.put(index, 0);
     }
+
+    public void deleteFigure(int index){
+        selectedMap.remove(index);
+    }
+
+    public void clearSelected(){
+        selectedMap.clear();
+    }
+
+    public int getCurrentSelectedObject(){
+        if (selectedMap.size()  == 1){
+            for (TreeMap.Entry<Integer, Integer> entry: selectedMap.entrySet()) {
+                return entry.getKey();
+            }
+        }
+        return  -1;
+    }
+
+    public boolean isContainsFigure(int index){
+        return selectedMap.containsKey(index);
+    }
+
 }

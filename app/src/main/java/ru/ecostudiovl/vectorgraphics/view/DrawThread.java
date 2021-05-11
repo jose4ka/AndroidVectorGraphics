@@ -77,7 +77,7 @@ public class DrawThread extends Thread{
 
             List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
 
-            if (BufferComponent.getInstance().getSelectedMap().containsKey(i)){
+            if (BufferComponent.getInstance().isContainsFigure(i)){
                 p.setColor(Color.BLUE);
             }
             else {
