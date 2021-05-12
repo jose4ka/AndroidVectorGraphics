@@ -16,7 +16,6 @@ import ru.ecostudiovl.vectorgraphics.R;
 public class FragmentMainMenu extends Fragment {
 
     private View view;
-    private CardView cvStart;
 
     private FragmentMainMenuCallback fragmentMainMenuCallback;
 
@@ -25,9 +24,8 @@ public class FragmentMainMenu extends Fragment {
     }
 
 
-    public static FragmentMainMenu newInstance(String param1, String param2) {
-        FragmentMainMenu fragment = new FragmentMainMenu();
-        return fragment;
+    public static FragmentMainMenu newInstance() {
+        return new FragmentMainMenu();
     }
 
     @Override
@@ -36,10 +34,6 @@ public class FragmentMainMenu extends Fragment {
         fragmentMainMenuCallback = (FragmentMainMenuCallback) context;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +44,7 @@ public class FragmentMainMenu extends Fragment {
     }
 
     private void initializeViewElements(){
-        cvStart = view.findViewById(R.id.cvStartWork);
+        CardView cvStart = view.findViewById(R.id.cvStartWork);
         cvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

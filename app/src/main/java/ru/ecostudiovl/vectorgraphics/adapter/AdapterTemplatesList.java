@@ -1,10 +1,10 @@
 package ru.ecostudiovl.vectorgraphics.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +16,6 @@ import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesList.ViewHolder> {
@@ -41,6 +40,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         return new ViewHolder(v);
     }
 
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -51,10 +51,10 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         });
 
         if (position == selectedTemplate){
-            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
+            holder.lnIndicator.setBackgroundColor(context.getColor(R.color.selected_figure));
         }
         else {
-            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
+            holder.lnIndicator.setBackgroundColor(context.getColor(R.color.simple_figure));
         }
 
         holder.tvName.setText(mData.get(position).getName());
@@ -69,7 +69,7 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvPointCount;
         LinearLayout lnCLosedIndicator;
@@ -89,10 +89,6 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
 
     public interface TemplateSelect{
         void onSelectTemplate(int index);
-    }
-
-    public int getSelectedTemplate() {
-        return selectedTemplate;
     }
 
     public void setSelectedTemplate(int selectedTemplate) {

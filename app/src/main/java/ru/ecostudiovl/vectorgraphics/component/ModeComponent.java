@@ -3,10 +3,10 @@ package ru.ecostudiovl.vectorgraphics.component;
 public class ModeComponent {
 
     public enum Mode {
-        create,
-        edit,
-        delete,
-        view
+        CREATE,
+        EDIT,
+        DELETE,
+        VIEW
     }
 
     public enum SelectionMode{
@@ -26,7 +26,7 @@ public class ModeComponent {
     private static ModeComponent instance;
 
     private ModeComponent(){
-        currentMode = Mode.view;
+        currentMode = Mode.VIEW;
     }
 
     public static ModeComponent getInstance(){

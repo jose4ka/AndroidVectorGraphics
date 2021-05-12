@@ -2,27 +2,24 @@ package ru.ecostudiovl.vectorgraphics.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
-import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
-
-    public static String TAG = "=ABOBA= DRAW_VIEW"; //Тег для логов.
 
     private int touchedPoint; //Индекс точки, на которую мы тыкнули пальцем.
     private boolean isPointTouched; //Переменная нужна при перемещении точки, чтобы не цеплять точки которые очень рядом.
@@ -38,7 +35,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     Нужны для перемещения по холсту, и для масштабирования изображения.
      */
     private int scaleMultiplier = 1;
-    private float xDelta, yDelta = 0;
+    private float xDelta;
+    private float yDelta;
 
     private DrawThread drawThread;//Главный поток, отвечающий за постоянную отрисовку фигур и точек (рендеринг).
 
@@ -105,80 +103,74 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         float y = (event.getY());
 
         //Если у нас есть хоть какие-то фигуры, значит уже можем что-то делать с точками
-        if (JPointData.getInstance().getFigures().size() > 0){
+        if (!JPointData.getInstance().getFigures().isEmpty()){
             switch (ModeComponent.getInstance().getCurrentMode()) {
-                case create:
-                    switch (ModeComponent.getInstance().getSelectionMode()){
-                        case ONE:
-                            /*
+                case CREATE:
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {/*
                             Режим создания точек
                             Срабатывает если у нас выбрана хоть какая-то фигура
                             Далее, мы получаем шаблон у выбранной фигуры, и смотрим ограничения по точкам у этого шаблона
                             Если есть ограничения - добавляем точки с учетом ограничений
                             Если ограничений нет - просто добавляем точки*/
-                            if (BufferComponent.getInstance().hasSelectedFigures()) {
+                        if (BufferComponent.getInstance().hasSelectedFigures()) {
 
-
-                                    int template = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex();
-                                    int pointsCount = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getPoints().size();
-                                    if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
-                                        if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
-                                            JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                            JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1,x, y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex()));
-                                        }
-                                    } else {
-                                        JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                        JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1,x , y, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex())); /*Добавляем
+                            int template = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex();
+                            int pointsCount = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getPoints().size();
+                            if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
+                                if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
+                                    JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                                    JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex()));
+                                }
+                            } else {
+                                JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
+                                JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex())); /*Добавляем
                             индекс точки в структуру данных*/
-                                    }
-
-
                             }
-                            break;
+
+
+                        }
                     }
 
 
                     return false;
-                case edit:/*
+                case EDIT:/*
                 Режим редактирования точек
                 Срабатывает только если мы выбрали какую-то фигуру*/
-                    switch (ModeComponent.getInstance().getSelectionMode()) {
-                        case ONE:
-                            if (BufferComponent.getInstance().hasSelectedFigures()){
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        if (BufferComponent.getInstance().hasSelectedFigures()) {
 
 
-                                    if (!isPointTouched){
-                                        touchedPoint = getTouchedPoint(x, y);
-                                    }
+                            if (!isPointTouched) {
+                                touchedPoint = getTouchedPoint(x, y);
+                            }
 
-                                    if (touchedPoint != -1){
-                                        isPointTouched = true;
-                                    }
+                            if (touchedPoint != -1) {
+                                isPointTouched = true;
+                            }
 
-                                    //Если мы подняли палец, значит никакая точка не выбрана
-                                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                                        isPointTouched = false;
-                                        touchedPoint = -1;
-                                    }
+                            //Если мы подняли палец, значит никакая точка не выбрана
+                            if (event.getAction() == MotionEvent.ACTION_UP) {
+                                isPointTouched = false;
+                                touchedPoint = -1;
+                            }
 
-                                    if (JPointData.getInstance().getPoints().size() > 0) {
-                                        if (JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).isContainsPoint(touchedPoint)){
-                                            if (touchedPoint == -1) {
-                                                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                                    touchedPoint = getTouchedPoint(x, y);
-                                                }
-
-                                            } else {
-                                                JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
-                                                JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
-                                            }
+                            if (JPointData.getInstance().getPoints().size() > 0) {
+                                if (JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).isContainsPoint(touchedPoint)) {
+                                    if (touchedPoint == -1) {
+                                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                            touchedPoint = getTouchedPoint(x, y);
                                         }
 
+                                    } else {
+                                        JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
+                                        JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
                                     }
-
+                                }
 
                             }
-                            break;
+
+
+                        }
                     }
 
 
@@ -186,30 +178,28 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     return true;
 
-                case delete:
+                case DELETE:
                     /*
                     Режим удаления точек
                     Срабатывает только если мы выбрали какую-то фигуру*/
 
-                    switch (ModeComponent.getInstance().getSelectionMode()) {
-                        case ONE:
-                            if (BufferComponent.getInstance().hasSelectedFigures()){
-                                    touchedPoint = getTouchedPoint(x, y);
-                                    if (touchedPoint != -1){
-                                        JPointData.getInstance().getPoints().remove(touchedPoint); //Удаляем точку из общего списка
-                                        JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).deletePoint(touchedPoint); //Удаляем точку из текущей фигуры
-                                        minimize(touchedPoint); //Минимизируем все точки в структуре данных
-                                    }
-
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        if (BufferComponent.getInstance().hasSelectedFigures()) {
+                            touchedPoint = getTouchedPoint(x, y);
+                            if (touchedPoint != -1) {
+                                JPointData.getInstance().getPoints().remove(touchedPoint); //Удаляем точку из общего списка
+                                JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).deletePoint(touchedPoint); //Удаляем точку из текущей фигуры
+                                minimize(touchedPoint); //Минимизируем все точки в структуре данных
                             }
-                            break;
+
+                        }
                     }
 
 
 
                     return false;
 
-                case view:/*
+                case VIEW:/*
                 Режим простого просмотра фигур
                 Тут мы можем выбрать фигуру с помощью нажатия на точку или линию
                 */
@@ -243,7 +233,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
             boolean pointInRadius = (
                     Math.pow((JPointData.getInstance().getPoints().get(i).getX() - centerX), 2)+
-                            Math.pow(((JPointData.getInstance().getPoints().get(i).getY() - centerY)),2)) <
+                            Math.pow((JPointData.getInstance().getPoints().get(i).getY() - centerY),2)) <
                     (Math.pow(radius, 2));
 
             if (pointInRadius) {
@@ -310,7 +300,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     public void deletePointsWithFigure(int figureIndex){
         for (int i = 0; i < JPointData.getInstance().getFigures().get(figureIndex).getPoints().size() ; i++) {
             JPointData.getInstance().getPoints().remove(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i).intValue());
-            minimize(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i).intValue());
+            minimize(JPointData.getInstance().getFigures().get(figureIndex).getPoints().get(i));
         }
     }
 
@@ -374,11 +364,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
 
-                if (template.isClosedFigure()){
-                    if (j == figure.getPoints().size() - 1){
-                        startPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j));
-                        endPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(0));
-                    }
+                if (template.isClosedFigure() && j == figure.getPoints().size() - 1) {
+                    startPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(j));
+                    endPoint = JPointData.getInstance().getPoints().get(figure.getPoints().get(0));
                 }
 
                 if (isPointInZone(x, y, startPoint, endPoint)){
@@ -386,8 +374,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     lList.add(startPoint);
                     lList.add(endPoint);
 
-                    float length = getLength(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-                    Float oLength = new Float(length);
+                    Float oLength = getLength(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
                     pairsMap.put(oLength, lList);
                 }
 
@@ -407,11 +394,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         if (minEntry == null){
-            return null;
+            return new LinkedList<>();
         }
-        List<JPoint> pair = minEntry.getValue();
 
-        return pair;
+        return minEntry.getValue();
     }
 
     /*

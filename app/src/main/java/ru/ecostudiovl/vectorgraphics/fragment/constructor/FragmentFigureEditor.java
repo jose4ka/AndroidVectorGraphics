@@ -6,17 +6,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
@@ -26,7 +26,6 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 public class FragmentFigureEditor extends Fragment implements AdapterTemplatesList.TemplateSelect {
 
     private View view;
-    private ImageButton btnCreateFigure, btnBack;
     private RecyclerView rvTemplates;
     private EditText etFigureName;
 
@@ -43,9 +42,8 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
         // Required empty public constructor
     }
 
-    public static FragmentFigureEditor newInstance(String param1, String param2) {
-        FragmentFigureEditor fragment = new FragmentFigureEditor();
-        return fragment;
+    public static FragmentFigureEditor newInstance() {
+        return new FragmentFigureEditor();
     }
 
 
@@ -69,7 +67,7 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
         rvTemplates = view.findViewById(R.id.rvTemplates);
         etFigureName = view.findViewById(R.id.tvFigureName);
 
-        btnCreateFigure = view.findViewById(R.id.btnActFigureCreateFigure);
+        ImageButton btnCreateFigure = view.findViewById(R.id.btnActFigureCreateFigure);
         btnCreateFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +82,7 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
             }
         });
 
-        btnBack = view.findViewById(R.id.btnActFigureBack);
+        ImageButton btnBack = view.findViewById(R.id.btnActFigureBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,8 +108,7 @@ public class FragmentFigureEditor extends Fragment implements AdapterTemplatesLi
     @Override
     public void onSelectTemplate(int index) {
         selectedTemplate = index;
-        ((AdapterTemplatesList)rvTemplates.getAdapter()).setSelectedTemplate(index);
+        ((AdapterTemplatesList) Objects.requireNonNull(rvTemplates.getAdapter())).setSelectedTemplate(index);
         rvTemplates.getAdapter().notifyDataSetChanged();
-//        updateList();
     }
 }

@@ -1,5 +1,7 @@
 package ru.ecostudiovl.vectorgraphics.pointsystem;
 
+import org.jetbrains.annotations.NotNull;
+
 public class JPoint {
 
     private float x;
@@ -15,6 +17,7 @@ public class JPoint {
 
 
 
+    @NotNull
     @Override
     public String toString() {
         return "JPoint{" +

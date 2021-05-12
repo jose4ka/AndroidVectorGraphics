@@ -18,10 +18,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 import ru.ecostudiovl.vectorgraphics.R;
 import ru.ecostudiovl.vectorgraphics.adapter.AdapterTemplatesList;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
-import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 
@@ -31,24 +34,21 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     private View view;
 
     private RecyclerView rvTemplates;
-    private ImageButton btnCreateTemplate, btnBack;
-    private EditText etTemplateName, etPointsNumber;
-    private CheckBox cbIsClosedFigure, cbIsClosedFigureNumber;
+    private EditText etTemplateName;
+    private EditText etPointsNumber;
+    private CheckBox cbIsClosedFigure;
+    private CheckBox cbIsClosedFigureNumber;
 
     private int selectedIndex = 0;
 
-    private ItemTouchHelper itemTouchHelper;
-
     public interface FragmentTemplateEditorCallback{
-        void onCreatedTemplate();
         void onBackPressedTemplate();
     }
 
     private FragmentTemplateEditorCallback fragmentTemplateEditorCallback;
 
-    public static FragmentTemplateEditor newInstance(String param1, String param2) {
-        FragmentTemplateEditor fragment = new FragmentTemplateEditor();
-        return fragment;
+    public static FragmentTemplateEditor newInstance() {
+        return new FragmentTemplateEditor();
     }
 
     @Override
@@ -78,16 +78,12 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
         cbIsClosedFigureNumber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    etPointsNumber.setEnabled(true);
-                }
-                else {
-                    etPointsNumber.setEnabled(false);
-                }
+                etPointsNumber.setEnabled(isChecked);
+
             }
         });
 
-        btnCreateTemplate = view.findViewById(R.id.btnActTempCreateTemplate);
+        ImageButton btnCreateTemplate = view.findViewById(R.id.btnActTempCreateTemplate);
         btnCreateTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +113,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
         });
 
 
-        btnBack = view.findViewById(R.id.btnActTempBack);
+        ImageButton btnBack = view.findViewById(R.id.btnActTempBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +125,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
 
     @Override
     public void onSelectTemplate(int index) {
-        rvTemplates.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(rvTemplates.getAdapter()).notifyDataSetChanged();
     }
 
 
@@ -137,7 +133,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.UP) {
 
         @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        public boolean onMove(@NotNull RecyclerView recyclerView, @NotNull RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             return false;
         }
 
@@ -159,8 +155,7 @@ public class FragmentTemplateEditor extends Fragment  implements AdapterTemplate
         LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
         rvTemplates.setLayoutManager(layoutManager);
 
-        ItemTouchHelper.Callback itemTouchHelperCallback;
-        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(rvTemplates);
 
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,10 +46,10 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
         });
 
         if (BufferComponent.getInstance().isContainsFigure(position)){
-            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.selected_figure));
+            holder.lnIndicator.setBackgroundColor(context.getColor(R.color.selected_figure));
         }
         else {
-            holder.lnIndicator.setBackgroundColor(context.getResources().getColor(R.color.simple_figure));
+            holder.lnIndicator.setBackgroundColor(context.getColor(R.color.simple_figure));
         }
 
         holder.tvName.setText(mData.get(position).getName());
@@ -62,7 +61,7 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvName;
         LinearLayout linearLayout;

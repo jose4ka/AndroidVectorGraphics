@@ -38,11 +38,6 @@ public class MainActivity extends AppCompatActivity implements FragmentTemplateE
     }
 
     @Override
-    public void onCreatedTemplate() {
-        navController.navigate(R.id.fragmentDrawer);
-    }
-
-    @Override
     public void onBackPressedTemplate() {
         navController.navigate(R.id.fragmentDrawer);
     }

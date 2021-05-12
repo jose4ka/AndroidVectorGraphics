@@ -7,31 +7,22 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class JFigure {
 
-    private static final String TAG = "=== FIGURE";
-
-    private boolean isSelected;
     private String name;
     private int templateIndex;
-    private float centerX, centerY;
+    private float centerX;
+    private float centerY;
     protected List<Integer> points;
 
-    private float leftX, leftY;
-    private float rightX, rightY;
 
     public JFigure(String name, int templateIndex){
         this.points = new LinkedList<>();
-        this.isSelected = false;
         this.name = name;
         this.centerX = 0;
         this.centerY = 0;
-        this.leftX = 0;
-        this.leftY = 0;
-        this.rightX = 0;
-        this.rightY = 0;
         this.templateIndex = templateIndex;
     }
 
-    public void addPoint(int index, float x, float y, JFigureTemplates template){
+    public void addPoint(int index, JFigureTemplates template){
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
                 points.add(index);
@@ -74,9 +65,6 @@ public class JFigure {
         return points;
     }
 
-    public void setPoints(List<Integer> points) {
-        this.points = points;
-    }
 
     public String getName() {
         return name;
@@ -86,67 +74,8 @@ public class JFigure {
         this.name = name;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
-    public float getCenterX() {
-        return centerX;
-    }
-
-    public void setCenterX(float centerX) {
-        this.centerX = centerX;
-    }
-
-    public float getCenterY() {
-        return centerY;
-    }
-
-    public void setCenterY(float centerY) {
-        this.centerY = centerY;
-    }
-
     public int getTemplateIndex() {
         return templateIndex;
     }
 
-    public void setTemplateIndex(int templateIndex) {
-        this.templateIndex = templateIndex;
-    }
-
-    public float getLeftX() {
-        return leftX;
-    }
-
-    public void setLeftX(float leftX) {
-        this.leftX = leftX;
-    }
-
-    public float getLeftY() {
-        return leftY;
-    }
-
-    public void setLeftY(float leftY) {
-        this.leftY = leftY;
-    }
-
-    public float getRightX() {
-        return rightX;
-    }
-
-    public void setRightX(float rightX) {
-        this.rightX = rightX;
-    }
-
-    public float getRightY() {
-        return rightY;
-    }
-
-    public void setRightY(float rightY) {
-        this.rightY = rightY;
-    }
 }

@@ -1,15 +1,12 @@
 package ru.ecostudiovl.vectorgraphics.component;
 
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class BufferComponent {
-
-
-    private final String TAG = "=== BUFFER COMPONENT";
 
     private TreeMap<Integer, Integer> selectedMap;
     private static BufferComponent instance;
@@ -49,7 +46,6 @@ public class BufferComponent {
                 return entry.getKey();
             }
 
-
         }
         return  -1;
     }
@@ -77,12 +73,9 @@ public class BufferComponent {
 
     }
 
-    public TreeMap<Integer, Integer> getSelectedMap() {
+    public Map<Integer, Integer> getSelectedMap() {
         return selectedMap;
     }
 
-    public void setSelectedMap(TreeMap<Integer, Integer> selectedMap) {
-        this.selectedMap = selectedMap;
-    }
 
 }

@@ -54,7 +54,7 @@ public class DrawThread extends Thread{
         }
     }
 
-    private void render(Canvas canvas){
+    private void render(Canvas canvas) {
         canvas.save();
 
         canvas.drawColor(Color.rgb(255, 255, 255)); //Рисуем фон
@@ -72,57 +72,44 @@ public class DrawThread extends Thread{
             canvas.drawCircle(points.get(i).getX(), points.get(i).getY(), r, p);
         }
 
-            //Соединяем точки друг с другом
-            for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++) {
+        //Соединяем точки друг с другом
+        for (int i = 0; i < JPointData.getInstance().getFigures().size(); i++) {
 
-                List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
+            List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
 
-                if (BufferComponent.getInstance().isContainsFigure(i)){
-                    p.setColor(Color.BLUE);
-                }
-                else {
-                    p.setColor(Color.BLACK);
-                }
+            if (BufferComponent.getInstance().isContainsFigure(i)) {
+                p.setColor(Color.BLUE);
+            } else {
+                p.setColor(Color.BLACK);
+            }
 
-                if (lPoints.size() > 0){
-                    for (int j = 0; j < lPoints.size(); j++) {
+            if (!lPoints.isEmpty()) {
+                for (int j = 0; j < lPoints.size(); j++) {
 
-                        if (j != lPoints.size()){
-                            if ((j + 1) < lPoints.size()){
-                                canvas.drawLine(
-                                        points.get(lPoints.get(j)).getX(),
-                                        points.get(lPoints.get(j)).getY(),
-                                        points.get(lPoints.get(j + 1)).getX(),
-                                        points.get(lPoints.get(j + 1)).getY(),
-                                        p);
-                            }
-                            else {
-                                if (JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(i).getTemplateIndex()).isClosedFigure()){
-                                    canvas.drawLine(
-                                            points.get(lPoints.get(j)).getX(),
-                                            points.get(lPoints.get(j)).getY(),
-                                            points.get(lPoints.get(0)).getX(),
-                                            points.get(lPoints.get(0)).getY(),
-                                            p);
-                                }
-
-                            }
-
+                    if ((j + 1) < lPoints.size()) {
+                        canvas.drawLine(
+                                points.get(lPoints.get(j)).getX(),
+                                points.get(lPoints.get(j)).getY(),
+                                points.get(lPoints.get(j + 1)).getX(),
+                                points.get(lPoints.get(j + 1)).getY(),
+                                p);
+                    } else {
+                        if (JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(i).getTemplateIndex()).isClosedFigure()) {
+                            canvas.drawLine(
+                                    points.get(lPoints.get(j)).getX(),
+                                    points.get(lPoints.get(j)).getY(),
+                                    points.get(lPoints.get(0)).getX(),
+                                    points.get(lPoints.get(0)).getY(),
+                                    p);
                         }
-
 
                     }
 
+                }
 
-
-                lPoints = null;
             }
         }
 
-
-
-
-        points = null;
         canvas.restore();
     }
 
