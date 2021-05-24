@@ -164,6 +164,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                     } else {
                                         JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
                                         JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
+                                        if (BufferComponent.getInstance().hasSelectedFigures()){
+                                            JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).
+                                                    recalculateCenterByPointIndex(touchedPoint);
+                                        }
                                     }
                                 }
 
@@ -259,7 +263,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
         List<JPoint> minimalPair = findMinimalPair();
 
-        if (minimalPair != null){
+        if (minimalPair != null && !minimalPair.isEmpty()){
             JPoint sourcePoint = minimalPair.get(0);
             JPoint destPoint = minimalPair.get(1);
 
