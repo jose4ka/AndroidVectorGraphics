@@ -95,7 +95,7 @@ public class JFigure {
             maxY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
             centerX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
             centerY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
-            
+
             for (int i = 0; i < points.size(); i++) {
                 JPoint currentPoint = JPointData.getInstance().getPoints().get(points.get(i));
 
