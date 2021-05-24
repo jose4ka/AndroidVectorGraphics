@@ -31,16 +31,19 @@ public class JFigure {
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
                 points.add(index);
-                recalculateCenterByPointIndex(index);
+               // recalculateCenterByPointIndex(index);
+                recalculateCenterTest();
             }
         }
         else {
             points.add(index);
-            recalculateCenterByPointIndex(index);
+     //       recalculateCenterByPointIndex(index);
+            recalculateCenterTest();
         }
 
     }
 
+    /*
     public void recalculateCenterByPointIndex(int index){
         JPoint currentPoint = JPointData.getInstance().getPoints().get(index);
         if (points.size() == 1){
@@ -70,6 +73,51 @@ public class JFigure {
             centerY = (minY + maxY) / 2;
         }
 
+
+    }
+
+     */
+
+    public void recalculateCenterTest(){
+        if (points.size() == 1){
+            minX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            maxX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            minY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+            maxY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+            centerX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            centerY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+        }
+        else {
+
+            minX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            maxX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            minY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+            maxY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+            centerX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
+            centerY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+            
+            for (int i = 0; i < points.size(); i++) {
+                JPoint currentPoint = JPointData.getInstance().getPoints().get(points.get(i));
+
+                if(currentPoint.getX() < minX){
+                    minX = currentPoint.getX();
+                }
+                if(currentPoint.getX() > maxX) {
+                    maxX = currentPoint.getX();
+                }
+
+
+                if(currentPoint.getY() < minY){
+                    minY = currentPoint.getY();
+                }
+                if(currentPoint.getY() > maxY){
+                    maxY = currentPoint.getY();
+                }
+
+                centerX = (minX + maxX) / 2;
+                centerY = (minY + maxY) / 2;
+            }
+        }
 
     }
 

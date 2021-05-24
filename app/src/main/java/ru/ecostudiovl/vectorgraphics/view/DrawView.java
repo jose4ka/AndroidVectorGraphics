@@ -168,7 +168,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                         JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
                                         if (BufferComponent.getInstance().hasSelectedFigures()){
                                             JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).
-                                                    recalculateCenterByPointIndex(touchedPoint);
+                                                    recalculateCenterTest();
                                         }
                                     }
                                 }
