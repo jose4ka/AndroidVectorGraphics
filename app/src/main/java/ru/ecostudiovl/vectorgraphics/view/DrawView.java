@@ -220,20 +220,20 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return false;
 
                 case COPY:
-                    for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
-                        JPointData.getInstance().copyFigureToPosition(entry.getKey(), x, y);
-                    }
-                    drawViewCallback.onCopyFigure();
-                    return false;
-                case MOVE:
-                    for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
-                        JPointData.getInstance().moveFigureToPosition(entry.getKey(), x, y);
-                    }
-
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                            JPointData.getInstance().copyFigureToPosition(entry.getKey(), x, y);
+                        }
                         drawViewCallback.onCopyFigure();
                     }
 
+                    return false;
+                case MOVE:
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                            JPointData.getInstance().moveFigureToPosition(entry.getKey(), x, y);
+                        }
+                    }
 
                     return true;
 

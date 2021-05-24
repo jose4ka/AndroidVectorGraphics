@@ -54,7 +54,7 @@ public class JPointData {
         figures.add(new JFigure(figures.get(figure).getName() + " (copy)", figures.get(figure).getTemplateIndex()));
 
         for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
-            
+
             float lX = getLengthByOneAxis(figures.get(figure).getCenterX(),points.get(figures.get(figure).getPoints().get(i)).getX());
             float lY = getLengthByOneAxis(figures.get(figure).getCenterY(),points.get(figures.get(figure).getPoints().get(i)).getY());
 
