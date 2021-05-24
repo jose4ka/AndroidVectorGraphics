@@ -74,7 +74,10 @@ public class JFigure {
     }
 
     public void deletePoint(int index){
-        points.remove(getLocalIndexOfPoint(index));
+        if (index != -1){
+            points.remove(getLocalIndexOfPoint(index));
+        }
+
     }
 
     /*
