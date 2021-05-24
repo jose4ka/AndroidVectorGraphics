@@ -111,29 +111,34 @@ public class JPointData {
             PointDirection xDir = findHorizontalDirection(figures.get(figure).getCenterX(),points.get(figures.get(figure).getPoints().get(i)).getX());
             PointDirection yDir = findVerticalDirection(figures.get(figure).getCenterY(),points.get(figures.get(figure).getPoints().get(i)).getY());
 
-            figures.get(figure).setCenterX(posX);
-            figures.get(figure).setCenterY(posY);
+
+            float newPosX = 0;
+            float newPosY = 0;
 
             switch (xDir){
                 case LEFT:
-                    points.get(figures.get(figure).getPoints().get(i)).setX(posX - lX);
+                    newPosX = posX - lX;
                     break;
                 case RIGHT:
-                    points.get(figures.get(figure).getPoints().get(i)).setX(posX + lX);
+                    newPosX = posX + lX;
                     break;
             }
 
             switch (yDir){
                 case UP:
-                    points.get(figures.get(figure).getPoints().get(i)).setY(posY - lY);
+                    newPosY = posY - lY;
                     break;
                 case DOWN:
-                    points.get(figures.get(figure).getPoints().get(i)).setY(posY + lY);
+                    newPosY = posY + lY;
                     break;
             }
 
-
+            points.get(figures.get(figure).getPoints().get(i)).setX(newPosX);
+            points.get(figures.get(figure).getPoints().get(i)).setY(newPosY);
         }
+
+        figures.get(figure).setCenterX(posX);
+        figures.get(figure).setCenterY(posY);
     }
 
     public PointDirection findHorizontalDirection(float sX, float eX){
