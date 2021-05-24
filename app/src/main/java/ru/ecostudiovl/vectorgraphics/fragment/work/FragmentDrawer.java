@@ -263,7 +263,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         btnMove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                switchMode(ModeComponent.Mode.MOVE);
             }
         });
 

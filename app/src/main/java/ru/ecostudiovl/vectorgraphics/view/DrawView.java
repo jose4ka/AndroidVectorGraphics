@@ -225,6 +225,17 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                     drawViewCallback.onCopyFigure();
                     return false;
+                case MOVE:
+                    for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                        JPointData.getInstance().moveFigureToPosition(entry.getKey(), x, y);
+                    }
+
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        drawViewCallback.onCopyFigure();
+                    }
+
+
+                    return true;
 
             }
 
