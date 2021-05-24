@@ -39,6 +39,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnHide;
     private ImageButton btnSelectionMode;
     private ImageButton btnDeleteSelection;
+    private ImageButton btnCopy;
+    private ImageButton btnMove;
 
     private CardView lnList;
     private RecyclerView rvFigures;
@@ -249,6 +251,22 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             }
         });
 
+        btnCopy = view.findViewById(R.id.btnCopy);
+        btnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchMode(ModeComponent.Mode.COPY);
+            }
+        });
+
+        btnMove = view.findViewById(R.id.btnMove);
+        btnMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
     }
 
@@ -281,6 +299,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
                 break;
             case EDIT:
                 tvInfoLabel.setText("Редактирование фигуры");
@@ -289,6 +308,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
                 break;
             case DELETE:
                 tvInfoLabel.setText("Удаление точек");
@@ -297,6 +317,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
                 break;
             case VIEW:
                 BufferComponent.getInstance().clearSelected();
@@ -305,11 +326,22 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setVisibility(View.GONE);
                 btnSelectionMode.setVisibility(View.VISIBLE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.VISIBLE);
                 updateList();
                 break;
-
+            case COPY:
+                tvInfoLabel.setText("Копирование");
+                btnChangeMode.setVisibility(View.GONE);
+                btnSelectionMode.setVisibility(View.VISIBLE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                break;
+            case MOVE:
+                tvInfoLabel.setText("Перемещение");
+                btnChangeMode.setVisibility(View.GONE);
+                btnSelectionMode.setVisibility(View.VISIBLE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                break;
         }
-
     }
 
     private void switchSelectionMode(ModeComponent.SelectionMode mode){
@@ -321,12 +353,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             if (BufferComponent.getInstance().hasSelectedFigures()) {
                 btnChangeMode.setVisibility(View.VISIBLE);
             }
+            btnCopy.setVisibility(View.GONE);
         } else if (selectionMode == ModeComponent.SelectionMode.MORE) {
             tvInfoLabel.setText("Множественное выделение");
             btnSelectionMode.setImageResource(R.drawable.ic_baseline_touch_app_24);
             if (BufferComponent.getInstance().hasSelectedFigures()) {
                 btnChangeMode.setVisibility(View.GONE);
             }
+            btnCopy.setVisibility(View.VISIBLE);
         }
 
     }
@@ -379,7 +413,10 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
-
+    @Override
+    public void onCopyFigure() {
+        switchMode(ModeComponent.Mode.VIEW);
+    }
 
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
@@ -405,6 +442,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             updateList();
         }
     };
+
 
 
 

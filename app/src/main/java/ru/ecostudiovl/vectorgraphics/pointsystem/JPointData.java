@@ -40,6 +40,21 @@ public class JPointData {
         return instance;
     }
 
+    public void copyFigureToPosition(int figure, float posX, float posY){
+        figures.add(new JFigure(figures.get(figure).getName() + " (copy)", figures.get(figure).getTemplateIndex()));
+
+        for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
+            float lX = figures.get(figure).getCenterX() - points.get(figures.get(figure).getPoints().get(i)).getX();
+            float lY = figures.get(figure).getCenterY() - points.get(figures.get(figure).getPoints().get(i)).getY();
+
+            points.add(new JPoint(posX + lX,posY + lY));
+            figures.get(figures.size() - 1).addPoint(points.size() -1,
+                    templates.get(figures.get(figures.size() - 1).getTemplateIndex())
+            );
+        }
+
+    }
+
     public List<JFigure> getFigures() {
         return figures;
     }

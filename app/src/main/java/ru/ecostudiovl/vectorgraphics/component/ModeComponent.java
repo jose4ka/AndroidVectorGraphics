@@ -6,7 +6,9 @@ public class ModeComponent {
         CREATE,
         EDIT,
         DELETE,
-        VIEW
+        VIEW,
+        COPY,
+        MOVE
     }
 
     public enum SelectionMode{
@@ -18,6 +20,7 @@ public class ModeComponent {
         ADDITIVE,
         CREATIVE
     }
+
 
     public Mode currentMode;
     public SelectionMode selectionMode;

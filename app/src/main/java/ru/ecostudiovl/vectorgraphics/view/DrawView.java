@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
+import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
@@ -45,6 +46,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     //Интерфейс коллбэка, который нужен для обращения к фраменту
     public interface DrawViewCallback{
         void onSelectFigure(int index);
+        void onCopyFigure();
     }
 
     private DrawViewCallback drawViewCallback;
@@ -215,6 +217,13 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         selectFigureByPoint(findFigureByPoint(touchedPoint));
                     }
 
+                    return false;
+
+                case COPY:
+                    for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                        JPointData.getInstance().copyFigureToPosition(entry.getKey(), x, y);
+                    }
+                    drawViewCallback.onCopyFigure();
                     return false;
 
             }
