@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.math.*;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
@@ -132,6 +133,23 @@ public class JPointData {
         figures.get(figure).setCenterX(posX);
         figures.get(figure).setCenterY(posY);
     }
+
+
+    public void rotateFigure(int figure, float angle){
+        JFigure jFigure = figures.get(figure);
+        for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
+            JPoint currPoint = points.get(figures.get(figure).getPoints().get(i));
+
+            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
+
+            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
+            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
+        }
+
+
+
+    }
+
 
     public PointDirection findHorizontalDirection(float sX, float eX){
         if (eX > sX){ return PointDirection.RIGHT;}

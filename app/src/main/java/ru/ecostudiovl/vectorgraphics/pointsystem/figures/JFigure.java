@@ -14,6 +14,9 @@ public class JFigure {
     private float centerX;
     private float centerY;
 
+    private float scale = 1;
+    private float rotate = 0;
+
     private float minX, maxX;
     private float minY, maxY;
     protected List<Integer> points;
@@ -183,5 +186,17 @@ public class JFigure {
 
     public void setCenterY(float centerY) {
         this.centerY = centerY;
+    }
+
+    public void setTemplateIndex(int templateIndex) {
+        this.templateIndex = templateIndex;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 }
