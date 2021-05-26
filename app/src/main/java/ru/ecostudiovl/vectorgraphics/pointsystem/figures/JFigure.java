@@ -199,4 +199,12 @@ public class JFigure {
     public void setScale(float scale) {
         this.scale = scale;
     }
+
+    public float getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(float rotate) {
+        this.rotate = rotate;
+    }
 }

@@ -285,7 +285,13 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         sbRotate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                JPointData.getInstance().rotateFigure(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                if ((float) progress > JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getRotate()){
+                    JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                }
+                else {
+                    JPointData.getInstance().rotateFigureMinus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                }
+                JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).setRotate((float) progress);
             }
 
             @Override

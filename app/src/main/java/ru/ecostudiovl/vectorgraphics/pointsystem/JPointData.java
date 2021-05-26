@@ -135,15 +135,50 @@ public class JPointData {
     }
 
 
-    public void rotateFigure(int figure, float angle){
+    public void rotateFigurePlus(int figure, float angle){
         JFigure jFigure = figures.get(figure);
+
+        float s = (float) Math.sin(angle); // angle is in radians
+        float c = (float) Math.cos(angle); // angle is in radians
+
         for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
             JPoint currPoint = points.get(figures.get(figure).getPoints().get(i));
 
-            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
+            float xnew = currPoint.getX() * c + currPoint.getY() * s;
+            float ynew = -currPoint.getX() * s + currPoint.getY() * c;
 
-            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
-            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
+            points.get(figures.get(figure).getPoints().get(i)).setX(xnew);
+            points.get(figures.get(figure).getPoints().get(i)).setY(ynew);
+            //
+//            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
+//
+//            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
+//            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
+        }
+
+
+
+    }
+
+    public void rotateFigureMinus(int figure, float angle){
+        JFigure jFigure = figures.get(figure);
+
+        float s = (float) Math.sin(angle); // angle is in radians
+        float c = (float) Math.cos(angle); // angle is in radians
+
+        for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
+            JPoint currPoint = points.get(figures.get(figure).getPoints().get(i));
+
+            float xnew = currPoint.getX() * c - currPoint.getY() * s;
+            float ynew = currPoint.getX() * s + currPoint.getY() * c;
+
+            points.get(figures.get(figure).getPoints().get(i)).setX(xnew);
+            points.get(figures.get(figure).getPoints().get(i)).setY(ynew);
+            //
+//            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
+//
+//            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
+//            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
         }
 
 
