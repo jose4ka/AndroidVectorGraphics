@@ -1,0 +1,9 @@
+
+U
+java:S18540":Remove this useless assignment to local variable "jPoint".(òÆ‘êûÿÿÿÿ
+F
+java:S14810"+Remove this unused "jPoint" local variable.(òÆ‘êûÿÿÿÿ
+F
+java:S1068"+Remove this unused "centerX" private field.(Ôò¯úÿÿÿÿ
+F
+java:S1068"+Remove this unused "centerY" private field.(ƒ§¤éüÿÿÿÿ

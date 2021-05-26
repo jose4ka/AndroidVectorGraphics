@@ -3,6 +3,8 @@ package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
+import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class JFigure {
@@ -25,12 +27,26 @@ public class JFigure {
     public void addPoint(int index, JFigureTemplates template){
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
-                points.add(index);
+                smartAdd(index);
             }
         }
         else {
-            points.add(index);
+            smartAdd(index);
         }
+    }
+
+    private void smartAdd(int index){
+        points.add(index);
+        if(points.size() == 1){
+            centerX = JPointData.getInstance().getPoints().get(index).getX();
+            centerY = JPointData.getInstance().getPoints().get(index).getY();
+        }
+        recalculateCenterByIndex(index);
+    }
+
+    public void recalculateCenterByIndex(int pointIndex){
+        JPoint jPoint = JPointData.getInstance().getPoints().get(pointIndex);
+
     }
 
     public void deletePoint(int index){

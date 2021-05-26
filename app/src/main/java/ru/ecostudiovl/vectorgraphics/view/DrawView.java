@@ -119,11 +119,23 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                             if (JPointData.getInstance().getTemplates().get(template).isClosePointNumber()) {
                                 if (pointsCount < JPointData.getInstance().getTemplates().get(template).getPointsCount()) {
                                     JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                    JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex()));
+                                    JPointData.getInstance().getFigures().get(
+                                            BufferComponent.getInstance().getCurrentSelectedObject()).
+                                            addPoint(
+                                                    JPointData.getInstance().getPoints().size() - 1,
+                                                    JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(
+                                                            BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex()
+                                                    )
+                                            );
                                 }
                             } else {
                                 JPointData.getInstance().getPoints().add(new JPoint(x, y)); //Добавляем точку в общий список с точками
-                                JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(JPointData.getInstance().getPoints().size() - 1, JPointData.getInstance().getTemplates().get(JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex())); /*Добавляем
+                                JPointData.getInstance().getFigures().get(
+                                        BufferComponent.getInstance().getCurrentSelectedObject()).addPoint(
+                                                JPointData.getInstance().getPoints().size() - 1,
+                                        JPointData.getInstance().getTemplates().get(
+                                                JPointData.getInstance().getFigures().get(
+                                                        BufferComponent.getInstance().getCurrentSelectedObject()).getTemplateIndex())); /*Добавляем
                             индекс точки в структуру данных*/
                             }
 
