@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
+import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
@@ -45,6 +46,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     //Интерфейс коллбэка, который нужен для обращения к фраменту
     public interface DrawViewCallback{
         void onSelectFigure(int index);
+        void onCopyFigure();
     }
 
     private DrawViewCallback drawViewCallback;
@@ -176,6 +178,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                     } else {
                                         JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
                                         JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
+                                        if (BufferComponent.getInstance().hasSelectedFigures()){
+                                            JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).
+                                                    recalculateCenterTest();
+                                        }
                                     }
                                 }
 
@@ -225,6 +231,24 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                     return false;
 
+                case COPY:
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                            JPointData.getInstance().copyFigureToPosition(entry.getKey(), x, y);
+                        }
+                        drawViewCallback.onCopyFigure();
+                    }
+
+                    return false;
+                case MOVE:
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                            JPointData.getInstance().moveFigureToPosition(entry.getKey(), x, y);
+                        }
+                    }
+
+                    return true;
+
             }
 
         }
@@ -271,7 +295,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
         List<JPoint> minimalPair = findMinimalPair();
 
-        if (minimalPair != null){
+        if (minimalPair != null && !minimalPair.isEmpty()){
             JPoint sourcePoint = minimalPair.get(0);
             JPoint destPoint = minimalPair.get(1);
 

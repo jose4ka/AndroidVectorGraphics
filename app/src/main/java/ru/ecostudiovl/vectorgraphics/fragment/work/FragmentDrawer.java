@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -39,12 +40,17 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnHide;
     private ImageButton btnSelectionMode;
     private ImageButton btnDeleteSelection;
+    private ImageButton btnCopy;
+    private ImageButton btnMove;
 
     private CardView lnList;
     private RecyclerView rvFigures;
     private DrawView drawView;
     private ImageButton btnChangeMode;
     private TextView tvInfoLabel;
+
+    private LinearLayout lnProperties;
+    private SeekBar sbScale, sbRotate;
 
     public interface FragmentDrawerCallback{
         void onCreateFigureClicked();
@@ -249,6 +255,56 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             }
         });
 
+        btnCopy = view.findViewById(R.id.btnCopy);
+        btnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchMode(ModeComponent.Mode.COPY);
+            }
+        });
+
+        btnMove = view.findViewById(R.id.btnMove);
+        btnMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (ModeComponent.getInstance().getCurrentMode()){
+                    case MOVE:
+                        switchMode(ModeComponent.Mode.EDIT);
+                        break;
+                    default:
+                        switchMode(ModeComponent.Mode.MOVE);
+                        break;
+                }
+
+            }
+        });
+
+        lnProperties = view.findViewById(R.id.lnFigureProportions);
+
+        sbRotate = view.findViewById(R.id.sbRotate);
+        sbRotate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if ((float) progress > JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getRotate()){
+                    JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                }
+                else {
+                    JPointData.getInstance().rotateFigureMinus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                }
+                JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).setRotate((float) progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
     }
 
@@ -263,6 +319,10 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                     break;
                 case DELETE:
                     switchMode(ModeComponent.Mode.CREATE);
+                    break;
+                case MOVE:
+                case COPY:
+                    switchMode(ModeComponent.Mode.EDIT);
                     break;
                 default:
                     break;
@@ -281,6 +341,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_add_circle_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
+                btnMove.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.VISIBLE);
                 break;
             case EDIT:
                 tvInfoLabel.setText("Редактирование фигуры");
@@ -289,6 +352,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_edit_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.VISIBLE);
+                btnMove.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.VISIBLE);
                 break;
             case DELETE:
                 tvInfoLabel.setText("Удаление точек");
@@ -297,6 +363,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setImageResource(R.drawable.ic_baseline_delete_24);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
+                btnMove.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.VISIBLE);
                 break;
             case VIEW:
                 BufferComponent.getInstance().clearSelected();
@@ -305,11 +374,26 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnChangeMode.setVisibility(View.GONE);
                 btnSelectionMode.setVisibility(View.VISIBLE);
                 btnDeleteSelection.setVisibility(View.GONE);
+                btnCopy.setVisibility(View.GONE);
+                btnMove.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.GONE);
                 updateList();
                 break;
-
+            case COPY:
+                tvInfoLabel.setText("Копирование");
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.VISIBLE);
+                break;
+            case MOVE:
+                tvInfoLabel.setText("Перемещение");
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.VISIBLE);
+                break;
         }
-
     }
 
     private void switchSelectionMode(ModeComponent.SelectionMode mode){
@@ -379,7 +463,11 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
-
+    @Override
+    public void onCopyFigure() {
+        switchMode(ModeComponent.Mode.EDIT);
+        updateList();
+    }
 
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
@@ -405,6 +493,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             updateList();
         }
     };
+
 
 
 

@@ -62,6 +62,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_content_copy_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnCopy"
+                            android:visibility="visible"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_pan_tool_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnMove"
+                            android:visibility="visible"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
                     <ImageButton
                         android:src="@drawable/ic_baseline_add_circle_24"
                         android:theme="@style/PurpleButton"
@@ -199,13 +219,36 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/lnList"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         style="@style/BetterCardView">
         <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/lnFigureProportions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <SeekBar
+                android:id="@+id/sbScale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:max="100"
+                android:progress="50" />
+
+            <SeekBar
+                android:id="@+id/sbRotate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:alpha="1"
+                android:max="360" />
+        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

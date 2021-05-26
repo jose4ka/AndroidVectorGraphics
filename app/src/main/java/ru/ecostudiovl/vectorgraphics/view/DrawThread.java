@@ -77,6 +77,14 @@ public class DrawThread extends Thread{
 
             List<Integer> lPoints = JPointData.getInstance().getFigures().get(i).getPoints();
 
+            if (JPointData.getInstance().getFigures().get(i).getPoints().size() > 0){
+                p.setColor(Color.RED);
+                canvas.drawCircle(
+                        JPointData.getInstance().getFigures().get(i).getCenterX(),
+                        JPointData.getInstance().getFigures().get(i).getCenterY(), r, p);
+            }
+
+
             if (BufferComponent.getInstance().isContainsFigure(i)) {
                 p.setColor(Color.BLUE);
             } else {

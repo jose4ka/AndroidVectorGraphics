@@ -73,6 +73,8 @@ public class BufferComponent {
 
     }
 
+
+
     public Map<Integer, Integer> getSelectedMap() {
         return selectedMap;
     }
