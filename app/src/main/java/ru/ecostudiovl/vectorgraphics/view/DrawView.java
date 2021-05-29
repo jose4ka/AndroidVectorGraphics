@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,6 +31,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     Ключ - расстояние между точками
     Значение - список с самими точками*/
 
+    StringBuilder sb = new StringBuilder();
+    int upPI = 0;
+    int downPI = 0;
+    boolean inTouch = false;
+    String result = "";
 
 
     /*
@@ -219,7 +225,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         selectFigureByPoint(findFigureByPoint(touchedPoint));
                     }
 
-                    return true;
+                    return false;
 
                 case COPY:
                     if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
@@ -238,6 +244,63 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     }
 
                     return true;
+                case ROTATE:
+
+                    Log.i("=== ROTATE", "onTouchEvent: ROTATE");
+                    // событие
+                    int actionMask = event.getActionMasked();
+                    // индекс касания
+                    int pointerIndex = event.getActionIndex();
+                    // число касаний
+                    int pointerCount = event.getPointerCount();
+
+                    switch (actionMask) {
+                        case MotionEvent.ACTION_DOWN: // первое касание
+                            inTouch = true;
+                        case MotionEvent.ACTION_POINTER_DOWN: // последующие касания
+                            downPI = pointerIndex;
+                            break;
+
+                        case MotionEvent.ACTION_UP: // прерывание последнего касания
+                            inTouch = false;
+                            sb.setLength(0);
+                        case MotionEvent.ACTION_POINTER_UP: // прерывания касаний
+                            upPI = pointerIndex;
+                            break;
+
+                        case MotionEvent.ACTION_MOVE: // движение
+                            sb.setLength(0);
+
+                            for (int i = 0; i < 10; i++) {
+                                sb.append("Index = " + i);
+                                if (i < pointerCount) {
+                                    sb.append(", ID = " + event.getPointerId(i));
+                                    sb.append(", X = " + event.getX(i));
+                                    sb.append(", Y = " + event.getY(i));
+                                } else {
+                                    sb.append(", ID = ");
+                                    sb.append(", X = ");
+                                    sb.append(", Y = ");
+                                }
+                                sb.append("\r\n");
+                            }
+                            break;
+                    }
+                    result = "down: " + downPI + "\n" + "up: " + upPI + "\n";
+
+                    if (inTouch) {
+                        result += "pointerCount = " + pointerCount + "\n" + sb.toString();
+                    }
+
+                    Log.i("=== ROTATE ", result);
+
+//                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+//
+//                        float angle = 0;
+//
+//                        JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), angle);
+//                    }
+                    return true;
 
             }
 
@@ -248,9 +311,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+
     /*
-    Проверяем нахождение точки в радиусе
-     */
+        Проверяем нахождение точки в радиусе
+         */
     private int getTouchedPoint(float centerX, float centerY) {
         int result = -1;
         float radius = 30;

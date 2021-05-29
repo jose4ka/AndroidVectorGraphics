@@ -43,6 +43,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnDeleteSelection;
     private ImageButton btnCopy;
     private ImageButton btnMove;
+    private ImageButton btnRotate;
 
     private CardView lnList;
     private RecyclerView rvFigures;
@@ -256,6 +257,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             }
         });
 
+        btnRotate = view.findViewById(R.id.btnRotate);
+        btnRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchMode(ModeComponent.Mode.ROTATE);
+            }
+        });
+
         btnCopy = view.findViewById(R.id.btnCopy);
         btnCopy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,7 +298,13 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
 
-                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                if (progress > JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getRotate()){
+                    JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
+                }
+                else {
+                    JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) -progress);
+                }
+
                 JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).setRotate((float) progress);
             }
 
@@ -300,7 +315,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-               
+
             }
         });
 
@@ -342,7 +357,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnDeleteSelection.setVisibility(View.GONE);
                 btnCopy.setVisibility(View.GONE);
                 btnMove.setVisibility(View.GONE);
-                lnProperties.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.GONE);
+                btnRotate.setVisibility(View.GONE);
                 break;
             case EDIT:
                 tvInfoLabel.setText("Редактирование фигуры");
@@ -353,7 +369,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnDeleteSelection.setVisibility(View.GONE);
                 btnCopy.setVisibility(View.VISIBLE);
                 btnMove.setVisibility(View.VISIBLE);
-                lnProperties.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.GONE);
+                btnRotate.setVisibility(View.VISIBLE);
                 break;
             case DELETE:
                 tvInfoLabel.setText("Удаление точек");
@@ -364,7 +381,8 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnDeleteSelection.setVisibility(View.GONE);
                 btnCopy.setVisibility(View.GONE);
                 btnMove.setVisibility(View.GONE);
-                lnProperties.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.GONE);
+                btnRotate.setVisibility(View.GONE);
                 break;
             case VIEW:
                 BufferComponent.getInstance().clearSelected();
@@ -376,6 +394,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnCopy.setVisibility(View.GONE);
                 btnMove.setVisibility(View.GONE);
                 lnProperties.setVisibility(View.GONE);
+                btnRotate.setVisibility(View.GONE);
                 updateList();
                 break;
             case COPY:
@@ -384,13 +403,21 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
                 lnProperties.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.GONE);
                 break;
             case MOVE:
                 tvInfoLabel.setText("Перемещение");
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
-                lnProperties.setVisibility(View.VISIBLE);
+                lnProperties.setVisibility(View.GONE);
+                break;
+            case ROTATE:
+                tvInfoLabel.setText("Поворот фигуры");
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.GONE);
                 break;
         }
     }

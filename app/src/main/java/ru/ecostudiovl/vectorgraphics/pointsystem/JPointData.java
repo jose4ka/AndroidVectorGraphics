@@ -164,8 +164,6 @@ public class JPointData {
 //            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
         }
 
-
-
     }
 
     public void rotateFigureMinus(int figure, float angle){
