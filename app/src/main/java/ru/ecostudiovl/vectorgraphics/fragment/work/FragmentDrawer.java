@@ -1,5 +1,6 @@
 package ru.ecostudiovl.vectorgraphics.fragment.work;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -283,14 +284,12 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
         sbRotate = view.findViewById(R.id.sbRotate);
         sbRotate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if ((float) progress > JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).getRotate()){
-                    JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
-                }
-                else {
-                    JPointData.getInstance().rotateFigureMinus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
-                }
+
+
+                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), (float) progress);
                 JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).setRotate((float) progress);
             }
 
@@ -301,7 +300,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+               
             }
         });
 

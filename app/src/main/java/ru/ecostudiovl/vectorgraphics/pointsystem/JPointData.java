@@ -138,14 +138,22 @@ public class JPointData {
     public void rotateFigurePlus(int figure, float angle){
         JFigure jFigure = figures.get(figure);
 
+        angle = (float) Math.toRadians(angle);
+
         float s = (float) Math.sin(angle); // angle is in radians
         float c = (float) Math.cos(angle); // angle is in radians
 
         for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
             JPoint currPoint = points.get(figures.get(figure).getPoints().get(i));
 
-            float xnew = currPoint.getX() * c + currPoint.getY() * s;
-            float ynew = -currPoint.getX() * s + currPoint.getY() * c;
+            float x = currPoint.getX();
+            float y = currPoint.getY();
+
+            float x0 = jFigure.getCenterX();
+            float y0 = jFigure.getCenterY();
+
+            float xnew = x0 + (x - x0) * ((float) Math.cos(angle)) - (y - y0) * ((float) Math.sin(angle));
+            float ynew = y0 + (y - y0) * ((float) Math.cos(angle)) + (x - x0) * ((float) Math.sin(angle));
 
             points.get(figures.get(figure).getPoints().get(i)).setX(xnew);
             points.get(figures.get(figure).getPoints().get(i)).setY(ynew);
@@ -162,6 +170,8 @@ public class JPointData {
 
     public void rotateFigureMinus(int figure, float angle){
         JFigure jFigure = figures.get(figure);
+
+        angle = (float) Math.toRadians(angle);
 
         float s = (float) Math.sin(angle); // angle is in radians
         float c = (float) Math.cos(angle); // angle is in radians

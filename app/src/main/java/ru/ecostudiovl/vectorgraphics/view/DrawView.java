@@ -2,6 +2,8 @@ package ru.ecostudiovl.vectorgraphics.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.provider.SyncStateContract;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -217,7 +219,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                         selectFigureByPoint(findFigureByPoint(touchedPoint));
                     }
 
-                    return false;
+                    return true;
 
                 case COPY:
                     if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
@@ -464,6 +466,17 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         return result;
+    }
+
+    private float rotation(MotionEvent event) {
+
+        double delta_x = (event.getX(0) - event.getX(1));
+        double delta_y = (event.getY(0) - event.getY(1));
+        double radians = Math.atan2(delta_y, delta_x);
+
+        Log.i("=== ROTATE","Rotation ~~~~~~~~~~~~~~~~~"+ delta_x+" ## "+delta_y+" ## "+radians+" ## "+Math.toDegrees(radians));
+
+        return (float) Math.toDegrees(radians);
     }
 
     /*

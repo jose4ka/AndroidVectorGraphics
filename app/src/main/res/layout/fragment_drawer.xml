@@ -247,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:alpha="1"
-                android:max="360" />
+                android:max="100" />
         </LinearLayout>
 
             <LinearLayout
