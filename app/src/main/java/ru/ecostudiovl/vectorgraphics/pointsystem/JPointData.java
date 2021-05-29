@@ -135,7 +135,7 @@ public class JPointData {
     }
 
 
-    public void rotateFigurePlus(int figure, float angle){
+    public void rotateFigurePlus(int figure, double angle){
         JFigure jFigure = figures.get(figure);
 
         angle = (float) Math.toRadians(angle);

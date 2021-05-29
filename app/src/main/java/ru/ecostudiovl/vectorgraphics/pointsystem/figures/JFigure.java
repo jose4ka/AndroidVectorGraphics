@@ -207,4 +207,36 @@ public class JFigure {
     public void setRotate(float rotate) {
         this.rotate = rotate;
     }
+
+    public float getMinX() {
+        return minX;
+    }
+
+    public void setMinX(float minX) {
+        this.minX = minX;
+    }
+
+    public float getMaxX() {
+        return maxX;
+    }
+
+    public void setMaxX(float maxX) {
+        this.maxX = maxX;
+    }
+
+    public float getMinY() {
+        return minY;
+    }
+
+    public void setMinY(float minY) {
+        this.minY = minY;
+    }
+
+    public float getMaxY() {
+        return maxY;
+    }
+
+    public void setMaxY(float maxY) {
+        this.maxY = maxY;
+    }
 }

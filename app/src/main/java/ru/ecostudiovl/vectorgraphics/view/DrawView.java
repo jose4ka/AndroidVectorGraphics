@@ -36,6 +36,11 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     int downPI = 0;
     boolean inTouch = false;
     String result = "";
+    double lastAngle = 0;
+    float firstX;
+    float firstY;
+    float secondX;
+    float secondY;
 
 
     /*
@@ -50,10 +55,10 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private DrawThread drawThread;//Главный поток, отвечающий за постоянную отрисовку фигур и точек (рендеринг).
 
 
-
     //Интерфейс коллбэка, который нужен для обращения к фраменту
-    public interface DrawViewCallback{
+    public interface DrawViewCallback {
         void onSelectFigure(int index);
+
         void onCopyFigure();
     }
 
@@ -66,7 +71,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         initializeVariables();
     }
 
-    private void initializeVariables(){
+    private void initializeVariables() {
         touchedPoint = -1; //Изначально -1, т.к. точек никаких нет
         isPointTouched = false;
         this.pairsMap = new TreeMap<>();
@@ -113,7 +118,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         float y = (event.getY());
 
         //Если у нас есть хоть какие-то фигуры, значит уже можем что-то делать с точками
-        if (!JPointData.getInstance().getFigures().isEmpty()){
+        if (!JPointData.getInstance().getFigures().isEmpty()) {
             switch (ModeComponent.getInstance().getCurrentMode()) {
                 case CREATE:
                     if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {/*
@@ -174,7 +179,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                     } else {
                                         JPointData.getInstance().getPoints().get(touchedPoint).setX(x);
                                         JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
-                                        if (BufferComponent.getInstance().hasSelectedFigures()){
+                                        if (BufferComponent.getInstance().hasSelectedFigures()) {
                                             JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).
                                                     recalculateCenterTest();
                                         }
@@ -186,8 +191,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                         }
                     }
-
-
 
 
                     return true;
@@ -210,7 +213,6 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     }
 
 
-
                     return false;
 
                 case VIEW:/*
@@ -218,10 +220,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                 Тут мы можем выбрать фигуру с помощью нажатия на точку или линию
                 */
                     touchedPoint = getTouchedPoint(x, y);
-                    if (touchedPoint == -1){
+                    if (touchedPoint == -1) {
                         findFigureByLine(x, y);
-                    }
-                    else {
+                    } else {
                         selectFigureByPoint(findFigureByPoint(touchedPoint));
                     }
 
@@ -229,7 +230,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                 case COPY:
                     if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
-                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                        for (Map.Entry<Integer, Integer> entry : BufferComponent.getInstance().getSelectedMap().entrySet()) {
                             JPointData.getInstance().copyFigureToPosition(entry.getKey(), x, y);
                         }
                         drawViewCallback.onCopyFigure();
@@ -238,7 +239,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return false;
                 case MOVE:
                     if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
-                        for (Map.Entry<Integer, Integer> entry:BufferComponent.getInstance().getSelectedMap().entrySet()) {
+                        for (Map.Entry<Integer, Integer> entry : BufferComponent.getInstance().getSelectedMap().entrySet()) {
                             JPointData.getInstance().moveFigureToPosition(entry.getKey(), x, y);
                         }
                     }
@@ -246,69 +247,55 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                     return true;
                 case ROTATE:
 
-                    Log.i("=== ROTATE", "onTouchEvent: ROTATE");
-                    // событие
-                    int actionMask = event.getActionMasked();
-                    // индекс касания
-                    int pointerIndex = event.getActionIndex();
-                    // число касаний
-                    int pointerCount = event.getPointerCount();
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
 
-                    switch (actionMask) {
-                        case MotionEvent.ACTION_DOWN: // первое касание
-                            inTouch = true;
-                        case MotionEvent.ACTION_POINTER_DOWN: // последующие касания
-                            downPI = pointerIndex;
-                            break;
+                        JFigure figure = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject());
 
-                        case MotionEvent.ACTION_UP: // прерывание последнего касания
-                            inTouch = false;
-                            sb.setLength(0);
-                        case MotionEvent.ACTION_POINTER_UP: // прерывания касаний
-                            upPI = pointerIndex;
-                            break;
 
-                        case MotionEvent.ACTION_MOVE: // движение
-                            sb.setLength(0);
+//                        float x0 = secondX;
+//                        float y0 = secondY;
+//
+//                        float x1 = event.getX(1);
+//                        float y1 = event.getX(1);
+//
+                        float fX = figure.getCenterX();
+                        float fY = figure.getCenterY();
 
-                            for (int i = 0; i < 10; i++) {
-                                sb.append("Index = " + i);
-                                if (i < pointerCount) {
-                                    sb.append(", ID = " + event.getPointerId(i));
-                                    sb.append(", X = " + event.getX(i));
-                                    sb.append(", Y = " + event.getY(i));
-                                } else {
-                                    sb.append(", ID = ");
-                                    sb.append(", X = ");
-                                    sb.append(", Y = ");
-                                }
-                                sb.append("\r\n");
+//                        float radius = getLength(fX, fY, x1, y1);
+
+
+                        double angle = getDegrees(fX, fY, x, y);
+
+                        Log.i("=== ROTATE", "onTouchEvent: MOVE ANGLE 1 " + angle);
+
+
+                        if (!Double.isNaN(angle)) {
+                            if (angle > lastAngle){
+                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), -3);
                             }
-                            break;
+                            else if (angle < lastAngle){
+                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), 3);
+                            }
+
+                            lastAngle = angle;
+                        }
+
+
                     }
-                    result = "down: " + downPI + "\n" + "up: " + upPI + "\n";
-
-                    if (inTouch) {
-                        result += "pointerCount = " + pointerCount + "\n" + sb.toString();
-                    }
-
-                    Log.i("=== ROTATE ", result);
-
-//                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
-//
-//                        float angle = 0;
-//
-//                        JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), angle);
-//                    }
                     return true;
-
             }
+
 
         }
 
-
         return false;
     }
+
+
+
+
+
+
 
 
 
