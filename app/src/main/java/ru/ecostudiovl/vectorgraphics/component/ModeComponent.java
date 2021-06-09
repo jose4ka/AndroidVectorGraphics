@@ -9,7 +9,8 @@ public class ModeComponent {
         VIEW,
         COPY,
         MOVE,
-        ROTATE
+        ROTATE,
+        SCALE
     }
 
     public enum SelectionMode{

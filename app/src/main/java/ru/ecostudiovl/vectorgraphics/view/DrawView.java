@@ -37,10 +37,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     boolean inTouch = false;
     String result = "";
     double lastAngle = 0;
-    float firstX;
-    float firstY;
-    float secondX;
-    float secondY;
+    double lastScale = 0;
+
 
 
     /*
@@ -251,34 +249,48 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
                         JFigure figure = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject());
 
-
-//                        float x0 = secondX;
-//                        float y0 = secondY;
-//
-//                        float x1 = event.getX(1);
-//                        float y1 = event.getX(1);
-//
                         float fX = figure.getCenterX();
                         float fY = figure.getCenterY();
 
-//                        float radius = getLength(fX, fY, x1, y1);
-
-
                         double angle = getDegrees(fX, fY, x, y);
-
-                        Log.i("=== ROTATE", "onTouchEvent: MOVE ANGLE 1 " + angle);
-
 
                         if (!Double.isNaN(angle)) {
                             if (angle > lastAngle){
-                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), -3);
+                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), -2);
                             }
                             else if (angle < lastAngle){
-                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), 3);
+                                JPointData.getInstance().rotateFigurePlus(BufferComponent.getInstance().getCurrentSelectedObject(), 2);
                             }
 
                             lastAngle = angle;
                         }
+
+                    }
+                    return true;
+                case SCALE:
+
+                    if (ModeComponent.getInstance().getSelectionMode() == ModeComponent.SelectionMode.ONE) {
+
+                        JFigure figure = JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject());
+
+                        float fX = figure.getCenterX();
+                        float fY = figure.getCenterY();
+
+                        double teta = getLength(fX, fY, x, y) / 50;
+
+
+                        if (!Double.isNaN(teta)) {
+
+                            if (teta > lastScale){
+                                JPointData.getInstance().scaleFigure(BufferComponent.getInstance().getCurrentSelectedObject(), 3, true);
+                            }
+                            else if(teta < lastScale){
+                                JPointData.getInstance().scaleFigure(BufferComponent.getInstance().getCurrentSelectedObject(), 3, false);
+                            }
+                            lastScale = teta;
+                        }
+
+
 
 
                     }

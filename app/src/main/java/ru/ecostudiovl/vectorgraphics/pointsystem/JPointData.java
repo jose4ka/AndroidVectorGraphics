@@ -166,6 +166,55 @@ public class JPointData {
 
     }
 
+    public void scaleFigure(int figure, double teta, boolean plus) {
+        JFigure jFigure = figures.get(figure);
+
+
+        if (!plus) {
+            Log.i("=== SCALE", "scaleFigure: MINUS");
+            if ((jFigure.getMinRadius() - 3) > 20) {
+                jFigure.setMinRadius(jFigure.getMinRadius() - 3);
+            }
+        }
+
+        for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
+            JPoint currPoint = points.get(figures.get(figure).getPoints().get(i));
+
+            float x = currPoint.getX();
+            float y = currPoint.getY();
+
+            float deltaX = x - jFigure.getCenterX();
+            float deltaY = y - jFigure.getCenterY();
+
+            double angle = Math.atan2(deltaY, deltaX);
+
+
+            if (plus) {
+                x += teta * Math.cos(angle);
+                y += teta * Math.sin(angle);
+            } else {
+                x -= teta * Math.cos(angle);
+                y -= teta * Math.sin(angle);
+            }
+
+
+            boolean goodDelta = getLength(x, y, jFigure.getCenterX(), jFigure.getCenterY()) > jFigure.getMinRadius();
+
+
+            if (goodDelta) {
+                points.get(figures.get(figure).getPoints().get(i)).setX(x);
+                points.get(figures.get(figure).getPoints().get(i)).setY(y);
+            }
+
+
+        }
+
+        jFigure.recalculateCenterTest();
+
+    }
+
+
+
     public void rotateFigureMinus(int figure, float angle){
         JFigure jFigure = figures.get(figure);
 

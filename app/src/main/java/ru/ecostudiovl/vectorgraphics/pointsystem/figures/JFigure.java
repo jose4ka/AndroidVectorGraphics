@@ -1,5 +1,7 @@
 package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 
+import android.util.Log;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,10 +18,12 @@ public class JFigure {
 
     private float scale = 1;
     private float rotate = 0;
+    private boolean canScale = true;
 
     private float minX, maxX;
     private float minY, maxY;
     protected List<Integer> points;
+    private float minRadius = 100000;
 
 
     public JFigure(String name, int templateIndex){
@@ -82,13 +86,16 @@ public class JFigure {
      */
 
     public void recalculateCenterTest(){
+        minRadius = 100000;
         if (points.size() == 1){
+
             minX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
             maxX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
             minY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
             maxY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
             centerX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
             centerY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
+
         }
         else {
 
@@ -100,6 +107,8 @@ public class JFigure {
             centerY = JPointData.getInstance().getPoints().get(points.get(0)).getY();
 
             for (int i = 0; i < points.size(); i++) {
+
+
                 JPoint currentPoint = JPointData.getInstance().getPoints().get(points.get(i));
 
                 if(currentPoint.getX() < minX){
@@ -119,9 +128,27 @@ public class JFigure {
 
                 centerX = (minX + maxX) / 2;
                 centerY = (minY + maxY) / 2;
+
+                if (points.size() > 1){
+                    Log.i("=== FIGURE ", "recalculateCenterTest: CHECK SIZE");
+                    float lRadius = getLength(centerX, centerY, currentPoint.getX(), currentPoint.getY());
+                    Log.i("=== FIGURE ", "recalculateCenterTest: CURR RADIUS = "+minRadius);
+                    Log.i("=== FIGURE ", "recalculateCenterTest: LRADIUS = "+lRadius);
+                    if (lRadius != 0 && lRadius < minRadius){
+                        minRadius = lRadius;
+                    }
+                }
+
             }
         }
 
+        Log.i("=== FIGURE", "recalculateCenterTest: MIN RADIUS "+minRadius);
+
+    }
+
+    //Процедура находит блину отрезка между двумя точками
+    private float getLength(float startX, float startY, float endX, float endY){
+        return (float) Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2));
     }
 
     public void deletePoint(int index){
@@ -238,5 +265,21 @@ public class JFigure {
 
     public void setMaxY(float maxY) {
         this.maxY = maxY;
+    }
+
+    public boolean isCanScale() {
+        return canScale;
+    }
+
+    public void setCanScale(boolean canScale) {
+        this.canScale = canScale;
+    }
+
+    public float getMinRadius() {
+        return minRadius;
+    }
+
+    public void setMinRadius(float minRadius) {
+        this.minRadius = minRadius;
     }
 }

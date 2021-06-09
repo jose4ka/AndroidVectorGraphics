@@ -8,6 +8,7 @@ import android.view.SurfaceHolder;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
+import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
@@ -82,6 +83,15 @@ public class DrawThread extends Thread{
                 canvas.drawCircle(
                         JPointData.getInstance().getFigures().get(i).getCenterX(),
                         JPointData.getInstance().getFigures().get(i).getCenterY(), r, p);
+            }
+
+
+            if (ModeComponent.getInstance().getCurrentMode() == ModeComponent.Mode.SCALE) {
+                p.setColor(Color.RED);
+                canvas.drawCircle(
+                        JPointData.getInstance().getFigures().get(i).getCenterX(),
+                        JPointData.getInstance().getFigures().get(i).getCenterY(),
+                        JPointData.getInstance().getFigures().get(i).getMinRadius(), p);
             }
 
 

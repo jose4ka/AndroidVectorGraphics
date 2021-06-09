@@ -92,6 +92,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_photo_size_select_small_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnScale"
+                            android:visibility="visible"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
                     <ImageButton
                         android:src="@drawable/ic_baseline_add_circle_24"
                         android:theme="@style/PurpleButton"

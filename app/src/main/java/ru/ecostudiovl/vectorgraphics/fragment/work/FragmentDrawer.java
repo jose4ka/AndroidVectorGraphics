@@ -44,6 +44,7 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     private ImageButton btnCopy;
     private ImageButton btnMove;
     private ImageButton btnRotate;
+    private ImageButton btnScale;
 
     private CardView lnList;
     private RecyclerView rvFigures;
@@ -273,6 +274,14 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
             }
         });
 
+        btnScale = view.findViewById(R.id.btnScale);
+        btnScale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchMode(ModeComponent.Mode.SCALE);
+            }
+        });
+
         btnMove = view.findViewById(R.id.btnMove);
         btnMove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,6 +423,13 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
                 break;
             case ROTATE:
                 tvInfoLabel.setText("Поворот фигуры");
+                btnChangeMode.setVisibility(View.VISIBLE);
+                btnSelectionMode.setVisibility(View.GONE);
+                btnDeleteSelection.setVisibility(View.GONE);
+                lnProperties.setVisibility(View.GONE);
+                break;
+            case SCALE:
+                tvInfoLabel.setText("Масштабирование фигуры");
                 btnChangeMode.setVisibility(View.VISIBLE);
                 btnSelectionMode.setVisibility(View.GONE);
                 btnDeleteSelection.setVisibility(View.GONE);
