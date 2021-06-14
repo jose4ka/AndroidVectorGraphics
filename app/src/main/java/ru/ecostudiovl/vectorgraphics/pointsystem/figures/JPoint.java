@@ -1,21 +1,17 @@
-package ru.ecostudiovl.vectorgraphics.pointsystem;
+package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 
 import org.jetbrains.annotations.NotNull;
 
 public class JPoint {
 
-    private float x;
-    private float y;
+    private float x; //Позиция точки по  X
+    private float y; //Позиция точки по Y
 
-
-
+    //Конструктор класса
     public JPoint(float x, float y){
         this.x = x;
         this.y = y;
     }
-
-
-
 
     @NotNull
     @Override

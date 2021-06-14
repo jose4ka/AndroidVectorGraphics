@@ -1,27 +1,31 @@
 package ru.ecostudiovl.vectorgraphics.pointsystem;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.math.*;
 
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
+import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class JPointData {
 
 
-    private List<JFigure> figures;
-    private List<JFigureTemplates> templates;
+    private List<JFigure> figures; //Все фигуры созданные пользователем
+    private List<JFigureTemplates> templates; //Все шаблоны в программе
 
     private List<JPoint> points;/*Список абсолютно всех точек, которые есть на экране и которые задействуются
                                     в структуре данных, описывающих фигуры.*/
 
 
-    private static JPointData instance;
+    private static JPointData instance; /*Т.к. этот класс реализует паттерн
+                                        Singleton, внутри храним объект самого класса*/
 
+    /*
+    Вспомогательная структура данных, которая используется в процедурах
+    и методах этого класса.
+    Она собержит в себе 4 направления: ВВЕРХ, ВНИЗ, ВЛЕВО, ВПРАВО
+     */
     private enum PointDirection{
         UP,
         DOWN,
@@ -30,9 +34,11 @@ public class JPointData {
     }
 
 
+    //Конструктор класса
     private JPointData(){
         figures = new ArrayList<>();
         templates = new ArrayList<>();
+        //Тут мы добавляем системные шаблоны в программу
         templates.add(new JFigureTemplates(0, false, false, "Кривая"));
         templates.add(new JFigureTemplates(0, false, true, "Замкнутая фигура"));
         templates.add(new JFigureTemplates(3, true, true, "Треугольник"));
@@ -43,6 +49,7 @@ public class JPointData {
         points = new LinkedList<>();
     }
 
+    //Реализация паттерна Singleton
     public static JPointData getInstance(){
         if (instance == null) {
             instance = new JPointData();
@@ -50,6 +57,11 @@ public class JPointData {
 
         return instance;
     }
+
+    /*
+Процедура копирует указанную фигуру в указанные координаты
+На вход подаётся индекс фигуры, и позиция куда её копировать
+ */
 
     public void copyFigureToPosition(int figure, float posX, float posY){
         figures.add(new JFigure(figures.get(figure).getName() + " (copy)", figures.get(figure).getTemplateIndex()));
@@ -94,6 +106,10 @@ public class JPointData {
 
     }
 
+/*
+Процедура перемещает указанную фигуру в указанные координаты
+На вход подаётся индекс фигуры, и позиция куда её переместить
+ */
 
     public void moveFigureToPosition(int figure, float posX, float posY){
         for (int i = 0; i < figures.get(figure).getPoints().size(); i++) {
@@ -134,7 +150,9 @@ public class JPointData {
         figures.get(figure).setCenterY(posY);
     }
 
-
+    /*
+    Процедура поворачивает указанную фигуру по часовой стрелке на указаное кол-во градусов
+     */
     public void rotateFigurePlus(int figure, float angle){
         JFigure jFigure = figures.get(figure);
 
@@ -149,20 +167,13 @@ public class JPointData {
 
             points.get(figures.get(figure).getPoints().get(i)).setX(xnew);
             points.get(figures.get(figure).getPoints().get(i)).setY(ynew);
-            //
-//            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
-//
-//            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
-//            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
         }
-
-
-
     }
 
+    /*
+    Процедура поворачивает указанную фигуру против часовой стрелки на указаное кол-во градусов
+     */
     public void rotateFigureMinus(int figure, float angle){
-        JFigure jFigure = figures.get(figure);
-
         float s = (float) Math.sin(angle); // angle is in radians
         float c = (float) Math.cos(angle); // angle is in radians
 
@@ -174,33 +185,42 @@ public class JPointData {
 
             points.get(figures.get(figure).getPoints().get(i)).setX(xnew);
             points.get(figures.get(figure).getPoints().get(i)).setY(ynew);
-            //
-//            points.get(figures.get(figure).getPoints().get(i)).setX((float) (jFigure.getCenterX() + (currPoint.getX() - jFigure.getCenterX()) * Math.cos(angle) - (currPoint.getY() - jFigure.getCenterY()) * Math.sin(angle)));
-//
-//            // Y = y0 + (y - y0) * cos(a) + (x - x0) * sin(a);
-//            points.get(figures.get(figure).getPoints().get(i)).setY((float) (jFigure.getCenterY() + (currPoint.getY() - jFigure.getCenterY()) * Math.cos(angle) - (currPoint.getX() - jFigure.getCenterX()) * Math.sin(angle)));
         }
 
 
 
     }
 
-
+    /*
+    Находит положение координаты X одной точки, относительно другой
+    первый входной параметр - точка относительно которой находим
+    второй входной параметр - точка положение которой нужно найти
+     */
     public PointDirection findHorizontalDirection(float sX, float eX){
         if (eX > sX){ return PointDirection.RIGHT;}
         else { return PointDirection.LEFT;}
     }
 
+    /*
+    Находит положение координаты Y одной точки, относительно другой
+    первый входной параметр - точка относительно которой находим
+    второй входной параметр - точка положение которой нужно найти
+     */
     public PointDirection findVerticalDirection(float sY, float eY){
         if (eY > sY){ return PointDirection.DOWN;}
         else { return PointDirection.UP;}
     }
 
-
+    /*
+    Процедура находит длину между двумя точками в одной плоскости
+     */
     private float getLengthByOneAxis(float startX, float endX){
         return (float) Math.sqrt(Math.pow((endX - startX), 2));
     }
 
+    /*
+    Процедура находит расстояние между двумя точками в двумерном пространстве
+     */
     private float getLength(float startX, float startY, float endX, float endY){
         return (float) Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2));
     }

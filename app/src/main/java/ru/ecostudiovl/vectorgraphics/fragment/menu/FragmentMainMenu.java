@@ -15,10 +15,12 @@ import ru.ecostudiovl.vectorgraphics.R;
 
 public class FragmentMainMenu extends Fragment {
 
-    private View view;
+    private View view; //Корневой элемент фрагмента
 
+    //Объект для колбэка, чтобы к нему обращаться
     private FragmentMainMenuCallback fragmentMainMenuCallback;
 
+    //нтерфейс коллбэка для активности
     public interface FragmentMainMenuCallback{
         void onStartWork();
     }

@@ -19,14 +19,20 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.ViewHolder> {
 
 
-    private List<JFigure> mData;
-    private FigureSelect figureSelect;
-    private Context context;
+    private List<JFigure> mData; //Локальный список фигур
+    private FigureSelect figureSelect; //Объект интерфейса колбэка
+    private Context context; //Контекст в котором работает данный список
 
+    //Конструктор класса
     public AdapterFiguresList(List<JFigure> figures, FigureSelect figureSelect, Context context){
         mData = figures;
         this.figureSelect = figureSelect;
         this.context = context;
+    }
+
+    //Интерфейс колбэка
+    public interface FigureSelect{
+        void onSelectFigure(int index);
     }
 
     @NonNull
@@ -75,7 +81,5 @@ public class AdapterFiguresList extends RecyclerView.Adapter<AdapterFiguresList.
     }
 
 
-    public interface FigureSelect{
-        void onSelectFigure(int index);
-    }
+
 }

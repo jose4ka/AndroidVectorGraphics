@@ -3,25 +3,24 @@ package ru.ecostudiovl.vectorgraphics.pointsystem.figures;
 import java.util.LinkedList;
 import java.util.List;
 
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 
 public class JFigure {
 
-    private String name;
-    private int templateIndex;
-    private float centerX;
-    private float centerY;
+    private String name; //Название фигуры
+    private int templateIndex; //Индекс используемого шаблона
+    private float centerX; //Центр фигуры по X
+    private float centerY; //Центр фигуры по Y
 
-    private float scale = 1;
-    private float rotate = 0;
+    private float scale = 1; //Размер фигуры
+    private float rotate = 0; //Поворот фигуры
 
-    private float minX, maxX;
-    private float minY, maxY;
-    protected List<Integer> points;
+    private float minX, maxX; //Крайние точки по X
+    private float minY, maxY; //Крайние точки по Y
+    protected List<Integer> points; //Индексы точек, которая хранит в себе фигура
 
-
+    //Конструктор фигуры
     public JFigure(String name, int templateIndex){
         this.points = new LinkedList<>();
         this.name = name;
@@ -30,18 +29,25 @@ public class JFigure {
         this.templateIndex = templateIndex;
     }
 
+    /*
+    Процедура добавляющая точку в фигуру
+    Сначала мы проверяем по шаблону, можем ли мы её добавить
+    Затем добавляем её в список
+    Добавляется именно индекс самой точки из общего списка точек
+    На вход подаётся индекс точки, и шаблон на который мы ссылаемся
+     */
     public void addPoint(int index, JFigureTemplates template){
         if (template.isClosePointNumber()){
             if (points.size() < template.getPointsCount()){
                 points.add(index);
                // recalculateCenterByPointIndex(index);
-                recalculateCenterTest();
+                recalculateCenter();
             }
         }
         else {
             points.add(index);
      //       recalculateCenterByPointIndex(index);
-            recalculateCenterTest();
+            recalculateCenter();
         }
 
     }
@@ -81,7 +87,12 @@ public class JFigure {
 
      */
 
-    public void recalculateCenterTest(){
+    /*
+    Процедура просчитывает центр масс фигуры на основе всех имеющихся точек
+    у этой фигуры
+    Ищется самая центральная точка, относительно самых крайних точек фигуры
+     */
+    public void recalculateCenter(){
         if (points.size() == 1){
             minX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
             maxX = JPointData.getInstance().getPoints().get(points.get(0)).getX();
@@ -124,6 +135,10 @@ public class JFigure {
 
     }
 
+    /*
+    Процедура удаляет точку из списка точек в фигуре
+    На вход подаётся индекс точки из обшего списка точек
+     */
     public void deletePoint(int index){
         if (index != -1){
             points.remove(getLocalIndexOfPoint(index));
@@ -132,7 +147,8 @@ public class JFigure {
     }
 
     /*
-    Нужно найти индекс точки в локальном списке
+    Процедура возвращает индекс точки в локальном списке фигуры
+    На основе индекса из общего списка
      */
     public int getLocalIndexOfPoint(int index){
         for (int i = 0; i < points.size(); i++) {
@@ -143,7 +159,11 @@ public class JFigure {
         return -1;
     }
 
-
+    /*
+    Процедура возвращающая булевое значение
+    Говорящее о том, хранится точка в фигуре или нет
+    На вход подаётся индекс из общего списка точек
+     */
     public boolean isContainsPoint(int index){
         for (int i = 0; i < points.size(); i++) {
             if (points.get(i).equals(index)){

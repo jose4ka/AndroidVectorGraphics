@@ -14,8 +14,7 @@ import java.util.TreeMap;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
 import ru.ecostudiovl.vectorgraphics.component.ModeComponent;
-import ru.ecostudiovl.vectorgraphics.fragment.work.FragmentDrawer;
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
+import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
@@ -49,6 +48,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         void onCopyFigure();
     }
 
+    //Объект колбэка
     private DrawViewCallback drawViewCallback;
 
     public DrawView(Context context, DrawViewCallback drawViewCallback) {
@@ -72,7 +72,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         startDrawThread();
     }
 
-    //Останавливаем поток
+    /*
+    Процедура останавливает поток рисования
+     */
     public void stopDrawThread() {
         boolean retry = true;
         drawThread.setRunning(false);
@@ -87,6 +89,9 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    /*
+    Процедура запускает поток рисования
+     */
     public void startDrawThread() {
         //Устанавливаем переменуую как true, это нужно для управления потоком
         drawThread.setRunning(true);
@@ -97,6 +102,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
     /*
     Эвент реагирующий на нажатия по экрану
+    В нём, в зависимости от того какой режим работы программы
+    происходят нужные действия с фигурами
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -180,7 +187,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
                                         JPointData.getInstance().getPoints().get(touchedPoint).setY(y);
                                         if (BufferComponent.getInstance().hasSelectedFigures()){
                                             JPointData.getInstance().getFigures().get(BufferComponent.getInstance().getCurrentSelectedObject()).
-                                                    recalculateCenterTest();
+                                                    recalculateCenter();
                                         }
                                     }
                                 }
@@ -259,7 +266,8 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
 
     /*
-    Проверяем нахождение точки в радиусе
+    Метод возвращает индекс точки, на которую мы нажали
+    На вход подаются координаты точки нажатия на экран
      */
     private int getTouchedPoint(float centerX, float centerY) {
         int result = -1;
@@ -340,7 +348,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    //Процедура находит блину отрезка между двумя точками
+    //Процедура находит длину отрезка между двумя точками
     private float getLength(float startX, float startY, float endX, float endY){
         return (float) Math.sqrt(Math.pow((endX - startX), 2) + Math.pow((endY - startY), 2));
     }
@@ -354,7 +362,7 @@ public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 
 
     /*
-    Процедура находит самую ближайшую точку к переданным координатам
+    Метод находит самую ближайшую точку к переданным координатам
      */
     private int findNearPoint(float startX, float startY){
         float minLength = 1000000;

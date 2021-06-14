@@ -3,9 +3,9 @@ package ru.ecostudiovl.vectorgraphics.component;
 public class SettingsComponent {
 
 
-    private static SettingsComponent instance;
+    private static SettingsComponent instance; //Инстанс класса
 
-    private boolean showPoints;
+    private boolean showPoints; //Отображать точки фигур или нет
 
     private SettingsComponent(){
         showPoints = true;

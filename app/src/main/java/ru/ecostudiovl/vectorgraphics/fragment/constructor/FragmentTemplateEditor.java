@@ -31,20 +31,21 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 public class FragmentTemplateEditor extends Fragment  implements AdapterTemplatesList.TemplateSelect {
 
 
-    private View view;
+    private View view;//Корневой view элемент фрагмента
+    private RecyclerView rvTemplates; //Элемент отображающий все имеющиеся шаблоны
+    private EditText etTemplateName; //Поле ввода имени нового шаблона
+    private EditText etPointsNumber; //Поле ввода количества точек шаблона
+    private CheckBox cbIsClosedFigure; //Чек-бокс, закрытая ли фигура
+    private CheckBox cbIsClosedFigureNumber;//Чек-бокс, закрытое ли кол-во точек
 
-    private RecyclerView rvTemplates;
-    private EditText etTemplateName;
-    private EditText etPointsNumber;
-    private CheckBox cbIsClosedFigure;
-    private CheckBox cbIsClosedFigureNumber;
+    private int selectedIndex = 0; //Индекс выбранного шаблона для удаления
 
-    private int selectedIndex = 0;
-
+    //Интерфейс коллбэка для активности
     public interface FragmentTemplateEditorCallback{
         void onBackPressedTemplate();
     }
 
+    //Объект интерфейса коллбэка чтобы к нему обратиться
     private FragmentTemplateEditorCallback fragmentTemplateEditorCallback;
 
     public static FragmentTemplateEditor newInstance() {

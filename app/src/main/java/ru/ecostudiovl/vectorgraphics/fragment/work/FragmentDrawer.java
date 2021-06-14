@@ -35,28 +35,31 @@ import ru.ecostudiovl.vectorgraphics.view.DrawView;
 public class FragmentDrawer extends Fragment  implements AdapterFiguresList.FigureSelect, DrawView.DrawViewCallback {
 
 
-    private View view;
+    private View view; //Корневой view элемент фрагмента
 
-    private ImageButton btnHide;
-    private ImageButton btnSelectionMode;
-    private ImageButton btnDeleteSelection;
-    private ImageButton btnCopy;
-    private ImageButton btnMove;
+    private ImageButton btnHide; //Кнопка скрытия списка фигур
+    private ImageButton btnSelectionMode; //Кнопка режима выбора фигуры
+    private ImageButton btnDeleteSelection; //Кнопка удаления выбраных фигур
+    private ImageButton btnCopy; //Кнопка копирования фигуры
+    private ImageButton btnMove; //Кнопка перемещения фигуры
 
-    private CardView lnList;
-    private RecyclerView rvFigures;
-    private DrawView drawView;
-    private ImageButton btnChangeMode;
-    private TextView tvInfoLabel;
+    private CardView lnList; //Обхект на экране со списком фигур
+    private RecyclerView rvFigures; //Список фигур
+    private DrawView drawView; //Элемент отображающий сами фигуры на экране (линии и точки)
+    private ImageButton btnChangeMode; //Кнопка смены режима рисования
+    private TextView tvInfoLabel; //Информационное сообщение о текущих действияъ
 
-    private LinearLayout lnProperties;
-    private SeekBar sbScale, sbRotate;
+    private LinearLayout lnProperties; //Не используется
+    private SeekBar sbScale, sbRotate; //Не используются
 
+    //Интерфейс для коллбэка в активность
     public interface FragmentDrawerCallback{
         void onCreateFigureClicked();
         void onCreateTemplateClicked();
         void onMainMenuClicked();
     }
+
+    //Объект интерфейса, для обращения к нему
     private FragmentDrawerCallback fragmentDrawerCallback;
 
     public FragmentDrawer() {
@@ -87,6 +90,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         return view;
     }
 
+    /*
+    Процедура инициализирует все view-элементы этого фрагмента
+     */
     private void initializeViewElements(){
         rvFigures = view.findViewById(R.id.rvFiguresList);
         tvInfoLabel = view.findViewById(R.id.tvSelectedMode);
@@ -308,6 +314,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
+    /*
+    Процедура, которая меняет режим рабоыт программы, на основе текущего режима
+     */
     private void onChangedMode(){
         if (BufferComponent.getInstance().hasSelectedFigures()){
             switch (ModeComponent.getInstance().getCurrentMode()) {
@@ -330,7 +339,11 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         }
     }
 
-
+    /*
+    Процедура которая меняет текущий режим работы программы
+    и подгоняет интерфейс под него
+    НА вход подаётся новый режим работы программы
+     */
     private void switchMode(ModeComponent.Mode mode){
         ModeComponent.getInstance().setCurrentMode(mode);
         switch (ModeComponent.getInstance().getCurrentMode()) {
@@ -396,6 +409,10 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
         }
     }
 
+    /*
+    Процедура смены режима выбора фигур
+    На вход подаётся новый режим выбора фигуры
+     */
     private void switchSelectionMode(ModeComponent.SelectionMode mode){
         ModeComponent.getInstance().setSelectionMode(mode);
         ModeComponent.SelectionMode selectionMode = ModeComponent.getInstance().getSelectionMode();
@@ -415,6 +432,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
+    /*
+    Процедура обновляет список фигур на экране
+     */
     public void updateList(){
 
         simpleItemTouchCallback.setDefaultSwipeDirs(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
@@ -428,7 +448,11 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
     }
 
 
-
+    /*
+    Процедура колбэка адаптера списка фигур
+    Срабатывает при выборе фигуры в списке
+    НА вход подаётся индекс выбранной фигуры
+     */
     @Override
     public void onSelectFigure(int index) {
         btnDeleteSelection.setVisibility(View.VISIBLE);
@@ -463,6 +487,9 @@ public class FragmentDrawer extends Fragment  implements AdapterFiguresList.Figu
 
     }
 
+    /*
+    Колбэк от графического элемента, гвоорящий что фигуры была скопирвоана
+     */
     @Override
     public void onCopyFigure() {
         switchMode(ModeComponent.Mode.EDIT);

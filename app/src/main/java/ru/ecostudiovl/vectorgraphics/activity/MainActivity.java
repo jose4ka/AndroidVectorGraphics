@@ -16,7 +16,7 @@ import ru.ecostudiovl.vectorgraphics.R;
 public class MainActivity extends AppCompatActivity implements FragmentTemplateEditor.FragmentTemplateEditorCallback, FragmentDrawer.FragmentDrawerCallback, FragmentFigureEditor.FragmentFigureEditorCallback {
 
 
-    private NavController navController;
+    private NavController navController; //Навигационный контроллер, для переключения экранов
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -25,17 +25,19 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JFigure;
 
 public class FragmentFigureEditor extends Fragment implements AdapterTemplatesList.TemplateSelect {
 
-    private View view;
-    private RecyclerView rvTemplates;
-    private EditText etFigureName;
+    private View view; //Корневой View элемент фрагмента
+    private RecyclerView rvTemplates; //Графичесакий элемент списка шаблонов
+    private EditText etFigureName; //Поле ввода названия фигуры
 
-    private int selectedTemplate = -1;
+    private int selectedTemplate = -1; //Индекс выбранного шаблона фигуры
 
+    //Интерфейс для колбэка в активность
     public interface FragmentFigureEditorCallback{
-        void onCreatedFigure();
-        void onBackPressedFigure();
+        void onCreatedFigure(); //Говорим активности что мы создали фигуру
+        void onBackPressedFigure(); //Говорим активности, что мы не хотим создавать фигуру
     }
 
+    //Объект коллбэка, чтобы вызывать его процедуры
     private FragmentFigureEditorCallback fragmentFigureEditorCallback;
 
     public FragmentFigureEditor() {

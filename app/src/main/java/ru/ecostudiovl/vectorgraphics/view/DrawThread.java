@@ -8,23 +8,27 @@ import android.view.SurfaceHolder;
 import java.util.List;
 
 import ru.ecostudiovl.vectorgraphics.component.BufferComponent;
-import ru.ecostudiovl.vectorgraphics.pointsystem.JPoint;
+import ru.ecostudiovl.vectorgraphics.pointsystem.figures.JPoint;
 import ru.ecostudiovl.vectorgraphics.pointsystem.JPointData;
 
 public class DrawThread extends Thread{
 
-    private boolean running = false;
+    private boolean running = false; //Флаг который показывает, работает поток или нет
 
-    private SurfaceHolder surfaceHolder;
-    private Paint p;
+    private SurfaceHolder surfaceHolder; //Холдер для возврата результата рисования на экран
+    private Paint p; //Кисть, которая выполняет рисование
 
-
+    //Конструктор класса
     public DrawThread(SurfaceHolder surfaceHolder){
         this.surfaceHolder = surfaceHolder;
         this.p = new Paint();
     }
 
 
+    /*
+    Процедура рабоыт потока отрисовки графика
+    Вызывает процедуру render, возвращает холст на экран
+     */
     @Override
     public void run() {
 
@@ -54,6 +58,10 @@ public class DrawThread extends Thread{
         }
     }
 
+    /*
+    Процедура отрисовывает линии и точки фигур
+    На вход передаётся холст для рисования
+     */
     private void render(Canvas canvas) {
         canvas.save();
 

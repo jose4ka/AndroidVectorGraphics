@@ -21,11 +21,12 @@ import ru.ecostudiovl.vectorgraphics.pointsystem.template.JFigureTemplates;
 public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesList.ViewHolder> {
 
 
-    private List<JFigureTemplates> mData;
-    private TemplateSelect figureSelect;
-    private Context context;
-    private int selectedTemplate;
+    private List<JFigureTemplates> mData; //Локальный список шаблонов для отображения
+    private TemplateSelect figureSelect; //Объект интерфейса колбэка
+    private Context context; //Контекст в котором работает данный адаптер
+    private int selectedTemplate; //Выбранный шаблон, для посветки
 
+    //Конструктор адаптера
     public AdapterTemplatesList(TemplateSelect figureSelect, Context context, int selectedTemplate){
         mData = JPointData.getInstance().getTemplates();
         this.figureSelect = figureSelect;
@@ -33,6 +34,10 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         this.selectedTemplate = selectedTemplate;
     }
 
+    //Интерфейс колбэка выбранной фигуры
+    public interface TemplateSelect{
+        void onSelectTemplate(int index);
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -86,10 +91,6 @@ public class AdapterTemplatesList extends RecyclerView.Adapter<AdapterTemplatesL
         }
     }
 
-
-    public interface TemplateSelect{
-        void onSelectTemplate(int index);
-    }
 
     public void setSelectedTemplate(int selectedTemplate) {
         this.selectedTemplate = selectedTemplate;

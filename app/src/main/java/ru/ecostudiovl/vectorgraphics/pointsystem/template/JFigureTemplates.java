@@ -2,11 +2,12 @@ package ru.ecostudiovl.vectorgraphics.pointsystem.template;
 
 public class JFigureTemplates {
 
-    private int pointsCount;
-    private boolean isClosePointNumber;
-    private boolean isClosedFigure;
-    private String name;
+    private int pointsCount; //Количество точек в фигуре
+    private boolean isClosePointNumber; //Ограниченное ли кол-во точек
+    private boolean isClosedFigure; //амкнутая фигура или нет
+    private String name; //Название шаблона
 
+    //онструктор класса
     public JFigureTemplates(int pointsCount, boolean isClosePointNumber, boolean isClosedFigure, String name){
         this.pointsCount = pointsCount;
         this.isClosePointNumber = isClosePointNumber;
