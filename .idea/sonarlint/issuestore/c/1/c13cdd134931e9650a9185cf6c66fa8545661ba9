@@ -1,7 +1,5 @@
 
-P
-java:S1128"3Remove this unused import 'android.widget.SeekBar'.(§‹Úš8ë‘¾––/
-o
-java:S3776T"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(»ÌÜ 8‹’¾––/
-V
-java:S3252Â"3Use static access with "java.util.Map" for "Entry".(¥îì½ùÿÿÿÿ8ª’¾––/
+I
+java:S1128"3Remove this unused import 'android.widget.SeekBar'.(§‹Úš
+h
+java:S3776T"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(»ÌÜ 

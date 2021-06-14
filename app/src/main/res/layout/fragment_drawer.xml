@@ -82,6 +82,26 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_rotate_90_degrees_ccw_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnRotate"
+                            android:visibility="visible"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <ImageButton
+                            android:src="@drawable/ic_baseline_photo_size_select_small_24"
+                            android:theme="@style/PurpleButton"
+                            android:id="@+id/btnScale"
+                            android:visibility="visible"
+                            android:text="create"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
                     <ImageButton
                         android:src="@drawable/ic_baseline_add_circle_24"
                         android:theme="@style/PurpleButton"
@@ -247,7 +267,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:alpha="1"
-                android:max="360" />
+                android:max="100" />
         </LinearLayout>
 
             <LinearLayout
